@@ -21,9 +21,6 @@ Autor: Pablo Barvo - 05-Mayo-2006
 		<servlet-class>Prodandes.servlets.ServletBuscarMaterialesResp</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>Buscar</servlet-name>
-		<servlet-class>Prodandes.servlets.ServletBuscar</servlet-class>
-	</servlet><servlet>
 		<servlet-name>ServletRegistroEfectivo</servlet-name>
 		<servlet-class>Prodandes.servlets.ServletRegistroEfectivo</servlet-class>
 	</servlet><servlet>
@@ -88,10 +85,6 @@ Autor: Pablo Barvo - 05-Mayo-2006
 	<servlet-mapping>
 		<servlet-name>ServletRegistroEfectivo</servlet-name>
 		<url-pattern>/ServletRegistroEfectivo.htm</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Buscar</servlet-name>
-		<url-pattern>/buscar.htm</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>BuscarMaterialForm</servlet-name>
