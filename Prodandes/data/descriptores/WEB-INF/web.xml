@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                         "http://java.sun.com/dtd/web-app_2_3.dtd">
+<!-- 
+Universidad de los Andes (Bogotá - Colombia)
+Departamento de Ingeniería de Sistemas y Computación 
+Licenciado bajo el esquema Academic Free License version 2.1 
+
+Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
+Ejercicio: n18_calculadoraWeb
+Autor: Pablo Barvo - 05-Mayo-2006 
+-->
+<web-app>
+ <description>Servlet cupiMemes</description>
+ <!-- SERVLETS --><servlet>
+		<servlet-name>BuscarMaterialForm</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletBuscarMateriales</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>BuscarMaterialRes</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletBuscarMaterialesResp</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Buscar</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletBuscar</servlet-class>
+	</servlet><servlet>
+		<servlet-name>ServletRegistroEfectivo</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletRegistroEfectivo</servlet-class>
+	</servlet><servlet>
+  <servlet-name>Registrarse</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletRegistrarse</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>PedidoCliente</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletRegistrarPedidoProducto</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>ServletVerificarPedido</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletVerificarPedido</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>RegistrarCliente</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletRegistrarCliente</servlet-class>
+</servlet><servlet>
+ 	<servlet-name>ServletModificarEtapa</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletModificarEtapa</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>ServletModificarEtapaEfectivo</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletModificarEtapaEfectivo</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>ServletRegistrarEntregaPedidoCliente</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletRegistrarEntregaPedidoCliente</servlet-class>
+ </servlet><servlet>
+ 	<servlet-name>ServletEntregaProducto</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletEntregaProducto</servlet-class>
+</servlet><servlet>
+ 	<servlet-name>ServletModificar</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletModificar</servlet-class>
+ </servlet>
+	<servlet>
+		<servlet-name>BuscarOperarioProductivo</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletBuscarEmpleadoProductivo</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>RangoDeFechasEfectivo</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletRangoDeFechasEfectivo</servlet-class>
+</servlet><servlet>
+		<servlet-name>EtapasProduccionMayorMovimiento</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletEtapasProduccionMayorMovimiento</servlet-class>
+	</servlet><servlet>
+		<servlet-name>BuscarOperarioProductivoRes</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletBuscarEmpleadoProductivoRes</servlet-class>
+	</servlet><servlet>
+		<servlet-name>ConsultarExistenciaUnMaterial</servlet-name>
+		<servlet-class>Prodandes.servlets.ConsultarExistenciaUnMaterial</servlet-class>
+</servlet>
+
+	<!-- MAPPING -->
+
+
+
+
+	<servlet-mapping>
+ 	<servlet-name>RegistrarCliente</servlet-name>
+ 	<url-pattern>/registrarCliente.htm</url-pattern>
+</servlet-mapping>
+	<servlet-mapping>
+  <servlet-name>Registrarse</servlet-name>
+  <url-pattern>/registrarse.htm</url-pattern>
+ </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletRegistroEfectivo</servlet-name>
+		<url-pattern>/ServletRegistroEfectivo.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Buscar</servlet-name>
+		<url-pattern>/buscar.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BuscarMaterialForm</servlet-name>
+		<url-pattern>/buscarMaterialForm.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BuscarMaterialRes</servlet-name>
+		<url-pattern>/buscarMaterialRes.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PedidoCliente</servlet-name>
+		<url-pattern>/pedidoCliente.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletVerificarPedido</servlet-name>
+		<url-pattern>/servletVerificarPedido.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletModificar</servlet-name>
+		<url-pattern>/servletModificar.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletModificarEtapa</servlet-name>
+		<url-pattern>/servletModificarEtapa.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletModificarEtapaEfectivo</servlet-name>
+		<url-pattern>/servletModificarEtapaEfectivo.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletRegistrarEntregaPedidoCliente</servlet-name>
+		<url-pattern>/ServletRegistrarEntregaPedidoCliente.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ServletEntregaProducto</servlet-name>
+		<url-pattern>/servletEntregaProducto.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BuscarOperarioProductivo</servlet-name>
+		<url-pattern>/buscarOperarioProductivo.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BuscarOperarioProductivoRes</servlet-name>
+		<url-pattern>/buscarOperarioProductivoRes.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EtapasProduccionMayorMovimiento</servlet-name>
+		<url-pattern>/etapasProduccionMayorMovimiento.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RangoDeFechasEfectivo</servlet-name>
+		<url-pattern>/rangoDeFechasEfectivo.htm</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ConsultarExistenciaUnMaterial</servlet-name>
+		<url-pattern>/consultarExistenciaUnMaterial.htm</url-pattern>
+	</servlet-mapping>
+
+	<login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+</web-app>
