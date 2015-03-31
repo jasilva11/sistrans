@@ -31,7 +31,7 @@ import Prodandes.vod.Personas;
 import Prodandes.vod.Producto;
 
 public class consultaDAO {
-
+ 
 	//----------------------------------------------------
 	//Constantes
 	//----------------------------------------------------
