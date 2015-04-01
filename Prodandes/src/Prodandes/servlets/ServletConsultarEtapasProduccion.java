@@ -197,9 +197,6 @@ public class ServletConsultarEtapasProduccion extends HttpServlet
 		out.println("    <label for=\"personaNat1\">Persona Natural:</label> ");
 		out.println("      <input type=\"text\" name=\"personaNat\" personaNat=\"personaNat2\" />");
 		out.println("  </p>");
-		
-
-		
 		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Registrarse\" />");
 		out.println("  </p>");
 		out.println("</form>");
