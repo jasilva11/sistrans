@@ -642,6 +642,7 @@ public class consultaDAO {
 		PreparedStatement prepStmt = null;
 
 		try {
+			inicializar();
 			establecerConexion();
 			prepStmt = conexion.prepareStatement("SELECT ROL_EN_SISTEMA FROM USUARIOS WHERE LOGIN =" +usr+ "AND PALABRACLAVE = " +pass+ ";" );
 
@@ -653,9 +654,8 @@ public class consultaDAO {
 		}
 		catch (Exception e)
 		{
-
+        return "No existe";
 		}
-		return "";
 	}
 
 	public boolean registrarEtapa(String nombre, int id, int secuencia, int empleados, String fechaIncio, String fechaFin) throws SQLException
