@@ -547,15 +547,28 @@ public class consultaDAO {
 		{
 			estado = resultado.getString( 1 );
 		}
+		
+		String sql4 = "SELECT max(ID_ESTACION) FROM ETAPAS_DE_ESTACION";
 
+		PreparedStatement prepStmt4 = conexion.prepareStatement(sql4);
+		ResultSet resultado2 = prepStmt4.executeQuery( sql4 );
+		
+		int mayor = 0;
+		
+		while( resultado2.next( )) 
+		{
+			mayor = Integer.parseInt(resultado2.getString( 1 ));
+		}
+		
 		String sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = 1 WHERE ID_ESTACION = 1";
 
 		if(estado.equalsIgnoreCase("ACTIVA"))
 		{
 			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'INACTIVA' WHERE CODIGO =" + estacion;
-			if(estacion == 16)
+			if(estacion == mayor)
 			{
-				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + 15 +" WHERE ID_ESTACION = "+ estacion;
+				int x = estacion - 1;
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + x +" WHERE ID_ESTACION = "+ estacion;
 			}
 			else
 			{
