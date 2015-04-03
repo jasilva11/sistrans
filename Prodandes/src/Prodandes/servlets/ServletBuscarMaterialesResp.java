@@ -145,7 +145,7 @@ public class ServletBuscarMaterialesResp extends HttpServlet
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
 		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
 		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
-		out.println("<li><a href=\"modificar.htm\">Modificar</a></li>");
+		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
 		out.println("<li><a href=\"#\">Contacts</a></li>");
@@ -165,6 +165,9 @@ public class ServletBuscarMaterialesResp extends HttpServlet
 			if (resultados.get(i) != null)
 			{
 				MateriasPrimas x = (MateriasPrimas) resultados.get(i);
+				int y = i+1;
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Material "+ y + "</strong></label> ");
+				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Nombre: "+ x.darNombre() + "</label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Lo componen: "+ x.darComponentes() + "</label> ");
@@ -184,7 +187,9 @@ public class ServletBuscarMaterialesResp extends HttpServlet
 				out.println("    <label for=\"categoria2\"> Fecha Inicio: "+ x.darInicio() + "</label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Fecha Fin: "+ x.darFin() + "</label> ");
-				out.println("  </p>");			
+				out.println("  </p>");	
+				out.println("  <p>&nbsp;</p>");
+				out.println("  <p>&nbsp;</p>");		
 			}
 		}
 		out.println("<p>&nbsp;</p>");

@@ -141,7 +141,7 @@ public class ServletDarProveedoresRes extends HttpServlet
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
 		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
 		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
-		out.println("<li><a href=\"modificar.htm\">Modificar</a></li>");
+		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
 		out.println("<li><a href=\"#\">Contacts</a></li>");
@@ -161,7 +161,8 @@ public class ServletDarProveedoresRes extends HttpServlet
 			if (resultados.get(i) != null)
 			{
 				Proveedores x = (Proveedores) resultados.get(i);
-				out.println("    <label for=\"categoria2\"> Proveedor "+ i + "</label> ");
+				int y = i+1;
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Proveedor "+ y + "</strong></label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Nombre: "+ x.getNombre() + "</label> ");
 				out.println("  </p>");
@@ -182,7 +183,9 @@ public class ServletDarProveedoresRes extends HttpServlet
 				out.println("    <label for=\"categoria2\"> Tiempo de entrega: "+ x.darTiempo() + "</label> ");
 				out.println("  </p>");	
 				out.println("    <label for=\"categoria2\"> Producto: "+ x.darProducto() + "</label> ");
-				out.println("  </p>");	
+				out.println("  </p>");
+				out.println("  <p>&nbsp;</p>");
+				out.println("  <p>&nbsp;</p>");
 			}
 		}
 		out.println("<p>&nbsp;</p>");

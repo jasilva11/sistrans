@@ -125,9 +125,9 @@ public class ServletRegistrarEntregaPedidoCliente extends HttpServlet
 		out.println("	<a href=\"#\" class=\"nav-btn\">Home<span></span></a>");
 		out.println("	<ul>");
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
-		out.println("<li class=\"active home\"><a href=\"#\">Buscar</a></li>");
-		out.println("<li><a href=\"#\">Projects</a></li>");
-		out.println("<li><a href=\"#\">Solutions</a></li>");
+		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
+		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
+		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
 		out.println("<li><a href=\"#\">Contacts</a></li>");

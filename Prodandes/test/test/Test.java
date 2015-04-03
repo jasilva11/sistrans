@@ -17,8 +17,6 @@ public class Test extends TestCase
 	{
 		x = new consultaDAO();
 		x.inicializar();
-
-
 	}
 
 

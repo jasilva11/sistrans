@@ -224,6 +224,11 @@ dao.agregarCliente(z);
 	{
 		return dao.darTipoUsuario(usr,pass);
 	}
+	
+	public String cambiarEstado(int estacion) throws SQLException
+	{
+		return dao.cambiarEstado(estacion);
+	}
 
 
 }

@@ -68,6 +68,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-name>DarProvedoresRes</servlet-name>
   <servlet-class>Prodandes.servlets.ServletDarProveedoresRes</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>CambiarEstado</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletCambiarEstado</servlet-class>
+ </servlet>
  <!-- MAPPING -->
  <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -124,5 +128,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
   <servlet-name>DarProvedoresRes</servlet-name>
   <url-pattern>/darProvedoresRes.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CambiarEstado</servlet-name>
+  <url-pattern>/servletCambiarEstado.htm</url-pattern>
  </servlet-mapping>
 </web-app>

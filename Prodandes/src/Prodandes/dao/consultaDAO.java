@@ -438,9 +438,10 @@ public class consultaDAO {
 		{
 			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE to_date('"+parametro+"','dd/mm/yyyy') < FECHA_INICIO AND to_date('"+parametro2+"','dd/mm/yyyy')>FECHA_FINAL";
 		}
+
+		inicializar();
+
 		establecerConexion();
-
-
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
@@ -498,9 +499,10 @@ public class consultaDAO {
 		{
 			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM (PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL)RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE TIEMPO_ENTREGA >" + "'" + parametro+ "'" ;
 		}
+
+		inicializar();
+
 		establecerConexion();
-
-
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
@@ -519,13 +521,60 @@ public class consultaDAO {
 			int tiempo = Integer.parseInt(resultado.getString(4));
 			String material = resultado.getString(2);
 			String producto = resultado.getString(5);
-			int id = Integer.parseInt(resultado.getString(1));
+			int id = contador;
 			System.out.println(nombre);
 			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto);
 			proveedores.add(registro);
 			contador++;
 		}
 		return proveedores;
+	}
+
+	public String cambiarEstado(int estacion) throws SQLException
+	{
+		String sql = "SELECT ESTADO FROM ESTACION_PRODUCCION WHERE CODIGO =" + estacion;
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		String estado = "";
+
+		while( resultado.next( )) 
+		{
+			estado = resultado.getString( 1 );
+		}
+
+		String sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = 1 WHERE ID_ESTACION = 1";
+
+		if(estado.equalsIgnoreCase("ACTIVA"))
+		{
+			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'INACTIVA' WHERE CODIGO =" + estacion;
+			if(estacion == 16)
+			{
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + 15 +" WHERE ID_ESTACION = "+ estacion;
+			}
+			else
+			{
+				int x = estacion + 1;
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + x +" WHERE ID_ESTACION = "+ estacion;
+			}
+		}
+		else
+		{
+			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'ACTIVA' WHERE CODIGO =" + estacion;
+		}
+
+		PreparedStatement prepStmt2 = conexion.prepareStatement(sql);
+		PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
+
+		ResultSet rs = prepStmt2.executeQuery();
+		ResultSet rs2 = prepStmt3.executeQuery();
+		
+		return estado;
 	}
 
 	public ArrayList buscarOperarios(String etapa) throws SQLException
@@ -535,6 +584,8 @@ public class consultaDAO {
 		Operario registro = null;
 
 		String sql = "SELECT * FROM OPERARIOS RIGHT OUTER JOIN PERSONAS ON OPERARIOS.IDENTIFICACION_PERSONA = PERSONAS.IDENTIFICACION WHERE PRODUCIDO >= all(SELECT PRODUCIDO FROM OPERARIOS WHERE AREA_ENCARGADA = "+ etapa +") AND AREA_ENCARGADA = "+ etapa;
+
+		inicializar();
 
 		establecerConexion();
 
@@ -600,14 +651,19 @@ public class consultaDAO {
 		String agregar = "INSERT INTO ETAPAS (PERSONAL_REQUERIDO, NUMEROSECUENCIA, NOMBRE, IDENTIFICADOR)values (" + empleados + ",'" + secuencia + "', '" + nombre + "', '" + id +"',  " + fechaIncio +", '" + fechaFin +"');";
 
 
-		try {
+		try 
+		{
+			inicializar();
+
 			establecerConexion();
 
 			prepStmt = conexion.prepareStatement(agregar);
 
 			ResultSet rs = prepStmt.executeQuery();
 
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;

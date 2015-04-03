@@ -61,67 +61,67 @@ public class ServletRegistroEfectivo extends HttpServlet
 
 	private void procesarSolicitud( HttpServletRequest request, HttpServletResponse response ) throws IOException
 	{
-		
+
 		// Toma los valores de los parámetros para hacer el cálculo
-        String antiguedad = request.getParameter("antiguedad");
-        String deudas = request.getParameter("deudas");
-      String nombRL = request.getParameter("nombRL");
-       String numRSNV2 = request.getParameter("numRSNV");
-        String direccion = request.getParameter("direccion");
-        String telefono = request.getParameter("telefono");
-        String id = request.getParameter("id");
-        String tpID = request.getParameter("tpID");
-        String  personaNat =request.getParameter("personaNat");
-        String nombre =request.getParameter("nombre");
-        String ciudad =request.getParameter("ciudad");
-        boolean papitas = false;
-        int x = -1;
-        int z = -1;
-        int zz = -1;
-        int zzz = -1;
-        int zzzz = -1;
-        
-        if (personaNat.equals("Si") )
-        {
-        	papitas = true;
-        }
-   
-        try
-        {
-      x = Integer.parseInt(antiguedad);
-     z = Integer.parseInt(deudas);
-      zz = Integer.parseInt(telefono);
-      zzz = Integer.parseInt(id);
-      zzzz = Integer.parseInt(numRSNV2);
-      
-        }
-        catch (Exception e) 
-        {
-            imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Debe llenar los campos de texto." );
+		String antiguedad = request.getParameter("antiguedad");
+		String deudas = request.getParameter("deudas");
+		String nombRL = request.getParameter("nombRL");
+		String numRSNV2 = request.getParameter("numRSNV");
+		String direccion = request.getParameter("direccion");
+		String telefono = request.getParameter("telefono");
+		String id = request.getParameter("id");
+		String tpID = request.getParameter("tpID");
+		String  personaNat =request.getParameter("personaNat");
+		String nombre =request.getParameter("nombre");
+		String ciudad =request.getParameter("ciudad");
+		boolean papitas = false;
+		int x = -1;
+		int z = -1;
+		int zz = -1;
+		int zzz = -1;
+		int zzzz = -1;
+
+		if (personaNat.equals("Si") )
+		{
+			papitas = true;
 		}
-        if(nombRL == "" || direccion == ""|| tpID == "" || x == -1 || z == -1 || zz == -1 || zzz == -1 || zzzz == -1)
-        {
-            // El pedido no contiene los parámetros necesarios
-            imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Debe llenar los campos de texto." );
-        }
-        else
-        {
-        	Prodandes joda = Prodandes.darInstancia();
-if (joda.darCliente(zzz) == null)
-{
-Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzzz, nombRL, papitas);
-        		imprimirEncabezadoNuevo( response, nuevo );
-        		
+
+		try
+		{
+			x = Integer.parseInt(antiguedad);
+			z = Integer.parseInt(deudas);
+			zz = Integer.parseInt(telefono);
+			zzz = Integer.parseInt(id);
+			zzzz = Integer.parseInt(numRSNV2);
+
+		}
+		catch (Exception e) 
+		{
+			imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Debe llenar los campos de texto." );
+		}
+		if(nombRL == "" || direccion == ""|| tpID == "" || x == -1 || z == -1 || zz == -1 || zzz == -1 || zzzz == -1)
+		{
+			// El pedido no contiene los parámetros necesarios
+			imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Debe llenar los campos de texto." );
+		}
+		else
+		{
+			Prodandes joda = Prodandes.darInstancia();
+			if (joda.darCliente(zzz) == null)
+			{
+				Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzzz, nombRL, papitas);
+				imprimirEncabezadoNuevo( response, nuevo );
 
 
-   }
-        	else
-        	{
-        		imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Nombre de usuario o contraseña incorrectos." );
-        	}
-        }
-    }
-	
+
+			}
+			else
+			{
+				imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Nombre de usuario o contraseña incorrectos." );
+			}
+		}
+	}
+
 
 	private void imprimirEncabezadoNuevo(HttpServletResponse response, Cliente memes) throws IOException 
 	{
@@ -152,9 +152,9 @@ Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzz
 		out.println("	<a href=\"#\" class=\"nav-btn\">Home<span></span></a>");
 		out.println("	<ul>");
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
-		out.println("<li class=\"active home\"><a href=\"#\">Buscar</a></li>");
-		out.println("<li><a href=\"#\">Projects</a></li>");
-		out.println("<li><a href=\"#\">Solutions</a></li>");
+		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
+		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
+		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
 		out.println("<li><a href=\"#\">Contacts</a></li>");
@@ -172,10 +172,10 @@ Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzz
 		out.println("        <blockquote>");
 		out.println("          <blockquote>");
 		out.println("            <h1>Se ha creado el cliente</h1>");
-		
+
 		out.println("    <label for=\"categoria2\"> "+ memes.getNombre()+ "</label> ");
 		out.println("  </p>");
-		
+
 		out.println("            <p>.</p>");
 		out.println("          </blockquote>");
 		out.println("        </blockquote>");
@@ -193,8 +193,8 @@ Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzz
 
 
 	}	// TODO Auto-generated method stub
-		
-	
+
+
 
 	/**
 	 * Maneja un pedido GET de un cliente
@@ -218,25 +218,25 @@ Cliente nuevo = new Cliente(direccion, nombre, zz	, ciudad, zzz, tpID, x, z, zzz
 		procesarSolicitud( request, response );
 	}
 
-	
-	
-	
-	 /**
-     * Imprime un mensaje de error
-     * @param respuesta Respuesta al cliente
-     * @param titulo Título del error
-     * @param mensaje Mensaje del error
-     */
-    private void imprimirMensajeError( PrintWriter respuesta, String titulo, String mensaje )
-    {
-    	respuesta.println( "<p><img src=\"imagenes/Untitled-1342.png\" width=\"375\" height=\"210\" /></p>" );
-    	respuesta.println( "                      <p class=\"error\"><b>Ha ocurrido un error!:<br>" );
-        respuesta.println( "                      </b>" + titulo + "</p><p>" + mensaje + ". </p>" );
-        respuesta.println( "                      <p>Intente la " );
-        respuesta.println( "                      operación nuevamente. Si el problema persiste, contacte" );
-        respuesta.println( "                      al administrador del sistema.</p>" );
-        respuesta.println( "<p><img src=\"imagenes/error.JPG\" width=\"375\" height=\"210\" /></p>" );
-        respuesta.println( "</body>" );
+
+
+
+	/**
+	 * Imprime un mensaje de error
+	 * @param respuesta Respuesta al cliente
+	 * @param titulo Título del error
+	 * @param mensaje Mensaje del error
+	 */
+	private void imprimirMensajeError( PrintWriter respuesta, String titulo, String mensaje )
+	{
+		respuesta.println( "<p><img src=\"imagenes/Untitled-1342.png\" width=\"375\" height=\"210\" /></p>" );
+		respuesta.println( "                      <p class=\"error\"><b>Ha ocurrido un error!:<br>" );
+		respuesta.println( "                      </b>" + titulo + "</p><p>" + mensaje + ". </p>" );
+		respuesta.println( "                      <p>Intente la " );
+		respuesta.println( "                      operación nuevamente. Si el problema persiste, contacte" );
+		respuesta.println( "                      al administrador del sistema.</p>" );
+		respuesta.println( "<p><img src=\"imagenes/error.JPG\" width=\"375\" height=\"210\" /></p>" );
+		respuesta.println( "</body>" );
 		respuesta.println( "</html>" );
-    }
+	}
 }

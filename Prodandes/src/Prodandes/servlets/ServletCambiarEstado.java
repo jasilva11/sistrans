@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.jboss.system.server.ServerConfig;
 import org.jboss.system.server.ServerConfigLocator;
 
-
 import Prodandes.fachada.Prodandes;
+import Prodandes.vod.Proveedores;
 
-public class ServletRegistrarse extends HttpServlet
-{	
+public class ServletCambiarEstado extends HttpServlet
+{
 	public final static String RUTA_ARCHIVO_SERIALIZADO = "/prodAndes.data";
 
 	// -----------------------------------------------------------------
@@ -37,7 +39,7 @@ public class ServletRegistrarse extends HttpServlet
 		System.out.println("Destruyendo instancia");
 		try
 		{
-			if ( Prodandes.darInstancia( ) != null ) 
+			if ( Prodandes.darInstancia() != null ) 
 			{
 				ServerConfig config = ServerConfigLocator.locate( );
 				File dataDir = config.getServerDataDir();
@@ -48,7 +50,7 @@ public class ServletRegistrarse extends HttpServlet
 
 				FileOutputStream fos = new FileOutputStream( tmp );
 				ObjectOutputStream oos = new ObjectOutputStream( fos );
-				oos.writeObject( Prodandes.darInstancia( ) );
+				oos.writeObject( Prodandes.darInstancia() );
 				oos.close();
 				fos.close();
 				System.out.println("Album Serializado");
@@ -62,12 +64,23 @@ public class ServletRegistrarse extends HttpServlet
 
 	private void procesarSolicitud( HttpServletRequest request, HttpServletResponse response ) throws IOException
 	{
-		
-		imprimirEncabezado(response);
+		Prodandes joda = Prodandes.darInstancia();
 
-    }
-	
+		int numero = Integer.parseInt(request.getParameter("nombre"));
 
+		String estado = "";
+
+		try 
+		{
+			estado = joda.cambiarEstado(numero);;
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		imprimirEncabezado(response, numero ,estado);
+	}
 
 	/**
 	 * Maneja un pedido GET de un cliente
@@ -96,7 +109,7 @@ public class ServletRegistrarse extends HttpServlet
 	 * @param response Respuesta
 	 * @throws IOException Excepción al imprimir en el resultado
 	 */
-	private void imprimirEncabezado( HttpServletResponse response ) throws IOException
+	private void imprimirEncabezado( HttpServletResponse response, int numero, String estado) throws IOException
 	{
 		// Obtiene el flujo de escritura de la respuesta
 		PrintWriter out = response.getWriter( );
@@ -105,7 +118,7 @@ public class ServletRegistrarse extends HttpServlet
 		out.println("<head>");
 		out.println("<meta charset=\"utf-8\" />");
 		out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0\" />");
-		out.println("<title>ProdAndes</title>");
+		out.println("<title>Dar proveedores</title>");
 		out.println("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"css/images/icon.png\" />");
 		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" media=\"all\" />");
 		out.println("<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />");
@@ -120,13 +133,13 @@ public class ServletRegistrarse extends HttpServlet
 		out.println("<header class=\"header\">");
 		out.println("<div class=\"shell\">");
 		out.println("<div class=\"header-top\">");
-		out.println("<h1 id=\"logo\"><a href=\"#\">Prodandes</a></h1>");
+		out.println("<h1 id=\"logo\"><a href=\"home.html\">Prodandes</a></h1>");
 		out.println("<nav id=\"navigation\">");
 		out.println("	<a href=\"#\" class=\"nav-btn\">Home<span></span></a>");
 		out.println("	<ul>");
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
 		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
-		out.println("<li class=\"active home\"><a href=\"#\">Registrarse</a></li>");
+		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
 		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
@@ -137,59 +150,22 @@ public class ServletRegistrarse extends HttpServlet
 		out.println("</div>");
 		out.println("</head>");
 		out.println("");
-		out.println( "<p><img src=\"imagenes/7E0F6B7EF.png\" width=\"375\" height=\"210\" /></p>" );
 		out.println("<body>");
-		out.println("<blockquote>");
-		out.println("  <blockquote>");
-		out.println("    <blockquote>");
-		out.println("      <blockquote>");
-		out.println("        <blockquote>");
-		out.println("          <blockquote>");
-		out.println("            <h1>Registrar Cliente</h1>");
-		out.println("            <p>.</p>");
-		out.println("          </blockquote>");
-		out.println("        </blockquote>");
-		out.println("      </blockquote>");
-		out.println("    </blockquote>");
-		out.println("  </blockquote>");
-		out.println("</blockquote>");
-		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"registrarCliente.htm\">");
-		out.println("  <p>");
-		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Registrar Cliente\" />");
+		out.println("<div id=\"bg\"></div>");
+		out.println("<div id=\"carousel\"><div>");
+		out.println("<h3><FONT SIZE=8>Proveedores</font></h3>");
+		out.println("</div>");
+		if(estado.equalsIgnoreCase("INACTIVA"))
+		{
+			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido activada</label> ");
+		}
+		else
+		{
+			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido desactivada</label> ");
+		}
 		out.println("  </p>");
-		out.println("</form>");
-		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"EliminarBasicoEfectivamente.htm\">");
-		out.println("  <p>");
-		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Registrar Proovedor\" />");
-		out.println("  </p>");
-		out.println("</form>");
-		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"EliminarBasicoEfectivamente.htm\">");
-		out.println("  <p>");
-		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Registrar Operario\" />");
-		out.println("</form>");
 		out.println("<p>&nbsp;</p>");
 		out.println("</body>");
 		out.println("</html>");
 	}
-	
-	
-	 /**
-     * Imprime un mensaje de error
-     * @param respuesta Respuesta al cliente
-     * @param titulo Título del error
-     * @param mensaje Mensaje del error
-     */
-    private void imprimirMensajeError( PrintWriter respuesta, String titulo, String mensaje )
-    {
-    	respuesta.println( "<p><img src=\"imagenes/Untitled-1342.png\" width=\"375\" height=\"210\" /></p>" );
-    	respuesta.println( "                      <p class=\"error\"><b>Ha ocurrido un error!:<br>" );
-        respuesta.println( "                      </b>" + titulo + "</p><p>" + mensaje + ". </p>" );
-        respuesta.println( "                      <p>Intente la " );
-        respuesta.println( "                      operación nuevamente. Si el problema persiste, contacte" );
-        respuesta.println( "                      al administrador del sistema.</p>" );
-        respuesta.println( "<p><img src=\"imagenes/error.JPG\" width=\"375\" height=\"210\" /></p>" );
-        respuesta.println( "</body>" );
-		respuesta.println( "</html>" );
-    }
 }
-

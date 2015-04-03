@@ -148,7 +148,7 @@ public class ServletModificarEtapaEfectivo extends HttpServlet
 		out.println("<li><a href=\"home.html\">Inicio</a></li>");
 		out.println("<li><a href=\"buscar.htm\">Buscar</a></li>");
 		out.println("<li><a href=\"registrarse.htm\">Registrarse</a></li>");
-		out.println("<li><a href=\"modificar.htm\">Modificar</a></li>");
+		out.println("<li><a href=\"servletModificar.htm\">Modificar</a></li>");
 		out.println("<li><a href=\"#\">Jobs</a></li>");
 		out.println("<li><a href=\"#\">Blog</a></li>");
 		out.println("<li><a href=\"#\">Contacts</a></li>");
