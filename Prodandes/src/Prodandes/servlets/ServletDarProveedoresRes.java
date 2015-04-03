@@ -180,7 +180,9 @@ public class ServletDarProveedoresRes extends HttpServlet
 				out.println("    <label for=\"categoria2\" > Volumen: "+ x.darVolumen() + "</label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Tiempo de entrega: "+ x.darTiempo() + "</label> ");
-				out.println("  </p>");			
+				out.println("  </p>");	
+				out.println("    <label for=\"categoria2\"> Producto: "+ x.darProducto() + "</label> ");
+				out.println("  </p>");	
 			}
 		}
 		out.println("<p>&nbsp;</p>");

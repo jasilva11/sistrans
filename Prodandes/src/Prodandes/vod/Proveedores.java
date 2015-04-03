@@ -11,14 +11,16 @@ public class Proveedores extends Personas
 	private String materiaPrima;
 	private int volumenMaximo;
 	private int tiempoEntrega;
+	private String producto;
 	private String nomRepresentanteLegal;
 
-	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, String ptipoId, String pMateriaPrima, int pId, int vol, int tiempo)
+	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, String ptipoId, String pMateriaPrima, int pId, int vol, int tiempo, String pProducto)
 	{
 		super( pdireccion, pnombre, ptelefono, pciudad,  pId, ptipoId);
 		materiaPrima = pMateriaPrima;
 		volumenMaximo = vol;
 		tiempoEntrega = tiempo;
+		producto = pProducto;
 	}
 	
 	public String darMaterial()
@@ -35,8 +37,14 @@ public class Proveedores extends Personas
 	{
 		return tiempoEntrega;
 	}
+	
+	public String darProducto()
+	{
+		return producto;
+	}
 
-	public void finalize() throws Throwable {
+	public void finalize() throws Throwable
+	{
 		super.finalize();
 	}
 }//end Proveedores

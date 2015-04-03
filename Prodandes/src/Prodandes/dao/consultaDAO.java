@@ -521,7 +521,7 @@ public class consultaDAO {
 			String producto = resultado.getString(5);
 			int id = Integer.parseInt(resultado.getString(1));
 			System.out.println(nombre);
-			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo);
+			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto);
 			proveedores.add(registro);
 			contador++;
 		}
