@@ -5,17 +5,35 @@ package Prodandes.vod;
  * @version 1.0
  * @created 14-Mar-2015 20:30:03
  */
-public class Proveedores extends Personas {
+public class Proveedores extends Personas 
+{
 
-	private int cotizacion;
 	private String materiaPrima;
 	private int volumenMaximo;
 	private int tiempoEntrega;
 	private String nomRepresentanteLegal;
 
-	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, int pidentificacion,String ptipoId)
+	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, String ptipoId, String pMateriaPrima, int pId, int vol, int tiempo)
 	{
-		super( pdireccion, pnombre, ptelefono, pciudad,  pidentificacion, ptipoId);
+		super( pdireccion, pnombre, ptelefono, pciudad,  pId, ptipoId);
+		materiaPrima = pMateriaPrima;
+		volumenMaximo = vol;
+		tiempoEntrega = tiempo;
+	}
+	
+	public String darMaterial()
+	{
+		return materiaPrima;
+	}
+	
+	public int darVolumen()
+	{
+		return volumenMaximo;
+	}
+	
+	public int darTiempo()
+	{
+		return tiempoEntrega;
 	}
 
 	public void finalize() throws Throwable {

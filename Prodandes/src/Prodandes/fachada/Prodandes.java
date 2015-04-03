@@ -210,6 +210,11 @@ dao.agregarCliente(z);
 		return dao.buscarMateriales(parametro, parametro2, tipo);
 	}
 	
+	public ArrayList conProveedores(String parametro, int numero, String tipo) throws SQLException
+	{
+		return dao.buscarProveedores(parametro, numero, tipo);
+	}
+	
 	public ArrayList conOperarios(String pEtapa) throws SQLException
 	{
 		return dao.buscarOperarios(pEtapa);

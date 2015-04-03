@@ -64,6 +64,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-name>ConsultarExistenciaUnMaterial</servlet-name>
   <servlet-class>Prodandes.servlets.ConsultarExistenciaUnMaterial</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>DarProvedoresRes</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarProveedoresRes</servlet-class>
+ </servlet>
  <!-- MAPPING -->
  <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -116,5 +120,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
   <servlet-name>ConsultarExistenciaUnMaterial</servlet-name>
   <url-pattern>/consultarExistenciaUnMaterial.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>DarProvedoresRes</servlet-name>
+  <url-pattern>/darProvedoresRes.htm</url-pattern>
  </servlet-mapping>
 </web-app>
