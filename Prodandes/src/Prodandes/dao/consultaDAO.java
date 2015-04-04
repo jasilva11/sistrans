@@ -555,7 +555,7 @@ public class consultaDAO {
 		
 		int mayor = 0;
 		
-		while( resultado2.next( )) 
+		while( resultado2.next( ))  
 		{
 			mayor = Integer.parseInt(resultado2.getString( 1 ));
 		}
