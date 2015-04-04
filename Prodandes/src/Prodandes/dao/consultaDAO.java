@@ -608,7 +608,7 @@ public class consultaDAO {
 			while( resultado4.next( ) && contador<cont/2)  
 			{
 				res = Integer.parseInt(resultado4.getString( 1 ));
-				etapas.add(res);
+				etapas.add(res); 
 				contador++;
 			}
 			
