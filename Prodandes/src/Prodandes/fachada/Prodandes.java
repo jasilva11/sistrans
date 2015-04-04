@@ -200,12 +200,20 @@ dao.agregarCliente(z);
 	
 	}
 	
+<<<<<<< HEAD
 //	public boolean cancelarProducto(String nombreP) 
 //	{
 //    Producto jesus = darProducto(nombreP);
 //    
 //	
 //	}
+=======
+	public boolean cancelarProducto(String nombreP) 
+	{
+    Producto jesus = darProducto(nombreP);
+  
+	}
+>>>>>>> branch 'master' of ssh://git@github.com/uniandes-jasilva11/sistrans.git
 	
 	
     // ---------------------------------------------------
