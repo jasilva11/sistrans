@@ -200,6 +200,13 @@ dao.agregarCliente(z);
 	
 	}
 	
+	public boolean cancelarProducto(String nombreP) 
+	{
+    Producto jesus = darProducto(nombreP);
+    
+	
+	}
+	
 	
     // ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -228,6 +235,15 @@ dao.agregarCliente(z);
 	public String cambiarEstado(int estacion) throws SQLException
 	{
 		return dao.cambiarEstado(estacion);
+	}
+	
+	public Producto darProducto(String nombre) 
+	{
+		return dao.buscarProducto(nombre);
+	}
+	public Producto darProducto(String nombre) 
+	{
+		return dao.buscarProducto(nombre);
 	}
 
 
