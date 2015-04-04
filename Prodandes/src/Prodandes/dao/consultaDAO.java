@@ -147,6 +147,9 @@ public class consultaDAO {
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------  
+
+	
+	
 	public String darEtapasProduccion(String x , String y) throws SQLException
 	{
 		PreparedStatement prepStmt = null;
@@ -358,6 +361,8 @@ public class consultaDAO {
 				resp =true;
 			}
 
+			
+			
 
 
 			Producto x = new Producto(pcostoProduccion, nombre ,resp,idEtapa);			
@@ -371,6 +376,51 @@ public class consultaDAO {
 		return null;
 
 	}
+	
+	
+	public ArrayList<MateriasPrimas> darMateriasDeUnProducto(String x ) throws SQLException
+	{
+		PreparedStatement prepStmt = null;
+		ArrayList<MateriasPrimas> jesus = new ArrayList<MateriasPrimas>();
+		inicializar();
+		establecerConexion();
+		
+
+
+
+return jesus;
+
+	}
+	
+	public ArrayList<EtapasDeProducion> darEtapasDeUnProducto(String x ) throws SQLException
+	{
+		PreparedStatement prepStmt = null;
+		ArrayList<EtapasDeProducion> jesus = new ArrayList<EtapasDeProducion>();
+		inicializar();
+		establecerConexion();
+		
+
+
+
+return jesus;
+
+	}
+	public ArrayList<ComponentesProduccion> darComponenteDeUnProducto(String x ) throws SQLException
+	{
+		PreparedStatement prepStmt = null;
+		ArrayList<ComponentesProduccion> jesus = new ArrayList<ComponentesProduccion>();
+		inicializar();
+		establecerConexion();
+		
+
+
+
+return jesus;
+
+	}
+	
+	
+	
 
 	public void actualizarProducto(Producto x) 
 	{

@@ -203,8 +203,7 @@ dao.agregarCliente(z);
 	public boolean cancelarProducto(String nombreP) 
 	{
     Producto jesus = darProducto(nombreP);
-    
-	
+  
 	}
 	
 	
@@ -237,10 +236,6 @@ dao.agregarCliente(z);
 		return dao.cambiarEstado(estacion);
 	}
 	
-	public Producto darProducto(String nombre) 
-	{
-		return dao.buscarProducto(nombre);
-	}
 	public Producto darProducto(String nombre) 
 	{
 		return dao.buscarProducto(nombre);
