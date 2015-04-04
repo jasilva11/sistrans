@@ -523,7 +523,7 @@ public class consultaDAO {
 			String producto = resultado.getString(5);
 			int id = contador;
 			System.out.println(nombre);
-			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto);
+			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto, 0);
 			proveedores.add(registro);
 			contador++;
 		}
@@ -598,7 +598,7 @@ public class consultaDAO {
 					num = Integer.parseInt(resultado3.getString( 2 ));
 				}
 			}
-			
+
 			String sql6 = "SELECT ID_ETAPA FROM ETAPAS_DE_ESTACION WHERE ID_ESTACION =" + num;
 			PreparedStatement prepStmt6 = conexion.prepareStatement(sql6);
 			ResultSet resultado4 = prepStmt6.executeQuery( sql6 );
@@ -611,7 +611,7 @@ public class consultaDAO {
 				etapas.add(res); 
 				contador++;
 			}
-			
+
 			int i = 0;
 			while(i<etapas.size())
 			{
@@ -664,6 +664,67 @@ public class consultaDAO {
 			operarios.add(registro);
 		}
 		return operarios;
+	}
+
+	public ArrayList generarPedidos(String pProducto, String tipo) throws SQLException
+	{
+		ArrayList proveedores = new ArrayList();
+
+		ArrayList materiales = new ArrayList();
+
+		ArrayList cantidad = new ArrayList();
+		
+		Proveedores registro = null;
+
+		String sql = "SELECT CANTIDAD_MATERIAL, MATERIAL FROM MATERIALESDEPRODUCTOS WHERE PRODUCTO = " + pProducto;
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		while( resultado.next( )) 
+		{
+			materiales.add(resultado.getString( 2 ));
+			cantidad.add(Integer.parseInt(resultado.getString( 2 )));
+		}
+
+		String sql2 ="";
+
+		for(int i = 0; i < materiales.size() && i < materiales.size(); i++)
+		{
+			if(tipo.equalsIgnoreCase("costo"))
+			{
+				sql2="SELECT * FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE MATERIA_PRIMA = '" + materiales.get(i) + "' AND VOLUMEN_MAXIMO >= "+ cantidad.get(i) +" AND COTIZACION <= all(SELECT COTIZACION FROM PROVEEDORES WHERE MATERIA_PRIMA = '"+ materiales.get(i) +"')";
+			}
+			else
+			{
+				sql2="SELECT * FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE MATERIA_PRIMA = '" + materiales.get(i) + "' AND VOLUMEN_MAXIMO >= "+ cantidad.get(i) +" AND TIEMPO_ENTREGA <= all(SELECT TIEMPO_ENTREGA FROM PROVEEDORES WHERE MATERIA_PRIMA = '"+ materiales.get(i) +"')";
+			}
+			
+			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+			ResultSet resultado2 = prepStmt2.executeQuery( sql2 );
+
+			while( resultado2.next( )) 
+			{
+					String nombre = resultado2.getString( 7 );
+					String codPos = resultado2.getString( 8 );
+					String direccion = resultado2.getString( 9 );
+					int cotizacion = Integer.parseInt(resultado2.getString( 3 ));
+					int id = Integer.parseInt(resultado2.getString( 4 ));
+					int telefono = Integer.parseInt(resultado2.getString( 10 ));
+					String tipoId = resultado2.getString( 11 );
+					int volumen = (Integer) cantidad.get(i);
+					int tiempo = Integer.parseInt(resultado2.getString(2));
+					String material = (String) materiales.get(i);
+					String producto = pProducto;
+					registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto, cotizacion);
+					proveedores.add(registro);
+			}
+		}
+		return proveedores;
 	}
 
 	public ArrayList<EtapasDeProducion> darMayorMovimientoSistema ()

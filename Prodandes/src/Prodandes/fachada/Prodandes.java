@@ -200,12 +200,12 @@ dao.agregarCliente(z);
 	
 	}
 	
-	public boolean cancelarProducto(String nombreP) 
-	{
-    Producto jesus = darProducto(nombreP);
-    
-	
-	}
+//	public boolean cancelarProducto(String nombreP) 
+//	{
+//    Producto jesus = darProducto(nombreP);
+//    
+//	
+//	}
 	
 	
     // ---------------------------------------------------
@@ -226,6 +226,11 @@ dao.agregarCliente(z);
 	{
 		return dao.buscarOperarios(pEtapa);
 	}
+	
+	public ArrayList generarPedidos(String pProducto, String tipo) throws SQLException
+	{
+		return dao.generarPedidos(pProducto, tipo);
+	}
 
 	public String darTipoUsuario(String usr,String pass) 
 	{
@@ -241,10 +246,7 @@ dao.agregarCliente(z);
 	{
 		return dao.buscarProducto(nombre);
 	}
-	public Producto darProducto(String nombre) 
-	{
-		return dao.buscarProducto(nombre);
-	}
 
+	
 
 }

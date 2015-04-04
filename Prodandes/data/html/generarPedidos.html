@@ -1,7 +1,7 @@
 <head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
-		<title>ProdAndes</title>
+		<title>Dar proveedores</title>
 		<link rel="shortcut icon" type="image/x-icon" href="css/images/icon.png" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 		<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />
@@ -23,7 +23,7 @@
 		<li><a href="home.html">Inicio</a></li>
 		<li><a href="buscar.htm">Buscar</a></li>
 		<li><a href="registrarse.htm">Registrarse</a></li>
-		<li class="active home"><a href=#>Modificar</a></li>
+		<li><a href="servletModificar.htm">Modificar</a></li>
 		<li><a href="#">Jobs</a></li>
 		<li><a href="#">Blog</a></li>
 		<li><a href="#">Contacts</a></li>
@@ -36,14 +36,25 @@
 		<body>
 		<div id="bg"></div>
 		<div id="carousel"><div>
-		<h3>Modificar</h3>
-		<p>Modifique aqui los datos existentes o agregue unos nuevos.</p>
+		<h3><FONT SIZE=5>GENERAR PEDIDOS DE MATERIAS PRIMAS / COMPONENTES </font></h3>
+		<p>Para satisfacer los pedidos de los clientes, la empresa debe comprar los diversos insumos que requieren los productos  que produce. </p>
 		</div>
-		<p><h4><a href="servletModificarEtapa.htm"><FONT SIZE=5>Registrar etapa de produccion</font></a></h4></p>
-		<p><h4><a href="#"><FONT SIZE=5>Registrar llegada de material</font></a></h4></p>
-		<p><h4><a href="registrarPedidoProducto.htm"><FONT SIZE=5>Registrar pedido producto</font></a></h4></p>
-		<p><h4><a href="modificarEstacion.htm"><FONT SIZE=5>Modificar estado de estacion de produccion</font></a></h4></p>
-		<p><h4><a href="generarPedidos.htm"><FONT SIZE=5>Generar pedido de materia prima / componente</font></a></h4></p>
+		<form id="form1" name="form1" method="post" action="generarPedidosRes.htm">
+		  <p>
+		    <label for="nombre2"><FONT SIZE=7>Producto:</font></label>
+            <input type="text" name="nombre2" size="12" style="border: 1px solid #666666; font-size:20pt">
+          </p>
+           <p>
+		 <label for="opcion"><FONT SIZE=7>Filtrar por:</font></label> 
+		 <select name="opcion">
+		 <option value="costo">Costo</option> 
+		 <option value="tiempo">Tiempo de entrega</option> 
+		 </select>
+          </p>
+          <p>
+		<input type="submit" name="button" id="button" value="Buscar" />
+		</p>
+		</form>
 		<p>&nbsp;</p>
 		</body>
 		</html>

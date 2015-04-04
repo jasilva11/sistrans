@@ -17,10 +17,9 @@ import org.jboss.system.server.ServerConfig;
 import org.jboss.system.server.ServerConfigLocator;
 
 import Prodandes.fachada.Prodandes;
-import Prodandes.vod.MateriasPrimas;
 import Prodandes.vod.Proveedores;
 
-public class ServletDarProveedoresRes extends HttpServlet
+public class ServletGenerarPedidosRes extends HttpServlet
 {
 	public final static String RUTA_ARCHIVO_SERIALIZADO = "/prodAndes.data";
 
@@ -69,18 +68,16 @@ public class ServletDarProveedoresRes extends HttpServlet
 
 		String parametro = request.getParameter("nombre2");
 
-		int numero = Integer.parseInt(request.getParameter("numero"));
-
 		String tipo = request.getParameter("opcion");
 
 		ArrayList resp = new ArrayList();
 		try {
-			resp = joda.conProveedores(parametro,numero, tipo);
+			resp = joda.generarPedidos(parametro, tipo);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		imprimirEncabezado(response, resp);
+		imprimirEncabezado(response, resp, parametro);
 	}
 
 	/**
@@ -110,7 +107,7 @@ public class ServletDarProveedoresRes extends HttpServlet
 	 * @param response Respuesta
 	 * @throws IOException Excepción al imprimir en el resultado
 	 */
-	private void imprimirEncabezado( HttpServletResponse response, ArrayList resultados ) throws IOException
+	private void imprimirEncabezado( HttpServletResponse response, ArrayList resultados, String producto ) throws IOException
 	{
 		// Obtiene el flujo de escritura de la respuesta
 		PrintWriter out = response.getWriter( );
@@ -155,6 +152,7 @@ public class ServletDarProveedoresRes extends HttpServlet
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
 		out.println("<h3><FONT SIZE=8>Proveedores</font></h3>");
+		out.println("<p>Estos son los proveedores que proveen los materiales necesarios para la produccion de"+ producto +", de acuerdo con los parametros seleccionados. </p>");
 		out.println("</div>");
 		for (int i = 0; i < resultados.size(); i++) 
 		{
@@ -162,11 +160,14 @@ public class ServletDarProveedoresRes extends HttpServlet
 			{
 				Proveedores x = (Proveedores) resultados.get(i);
 				int y = i+1;
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Proveedor "+ y + "</strong></label> ");
+				int costo = x.darCotizacion()*x.darVolumen();
+				out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"darProvedoresRes.htm\">");
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Material "+ y + "</strong></label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Nombre: "+ x.getNombre() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Nombre Proveedor: "+ x.getNombre() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Identificacion: "+ x.getIdentificacion() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Identificacion: </label> ");
+				out.println("<input type=\"text\" name=\"nombre\" placeholder=\""+ x.getIdentificacion() +"\">");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Tipo Identificacion: "+ x.getTipoId() + "</label> ");
 				out.println("  </p>");
@@ -178,12 +179,15 @@ public class ServletDarProveedoresRes extends HttpServlet
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Material: "+ x.darMaterial() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\" > Volumen: "+ x.darVolumen() + "</label> ");
+				out.println("    <label for=\"categoria2\" > Volumen necesario compra: "+ x.darVolumen() + "</label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Tiempo de entrega: "+ x.darTiempo() + " semanas</label> ");
 				out.println("  </p>");	
-				out.println("    <label for=\"categoria2\"> Producto: "+ x.darProducto() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Costo: "+ costo + "</label> ");
 				out.println("  </p>");
+				out.println(" <input type=\"submit\" name=\"button\" id=\"button\" value=\"Buscar\" />");
+				out.println(" </p>");
+				out.println(" </form>");
 				out.println("  <p>&nbsp;</p>");
 				out.println("  <p>&nbsp;</p>");
 			}
