@@ -548,14 +548,27 @@ public class consultaDAO {
 			estado = resultado.getString( 1 );
 		}
 
+		String sql4 = "SELECT max(ID_ESTACION) FROM ETAPAS_DE_ESTACION";
+
+		PreparedStatement prepStmt4 = conexion.prepareStatement(sql4);
+		ResultSet resultado2 = prepStmt4.executeQuery( sql4 );
+
+		int mayor = 0;
+
+		while( resultado2.next( ))  
+		{
+			mayor = Integer.parseInt(resultado2.getString( 1 ));
+		}
+
 		String sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = 1 WHERE ID_ESTACION = 1";
 
 		if(estado.equalsIgnoreCase("ACTIVA"))
 		{
 			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'INACTIVA' WHERE CODIGO =" + estacion;
-			if(estacion == 16)
+			if(estacion == mayor)
 			{
-				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + 15 +" WHERE ID_ESTACION = "+ estacion;
+				int x = estacion - 1;
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + x +" WHERE ID_ESTACION = "+ estacion;
 			}
 			else
 			{
@@ -566,6 +579,45 @@ public class consultaDAO {
 		else
 		{
 			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'ACTIVA' WHERE CODIGO =" + estacion;
+
+			String sql5 = "SELECT COUNT (ID_ESTACION), ID_ESTACION FROM ETAPAS_DE_ESTACION GROUP BY ID_ESTACION";
+
+			PreparedStatement prepStmt5 = conexion.prepareStatement(sql5);
+			ResultSet resultado3 = prepStmt5.executeQuery( sql5 );
+
+			int mayor2 = 0;
+			int cont = 0;
+			int num = 0;
+
+			while( resultado3.next( ))  
+			{
+				cont = Integer.parseInt(resultado3.getString( 1 ));
+				if(cont > mayor2)
+				{
+					mayor2 = cont;
+					num = Integer.parseInt(resultado3.getString( 2 ));
+				}
+			}
+			
+			String sql6 = "SELECT ID_ETAPA FROM ETAPAS_DE_ESTACION WHERE ID_ESTACION =" + num;
+			PreparedStatement prepStmt6 = conexion.prepareStatement(sql6);
+			ResultSet resultado4 = prepStmt6.executeQuery( sql6 );
+			ArrayList etapas = new ArrayList();
+			int contador = 0;
+			int res = 0;
+			while( resultado4.next( ) && contador<cont/2)  
+			{
+				res = Integer.parseInt(resultado4.getString( 1 ));
+				etapas.add(res);
+				contador++;
+			}
+			
+			int i = 0;
+			while(i<etapas.size())
+			{
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + estacion +" WHERE ID_ESTACION = "+ num + " AND ID_ETAPA = " + etapas.get(i);
+				i++;
+			}
 		}
 
 		PreparedStatement prepStmt2 = conexion.prepareStatement(sql);
@@ -573,7 +625,7 @@ public class consultaDAO {
 
 		ResultSet rs = prepStmt2.executeQuery();
 		ResultSet rs2 = prepStmt3.executeQuery();
-		
+
 		return estado;
 	}
 
@@ -641,7 +693,7 @@ public class consultaDAO {
 		}
 		catch (Exception e)
 		{
-        return "No existe";
+			return "No existe";
 		}
 	}
 

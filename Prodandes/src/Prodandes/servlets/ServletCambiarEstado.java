@@ -118,7 +118,7 @@ public class ServletCambiarEstado extends HttpServlet
 		out.println("<head>");
 		out.println("<meta charset=\"utf-8\" />");
 		out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0\" />");
-		out.println("<title>Dar proveedores</title>");
+		out.println("<title>Cambiar estado</title>");
 		out.println("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"css/images/icon.png\" />");
 		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" media=\"all\" />");
 		out.println("<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />");
@@ -153,18 +153,26 @@ public class ServletCambiarEstado extends HttpServlet
 		out.println("<body>");
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
-		out.println("<h3><FONT SIZE=8>Proveedores</font></h3>");
-		out.println("</div>");
+		out.println("<h3><FONT SIZE=6>Cambiar estado</font></h3>");
 		if(estado.equalsIgnoreCase("INACTIVA"))
 		{
-			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido activada</label> ");
+			out.println("<p>La estacion "+ numero + " ha sido activada</p>");
 		}
 		else
 		{
-			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido desactivada</label> ");
+			out.println("<p>La estacion "+ numero + " ha sido desactivada</p>");
 		}
-		out.println("  </p>");
-		out.println("<p>&nbsp;</p>");
+		out.println("</div>");
+//		if(estado.equalsIgnoreCase("INACTIVA"))
+//		{
+//			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido activada</label> ");
+//		}
+//		else
+//		{
+//			out.println("    <FONT SIZE=5><label for=\"categoria2\">La estacion "+ numero + " ha sido desactivada</label> ");
+//		}
+//		out.println("  </p>");
+//		out.println("<p>&nbsp;</p>");
 		out.println("</body>");
 		out.println("</html>");
 	}
