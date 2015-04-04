@@ -20,6 +20,7 @@ import Prodandes.vod.ComponentesProduccion;
 import Prodandes.vod.EtapasDeProducion;
 import Prodandes.vod.MateriasPrimas;
 import Prodandes.vod.Operario;
+import Prodandes.vod.PedidoMaterial;
 import Prodandes.vod.Personas;
 import Prodandes.vod.Producto;
 import Prodandes.vod.Proveedores;
@@ -148,8 +149,8 @@ public class consultaDAO {
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------  
 
-	
-	
+
+
 	public String darEtapasProduccion(String x , String y) throws SQLException
 	{
 		PreparedStatement prepStmt = null;
@@ -361,8 +362,8 @@ public class consultaDAO {
 				resp =true;
 			}
 
-			
-			
+
+
 
 
 			Producto x = new Producto(pcostoProduccion, nombre ,resp,idEtapa);			
@@ -376,33 +377,33 @@ public class consultaDAO {
 		return null;
 
 	}
-	
-	
+
+
 	public ArrayList<MateriasPrimas> darMateriasDeUnProducto(String x ) throws SQLException
 	{
 		PreparedStatement prepStmt = null;
 		ArrayList<MateriasPrimas> jesus = new ArrayList<MateriasPrimas>();
 		inicializar();
 		establecerConexion();
-		
 
 
 
-return jesus;
+
+		return jesus;
 
 	}
-	
+
 	public ArrayList<EtapasDeProducion> darEtapasDeUnProducto(String x ) throws SQLException
 	{
 		PreparedStatement prepStmt = null;
 		ArrayList<EtapasDeProducion> jesus = new ArrayList<EtapasDeProducion>();
 		inicializar();
 		establecerConexion();
-		
 
 
 
-return jesus;
+
+		return jesus;
 
 	}
 	public ArrayList<ComponentesProduccion> darComponenteDeUnProducto(String x ) throws SQLException
@@ -411,16 +412,16 @@ return jesus;
 		ArrayList<ComponentesProduccion> jesus = new ArrayList<ComponentesProduccion>();
 		inicializar();
 		establecerConexion();
-		
 
 
 
-return jesus;
+
+		return jesus;
 
 	}
-	
-	
-	
+
+
+
 
 	public void actualizarProducto(Producto x) 
 	{
@@ -528,26 +529,26 @@ return jesus;
 
 		if(tipo.equalsIgnoreCase("material"))
 		{
-			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO FROM PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL WHERE MATERIA_PRIMA =" + "'" + parametro + "'" ;
+			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE MATERIA_PRIMA =" + "'" + parametro + "'" ;
 		}
 
 		else if(tipo.equalsIgnoreCase("vmenor"))
 		{
-			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM (PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL)RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE VOLUMEN_MAXIMO <" + "'" + parametro+ "'" ;
+			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE VOLUMEN_MAXIMO <" + "'" + parametro+ "'" ;
 		}
 
 		else if(tipo.equalsIgnoreCase("vmayor"))
 		{
-			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM (PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL)RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE VOLUMEN_MAXIMO >" + "'" + parametro+ "'" ;
+			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE VOLUMEN_MAXIMO >" + "'" + parametro+ "'" ;
 		}
 
 		else if(tipo.equalsIgnoreCase("tmenor"))
 		{
-			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM (PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL)RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE TIEMPO_ENTREGA <" + "'" + parametro+ "'" ;
+			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE TIEMPO_ENTREGA <" + "'" + parametro+ "'" ;
 		}
 		else if(tipo.equalsIgnoreCase("tmayor"))
 		{
-			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE_PRODUCTO, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM (PROVEEDORES RIGHT OUTER JOIN PRODUCTO ON MATERIA_PRIMA = MATERIAL)RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE TIEMPO_ENTREGA >" + "'" + parametro+ "'" ;
+			sql ="SELECT IDENTIFICACION, MATERIA_PRIMA, VOLUMEN_MAXIMO, TIEMPO_ENTREGA, NOMBRE, CODIGO_POSTAL, DIRRECION, TELEFONO, TIPO_ID FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE TIEMPO_ENTREGA >" + "'" + parametro+ "'" ;
 		}
 
 		inicializar();
@@ -560,20 +561,38 @@ return jesus;
 		int contador = 0;
 		System.out.println("A");
 
+		String sql2 ="";
+		
 		while( resultado.next( ) && contador < numero) 
 		{
-			String nombre = resultado.getString( 6 );
-			String codPos = resultado.getString( 7 );
-			String direccion = resultado.getString( 8 );
-			int telefono = Integer.parseInt(resultado.getString( 9 ));
-			String tipoId = resultado.getString( 10 );
+			String nombre = resultado.getString( 5 );
+			String codPos = resultado.getString( 6 );
+			String direccion = resultado.getString( 7 );
+			int telefono = Integer.parseInt(resultado.getString( 8 ));
+			String tipoId = resultado.getString( 9 );
 			int volumen = Integer.parseInt(resultado.getString(3));
 			int tiempo = Integer.parseInt(resultado.getString(4));
 			String material = resultado.getString(2);
-			String producto = resultado.getString(5);
-			int id = contador;
+			int id = Integer.parseInt(resultado.getString(1));
 			System.out.println(nombre);
-			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto, 0);
+			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material, id, volumen, tiempo, 0);
+			
+			sql2 = "SELECT ID_PEDIDO FROM PEDIDOS_MATERIAL WHERE ID_PROVEEDOR = " + id;
+			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+			ResultSet resultado2 = prepStmt2.executeQuery( sql2 );
+			while( resultado2.next( )) 
+			{
+				registro.agregarPedido(Integer.parseInt(resultado2.getString( 1 )));
+			}
+			
+			sql2 = "SELECT PRODUCTO FROM MATERIALESDEPRODUCTOS WHERE MATERIAL = '" + material + "'";
+			PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
+			ResultSet resultado3 = prepStmt2.executeQuery( sql2 );
+			while( resultado3.next( )) 
+			{
+				registro.agregarProducto(resultado3.getString( 1 ));
+			}
+			
 			proveedores.add(registro);
 			contador++;
 		}
@@ -610,7 +629,7 @@ return jesus;
 			mayor = Integer.parseInt(resultado2.getString( 1 ));
 		}
 
-		String sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = 1 WHERE ID_ESTACION = 1";
+		String sql2 = "";
 
 		if(estado.equalsIgnoreCase("ACTIVA"))
 		{
@@ -723,10 +742,10 @@ return jesus;
 		ArrayList materiales = new ArrayList();
 
 		ArrayList cantidad = new ArrayList();
-		
+
 		Proveedores registro = null;
 
-		String sql = "SELECT CANTIDAD_MATERIAL, MATERIAL FROM MATERIALESDEPRODUCTOS WHERE PRODUCTO = " + pProducto;
+		String sql = "SELECT CANTIDAD_MATERIAL, MATERIAL FROM MATERIALESDEPRODUCTOS WHERE PRODUCTO = '" + pProducto +"'";
 
 		inicializar();
 
@@ -738,7 +757,7 @@ return jesus;
 		while( resultado.next( )) 
 		{
 			materiales.add(resultado.getString( 2 ));
-			cantidad.add(Integer.parseInt(resultado.getString( 2 )));
+			cantidad.add(Integer.parseInt(resultado.getString( 1 )));
 		}
 
 		String sql2 ="";
@@ -753,25 +772,25 @@ return jesus;
 			{
 				sql2="SELECT * FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE MATERIA_PRIMA = '" + materiales.get(i) + "' AND VOLUMEN_MAXIMO >= "+ cantidad.get(i) +" AND TIEMPO_ENTREGA <= all(SELECT TIEMPO_ENTREGA FROM PROVEEDORES WHERE MATERIA_PRIMA = '"+ materiales.get(i) +"')";
 			}
-			
+
 			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
 			ResultSet resultado2 = prepStmt2.executeQuery( sql2 );
 
 			while( resultado2.next( )) 
 			{
-					String nombre = resultado2.getString( 7 );
-					String codPos = resultado2.getString( 8 );
-					String direccion = resultado2.getString( 9 );
-					int cotizacion = Integer.parseInt(resultado2.getString( 3 ));
-					int id = Integer.parseInt(resultado2.getString( 4 ));
-					int telefono = Integer.parseInt(resultado2.getString( 10 ));
-					String tipoId = resultado2.getString( 11 );
-					int volumen = (Integer) cantidad.get(i);
-					int tiempo = Integer.parseInt(resultado2.getString(2));
-					String material = (String) materiales.get(i);
-					String producto = pProducto;
-					registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material,id, volumen, tiempo, producto, cotizacion);
-					proveedores.add(registro);
+				String nombre = resultado2.getString( 7 );
+				String codPos = resultado2.getString( 8 );
+				String direccion = resultado2.getString( 9 );
+				int cotizacion = Integer.parseInt(resultado2.getString( 3 ));
+				int id = Integer.parseInt(resultado2.getString( 1 ));
+				int telefono = Integer.parseInt(resultado2.getString( 10 ));
+				String tipoId = resultado2.getString( 11 );
+				int volumen = (Integer) cantidad.get(i);
+				int tiempo = Integer.parseInt(resultado2.getString(4));
+				String material = (String) materiales.get(i);
+				String producto = pProducto;
+				registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material, id, volumen, tiempo, cotizacion);
+				proveedores.add(registro);
 			}
 		}
 		return proveedores;
@@ -832,6 +851,37 @@ return jesus;
 			return false;
 		}
 		return true;
+	}
+
+	public PedidoMaterial crearPedido(int pIdProveedor, String pMaterial, int pCantidad, int pTiempo, int pCosto) throws SQLException
+	{
+		String sql = "SELECT max(ID_PEDIDO) FROM PEDIDOS_MATERIAL";
+				
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		
+		int id = 0;
+		
+		while( resultado.next( )) 
+		{
+			if(resultado.getString(1) != null)
+			{
+				id = Integer.parseInt(resultado.getString(1)) + 1;
+			}
+		}
+		
+		String sql2 = "INSERT INTO PEDIDOS_MATERIAL (ID_PEDIDO, ID_PROVEEDOR, MATERIAL, CANTIDAD, TIEMPO_ENTREGA, COSTO) VALUES (" + id + ", " + pIdProveedor + ", '" + pMaterial + "'," + pCantidad + ", " + pTiempo + ", " + pCosto + ")";
+		
+		PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+		ResultSet resultado2 = prepStmt.executeQuery( sql2 );
+		
+		PedidoMaterial pedido = new PedidoMaterial(id, pIdProveedor, pMaterial, pCantidad, pTiempo, pCosto);
+		
+		return pedido;
 	}
 
 	public boolean registrarMaterial(String nombre, double costo, String tipo, String unidad, int cantidad) throws SQLException

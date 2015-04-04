@@ -12,6 +12,7 @@ import Prodandes.vod.Cliente;
 import Prodandes.vod.ComponentesProduccion;
 import Prodandes.vod.EtapasDeProducion;
 import Prodandes.vod.MateriasPrimas;
+import Prodandes.vod.PedidoMaterial;
 import Prodandes.vod.Producto;
 import Prodandes.vod.Usuario;
 
@@ -245,7 +246,9 @@ dao.agregarCliente(z);
 	{
 		return dao.buscarProducto(nombre);
 	}
-
 	
-
+	public PedidoMaterial crearPedido(int pIdProveedor, String pMaterial, int pCantidad, int pTiempo, int pCosto) throws SQLException
+	{
+		return dao.crearPedido(pIdProveedor, pMaterial, pCantidad, pTiempo, pCosto);
+	}
 }

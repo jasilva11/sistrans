@@ -164,25 +164,57 @@ public class ServletDarProveedoresRes extends HttpServlet
 				int y = i+1;
 				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Proveedor "+ y + "</strong></label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Nombre: "+ x.getNombre() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x.getNombre() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Identificacion: "+ x.getIdentificacion() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Identificacion:</strong> "+ x.getIdentificacion() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Tipo Identificacion: "+ x.getTipoId() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Tipo Identificacion:</strong> "+ x.getTipoId() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Codigo Postal: "+ x.getcPostal() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Codigo Postal:</strong> "+ x.getcPostal() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Direccion: "+ x.getDireccion() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Direccion:</strong> "+ x.getDireccion() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Telefono: "+ x.getTelefono() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Telefono:</strong> "+ x.getTelefono() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Material: "+ x.darMaterial() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Material:</strong> "+ x.darMaterial() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\" > Volumen: "+ x.darVolumen() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Volumen:</strong> "+ x.darVolumen() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Tiempo de entrega: "+ x.darTiempo() + " semanas</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Tiempo de entrega:</strong> "+ x.darTiempo() + " semanas</label> ");
 				out.println("  </p>");	
-				out.println("    <label for=\"categoria2\"> Producto: "+ x.darProducto() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Productos:</strong></label> ");
+				if(x.darProductos().size() == 0)
+				{
+					out.println("    <label for=\"categoria2\"> No hay productos </label> ");
+				}
+				else
+				{
+					for (int j = 0; j < x.darProductos().size(); j++) 
+					{
+						if (x.darProductos().get(j) != null)
+						{
+							out.println("    <label for=\"categoria2\"> "+ x.darProductos().get(j) + "</label> ");
+							out.println("  </p>");	
+						}
+					}
+				}
+
+				out.println("    <label for=\"categoria2\"><strong> Pedidos:</strong></label> ");
+				if(x.darPedidos().size() == 0)
+				{
+					out.println("    <label for=\"categoria2\"> No hay pedidos </label> ");
+				}
+				else
+				{
+					for (int j = 0; j < x.darPedidos().size(); j++) 
+					{
+						if (x.darPedidos().get(j) != null)
+						{
+							out.println("    <label for=\"categoria2\"> "+ x.darPedidos().get(j) + "</label> ");
+							out.println("  </p>");	
+						}
+					}		
+				}
 				out.println("  </p>");
 				out.println("  <p>&nbsp;</p>");
 				out.println("  <p>&nbsp;</p>");

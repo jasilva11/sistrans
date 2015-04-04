@@ -1,5 +1,7 @@
 package Prodandes.vod;
 
+import java.util.ArrayList;
+
 /**
  * @author javie_000
  * @version 1.0
@@ -12,16 +14,18 @@ public class Proveedores extends Personas
 	private int volumenMaximo;
 	private int tiempoEntrega;
 	private int cotizacion;
-	private String producto;
+	private ArrayList productos;
+	private ArrayList pedidos;
 	private String nomRepresentanteLegal;
 
-	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, String ptipoId, String pMateriaPrima, int pId, int vol, int tiempo, String pProducto, int pCotizacion)
+	public Proveedores(String pdireccion,String pnombre,int ptelefono,String pciudad, String ptipoId, String pMateriaPrima, int pId, int vol, int tiempo, int pCotizacion)
 	{
 		super( pdireccion, pnombre, ptelefono, pciudad,  pId, ptipoId);
 		materiaPrima = pMateriaPrima;
 		volumenMaximo = vol;
 		tiempoEntrega = tiempo;
-		producto = pProducto;
+		productos = new ArrayList();
+		pedidos = new ArrayList();
 		cotizacion = pCotizacion;
 	}
 	
@@ -45,10 +49,26 @@ public class Proveedores extends Personas
 		return tiempoEntrega;
 	}
 	
-	public String darProducto()
+	public void agregarProducto(String pProducto)
 	{
-		return producto;
+		productos.add(pProducto);
 	}
+	
+	public void agregarPedido(int pIdPedido)
+	{
+		pedidos.add(pIdPedido);
+	}
+	
+	public ArrayList darProductos()
+	{
+		return productos;
+	}
+	
+	public ArrayList darPedidos()
+	{
+		return pedidos;
+	}
+
 
 	public void finalize() throws Throwable
 	{

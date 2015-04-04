@@ -76,6 +76,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-name>GenerarPedidosRes</servlet-name>
   <servlet-class>Prodandes.servlets.ServletGenerarPedidosRes</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>CrearPedido</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletCrearPedidoMaterial</servlet-class>
+ </servlet>
  <!-- MAPPING -->
  <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -140,5 +144,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
   <servlet-name>GenerarPedidosRes</servlet-name>
   <url-pattern>/generarPedidosRes.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CrearPedido</servlet-name>
+  <url-pattern>/crearPedido.htm</url-pattern>
  </servlet-mapping>
 </web-app>
