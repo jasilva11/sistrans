@@ -251,4 +251,11 @@ dao.agregarCliente(z);
 	{
 		return dao.crearPedido(pIdProveedor, pMaterial, pCantidad, pTiempo, pCosto);
 	}
+	
+	public ArrayList darClientes(String parametro, int numero, String tipo) throws Exception
+	{
+		return dao.darClientesBusqueda(parametro, numero, tipo);
+	}
+	
+	
 }

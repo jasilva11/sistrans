@@ -1,5 +1,8 @@
 
 package Prodandes.vod;
+
+import java.util.ArrayList;
+
 /**
  * @author je.camargo10
  * @version 1.0
@@ -14,6 +17,9 @@ public class Cliente extends Personas
 	private String nomRepresentanteLegal;
 	private boolean personaNatural;
 	public MetodoDePago metodoDePago;
+	
+	public ArrayList<String> productos;
+
 
 	public Cliente(String pdireccion,String pnombre,int ptelefono,String pciudad, int pidentificacion,String ptipoId,int pAntiguedad, int pdeudas, int pnumeroRegistro,String pnomRepresentanteLegal, boolean ppersonaNatural)
 	{
@@ -23,12 +29,20 @@ public class Cliente extends Personas
 		setDeudas(pdeudas);
 		setNumeroRegistro(pnumeroRegistro);
 		setNomRepresentanteLegal(pnomRepresentanteLegal);
-		personaNatural = ppersonaNatural;
+		setPersonaNatural(ppersonaNatural);
 		
-		
+		productos = new ArrayList<String>();
 
 	}
-
+	
+	public void agregarProducto(String x)
+	{
+		productos.add(x);
+	}
+  public ArrayList<String> darProductos()
+  {
+	  return productos;
+  }
 	public void setAntiguedad(int antiguedad) 
 	{
 		antiguedad = antiguedad;
@@ -61,6 +75,14 @@ public class Cliente extends Personas
 
 	public String getNomRepresentanteLegal() {
 		return nomRepresentanteLegal;
+	}
+
+	public void setPersonaNatural(boolean personaNatural) {
+		this.personaNatural = personaNatural;
+	}
+
+	public boolean isPersonaNatural() {
+		return personaNatural;
 	}
 
 

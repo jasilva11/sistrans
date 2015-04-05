@@ -949,5 +949,123 @@ public class consultaDAO {
 
 	}
 
+	public ArrayList darClientesBusqueda(String parametro, int numero, String tipo)throws Exception
+	{
+		ArrayList clientes = new ArrayList();
+
+
+		Cliente jesus = null;
+
+		String sql = "";
+
+		if(tipo.equalsIgnoreCase("id"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE IDENTIFICACION =" + "'" + parametro + "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("deudasMayor"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE DEUDAS >" + "'" + parametro+ "'" ;
+		}
+		else if(tipo.equalsIgnoreCase("deudasMenor"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE DEUDAS <" + "'" + parametro+ "'" ;
+		}
+
+
+		else if(tipo.equalsIgnoreCase("numReg"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE NUMEROREGISTRO =" + "'" + parametro+ "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("antiguedadMayor"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE ANTIGUEDAD >" + "'" + parametro+ "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("antiguedadMenor"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE ANTIGUEDAD <" + "'" + parametro+ "'" ;
+		}
+		else if(tipo.equalsIgnoreCase("nombreRepLeg"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE NOM_RP_LEGAL =" + "'" + parametro+ "'" ;
+		}
+		
+		else if(tipo.equalsIgnoreCase("pnNatural"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE PERSONANATURAL =" + "'" + parametro+ "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("numPedidosMayor"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE UNIANDEADES_REQ >" + "'" + parametro+ "'" ;
+		}
+		else if(tipo.equalsIgnoreCase("numPedidosMenor"))
+		{
+			sql ="SSELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE UNIANDEADES_REQ <" + "'" + parametro+ "'" ;
+		}
+		else if(tipo.equalsIgnoreCase("prodPed"))
+		{
+			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE NOM_PRODUCTO =" + "'" + parametro+ "'" ;
+		}
+
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		int contador = 0;
+		String sql2 ="";
+		
+		while( resultado.next( ) && contador != numero) 
+		{
+	           contador++;
+		
+			int id = Integer.parseInt(resultado.getString( 1 ));
+			int deudas = Integer.parseInt(resultado.getString( 2));
+			int numReg = Integer.parseInt(resultado.getString( 3 ));
+			int antiguedad = Integer.parseInt(resultado.getString( 4 ));
+			String nomREPL = resultado.getString( 5 );
+			
+			String person = resultado.getString( 6 );
+            boolean personaNatural = false;
+			if (person == null ||person.equals("TRUE") )
+            {
+				personaNatural = true;
+            }
+			String nombre = resultado.getString( 11 );
+
+			jesus = new Cliente("", nombre, 0, "", id, "", antiguedad, deudas, numReg, nomREPL, personaNatural);
+		    
+			String producto = resultado.getString( 8 );
+   
+			String infoProducto = "NO";
+		   if (producto != null )
+		   {
+				int unidades = Integer.parseInt(resultado.getString( 9 ));
+			   infoProducto = producto +  " con estas unidades requeridas: " + unidades;
+		   }
+		   boolean papitas = false;
+			for (int i = 0; i < clientes.size() ; i++)
+			{
+				Cliente algo =(Cliente) clientes.get(i);
+				if (algo.getIdentificacion() == id)
+				{
+					algo.agregarProducto(infoProducto);
+					papitas = true;
+				}
+			}
+           if (!papitas)
+           {
+			clientes.add(jesus);
+           }
+		}
+		return clientes;
+	}
+
 
 }
