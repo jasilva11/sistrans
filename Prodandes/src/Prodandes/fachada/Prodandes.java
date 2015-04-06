@@ -31,15 +31,10 @@ public class Prodandes
 	
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Usuario> usuarios;
-
-
 	
-
-    
     // -----------------------------------------------------------------
     // Singleton
     // -----------------------------------------------------------------
-
 
     /**
      * Instancia única de la clase

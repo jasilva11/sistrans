@@ -28,7 +28,7 @@ public class ConsultarExistenciaUnMaterial extends HttpServlet
 	/**
 	 * Inicialización del Servlet
 	 */
-	public void init( ) throws ServletException
+	public void init( ) throws ServletException 
 	{
 	}
 
