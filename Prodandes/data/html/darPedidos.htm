@@ -1,0 +1,81 @@
+<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+		<title>Dar clientes</title>
+		<link rel="shortcut icon" type="image/x-icon" href="css/images/icon.png" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+		<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Jura:400,500,600,300' rel='stylesheet' type='text/css' />
+		<script src="js/jquery-1.8.0.min.js" type="text/javascript"></script>
+		<script src="js/jquery.touchwipe.1.1.1.js" type="text/javascript"></script>
+		<script src="js/jquery.carouFredSel-5.5.0-packed.js" type="text/javascript"></script>
+			<!--[if lt IE 9]>
+		<script src="js/modernizr.custom.js"></script>
+		<![endif]-->
+		<script src="js/functions.js" type="text/javascript"></script>
+		<header class="header">
+		<div class="shell">
+		<div class="header-top">
+		<h1 id="logo"><a href="home.html">Prodandes</a></h1>
+		<nav id="navigation">
+			<a href="#" class="nav-btn">Home<span></span></a>
+			<ul>
+		<li><a href="home.html">Inicio</a></li>
+		<li><a href="buscar.htm">Buscar</a></li>
+		<li><a href="registrarse.htm">Registrarse</a></li>
+		<li><a href="servletModificar.htm">Modificar</a></li>
+		<li><a href="#">Jobs</a></li>
+		<li><a href="#">Blog</a></li>
+		<li><a href="#">Contacts</a></li>
+		</ul>
+		</nav>
+		<div class="cl">&nbsp;</div>
+		</div>
+		</head>
+		
+		<body>
+		<div id="bg"></div>
+		<div id="carousel"><div>
+		<h4>Consultar informacion sobre clientes</h4>
+		<p>Filtros.</p>
+		</div>
+		<form id="form1" name="form1" method="post" action="darClientesPro.htm">
+		  <p>
+		    <label for="numero"><FONT SIZE=7>Numero de clientes:</font></label> 
+		    <input type="text" name="numero" size="12" style="border: 1px solid #666666; font-size:20pt">
+		  </p>
+		  <p>
+		    <label for="nombre"><FONT SIZE=7>Parametro:</font></label>
+            <input type="text" name="nombre" size="12" style="border: 1px solid #666666; font-size:20pt">
+          </p>
+           <p>
+		 <label for="opcion"><FONT SIZE=7>Filtrar por:</font></label> 
+		 <select name="opcion">
+		 <option value="ID__CLIENTE">Identificacion</option> 
+		 <option value="NOM_PRODUCTO">Identificador del Cliente:</option> 
+		  <option value="UNIANDEADES_REQMAYOR">Unidades requeridas mayores a:</option> 
+		 <option value="UNIANDEADES_REQMENOR">Unidades requeridas menores a:</option>
+		 <option value="COSTO_VENTAMAYOR">Costo de venta mayor a:</option>
+		 <option value="COSTO_VENTAMENOR">Costo de venta menor a:</option> 
+		  <option value="UNIDADES_PRODUCCIONMAYOR">Unidades de Produccion mayor a:</option>
+		 <option value="UNIDADES_PRODUCCIONMENOR">Unidades de Produccion menor a:</option> 
+		  <option value="TERMINADO">Estan terminadas las unidades en espera</option> 
+		  <option value="MATERIAL">Materiales requeridos</option> 
+		  <option value="CANTIDAD_MATERIALMAYORA">Cantidad de material requerido mayor a</option>
+		 <option value="CANTIDAD_MATERIALMENORA">Cantidad de material requerido menor a</option>
+		  
+		  <option value="TIPO">Tipo de material</option>
+          <option value="TIEMPO_ENTREGAMAYOR">Tiempo de entrega menor a</option>  
+          <option value="TIEMPO_ENTREGAMenor">Tiempo de entrega menor a</option> 
+          		 <option value="NUMEROREGISTRO">Numero de Registro</option>
+                   <option value="NOM_RP_LEGAL">Nombre de representante legal</option> 
+           </select>
+		  </p>
+		  <p>&nbsp;</p>
+          <p>
+		<input type="submit" name="button" id="button" value="Buscar" />
+		</p>
+		</form>
+		<p>&nbsp;</p>
+		</body>
+		</html>
