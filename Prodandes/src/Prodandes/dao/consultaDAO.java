@@ -1081,7 +1081,6 @@ public class consultaDAO {
 					Cliente algo =(Cliente) clientes.get(i);
 					if (algo.getIdentificacion() == id)
 					{
-						System.out.print( "Deberia 3");
 
 					ArrayList<String> mat = algo.darProductos();
 
@@ -1089,6 +1088,7 @@ public class consultaDAO {
 					{
 
 						String productoDesado = mat.get(j);
+						System.out.print( productoDesado);
 
 						if(productoDesado.startsWith(producto))
 						{
@@ -1114,7 +1114,7 @@ public class consultaDAO {
 							mat.add(productoDesado);
 
 							aux = true;
-						
+						 break;
 						}
 					
 					
