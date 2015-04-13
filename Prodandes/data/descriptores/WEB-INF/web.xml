@@ -82,7 +82,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
 </servlet><servlet>
   <servlet-name>CrearPedido</servlet-name>
   <servlet-class>Prodandes.servlets.ServletCrearPedidoMaterial</servlet-class>
- </servlet>
+ </servlet><servlet>
+ 	<servlet-name>DarPedidos</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletDarPedidosEfectivo</servlet-class>
+</servlet>
  <!-- MAPPING -->
 	<servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -155,5 +158,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
  	<servlet-name>darClientes</servlet-name>
  	<url-pattern>/darClientesPro.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+ 	<servlet-name>DarPedidos</servlet-name>
+ 	<url-pattern>/DarPedidos.htm</url-pattern>
  </servlet-mapping>
 </web-app>

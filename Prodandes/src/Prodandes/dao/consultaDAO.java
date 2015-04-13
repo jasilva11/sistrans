@@ -949,7 +949,7 @@ public class consultaDAO {
 
 	}
 
-	public ArrayList darClientesBusqueda(String parametro, int numero, String tipo)throws Exception
+	public ArrayList darPedidosBusqueda(String parametro, int numero, String tipo)throws Exception
 	{
 		ArrayList clientes = new ArrayList();
 
@@ -978,7 +978,7 @@ public class consultaDAO {
 		}
 		else if(tipo.equals("UNIDADES_PRODUCCIONMAYOR"))
 		{
-			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE UNIDADES_PRODUCCION" + ">'"	+ parametro +"'"  ;
+			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE UNIDADES_PRODUCCION " + ">'"	+ parametro +"'"  ;
 		}
 		else if(tipo.equals("UNIDADES_PRODUCCIONMENOR"))
 		{
@@ -987,7 +987,7 @@ public class consultaDAO {
 		
 		else if(tipo.equals("CANTIDAD_MATERIALMAYORA"))
 		{
-			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE CANTIDAD_MATERIAL" + ">'"	+ parametro +"'"  ;
+			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE CANTIDAD_MATERIAL " + ">'"	+ parametro +"'"  ;
 		}
 		else if(tipo.equals("CANTIDAD_MATERIALMENORA"))
 		{
@@ -1013,9 +1013,9 @@ public class consultaDAO {
 		}
 		
 		else
-		{
-			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE"+ tipo + "='"	+ parametro +"'"  ;
+		{			
 
+			sql = "SELECT * FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE "+ tipo + " = '"+ parametro +"'";
 		}
 
 
@@ -1027,58 +1027,175 @@ public class consultaDAO {
 		ResultSet resultado = prepStmt.executeQuery( sql );
 
 		int contador = 0;
-		String sql2 ="";
 		
 		while( resultado.next( ) && contador != numero) 
 		{
 	           contador++;
 		
 			int id = Integer.parseInt(resultado.getString( 1 ));
-			int deudas = Integer.parseInt(resultado.getString( 2));
-			int numReg = Integer.parseInt(resultado.getString( 3 ));
-			int antiguedad = Integer.parseInt(resultado.getString( 4 ));
-			String nomREPL = resultado.getString( 5 );
+			int deudas = Integer.parseInt(resultado.getString( 19));
+			int numReg = Integer.parseInt(resultado.getString( 20 ));
+			int antiguedad = Integer.parseInt(resultado.getString( 21 ));
+			String nomREPL = resultado.getString( 22 );
 			
-			String person = resultado.getString( 6 );
+			String person = resultado.getString( 23 );
             boolean personaNatural = false;
 			if (person == null ||person.equals("TRUE") )
             {
 				personaNatural = true;
             }
-			String nombre = resultado.getString( 11 );
 
-			jesus = new Cliente("", nombre, 0, "", id, "", antiguedad, deudas, numReg, nomREPL, personaNatural);
+			jesus = new Cliente("", "", 0, "", id, "", antiguedad, deudas, numReg, nomREPL, personaNatural);
 		    
-			String producto = resultado.getString( 8 );
+			String material = resultado.getString( 9 );
    
 			String infoProducto = "NO";
-		   if (producto != null )
+			boolean aux = false;
+		   if (material != null )
 		   {
-				int unidades = Integer.parseInt(resultado.getString( 9 ));
-			   infoProducto = producto +  " con estas unidades requeridas: " + unidades;
+				String producto = resultado.getString( 2 );
+
+			   int unidades = Integer.parseInt(resultado.getString( 3 ));
+			   int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
+			   int costo = Integer.parseInt(resultado.getString( 5 ));
+			   int unidadesEnEspera = 0;
+
+			   boolean estado= false;
+			   String jesusMio = resultado.getString( 7 );
+			   if (jesusMio != null && jesusMio.equals("TRUE"))
+			   {
+				   estado = true;
+			   }
+			   if(estado)
+			   {
+				 unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
+
+			   }
+				String idPedido = resultado.getString( 24 );
+			
+
+		   
+			   for (int i = 0; i < clientes.size() ; i++)
+				{
+				   
+					Cliente algo =(Cliente) clientes.get(i);
+					if (algo.getIdentificacion() == id)
+					{
+						System.out.print( "Deberia 3");
+
+					ArrayList<String> mat = algo.darProductos();
+
+					for (int j = 0; j < mat.size(); j++)
+					{
+
+						String productoDesado = mat.get(j);
+
+						if(productoDesado.startsWith(producto))
+						{
+
+							String suma = "";
+
+							if(idPedido==null)
+				                {
+								suma = "</p> - " + resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>";
+
+				                }
+							 else
+							 {
+
+									suma = "</p> -" + resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
+									+idPedido + " hecho al proveedor " + resultado.getString( 24 )+ ", de donde se solicitan" + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 26 ) + " horas "+ "a un costo de" +resultado.getString( 27 ) +   "</p>"  ;
+
+							 
+							 }
+
+							productoDesado =productoDesado + suma;
+							mat.remove(j);
+							mat.add(productoDesado);
+
+							aux = true;
+						
+						}
+					
+					
+					}
+					
+					}
+				}
+			
+			   
+			   if (idPedido == null && !aux)
+			   {
+			   infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+			   + "</p>" + "El producto esta compuesto de los siguientes materiales: "  + "</p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>");
+			   }
+			   else
+			   {
+			 infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+			+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + "- </p>" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
+			+ " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
+			+idPedido + " hecho al proveedor de id " + resultado.getString( 24 )+ ", de donde se solicitan " + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 28 ) + " horas "+ "a un costo de" +resultado.getString( 29 ) +   "</p>" ) ;
+
+			}
+				   
+		   }
+		   else
+		   {
+			   String producto = resultado.getString( 2 );
+
+			   int unidades = Integer.parseInt(resultado.getString( 3 ));
+			   int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
+			   int costo = Integer.parseInt(resultado.getString( 5 ));
+			   int unidadesEnEspera = 0;
+
+			   boolean estado= false;
+			   String jesusMio = resultado.getString( 7 );
+			   if (jesusMio != null && jesusMio.equals("TRUE"))
+			   {
+				   estado = true;
+			   }
+			   if(estado)
+			   {
+				 unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
+
+			   }
+
+			   infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y " + unidadesEnEspera + " unidades en espera de ser producidas"
+			   + "\n" + "Este producto, no necesita ningun material para su fabricacion "  ;
+
+			 
 		   }
 		   boolean papitas = false;
-			for (int i = 0; i < clientes.size() ; i++)
+			
+		   if(!aux)
+		   {
+		   for (int i = 0; i < clientes.size() ; i++)
 			{
+
 				Cliente algo =(Cliente) clientes.get(i);
 				if (algo.getIdentificacion() == id)
 				{
+
 					algo.agregarProducto(infoProducto);
 					papitas = true;
 				}
 			}
            if (!papitas)
            {
+
+        	 jesus.agregarProducto(infoProducto);
 			clientes.add(jesus);
            }
+		   }
 		}
+
 		return clientes;
 	}
 	
 	
 	
 	
-	public ArrayList darPedidosBusqueda(String parametro, int numero, String tipo)throws Exception
+	public ArrayList darClientesBusqueda(String parametro, int numero, String tipo)throws Exception
 	{
 		ArrayList clientes = new ArrayList();
 

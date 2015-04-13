@@ -254,7 +254,7 @@ dao.agregarCliente(z);
 	
 	public ArrayList darPedidos(String parametro, int numero, String tipo) throws Exception
 	{
-		return dao.darClientesBusqueda(parametro, numero, tipo);
+		return dao.darPedidosBusqueda(parametro, numero, tipo);
 	}
 	
 	

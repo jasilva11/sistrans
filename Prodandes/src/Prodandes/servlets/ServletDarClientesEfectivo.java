@@ -163,7 +163,7 @@ public class ServletDarClientesEfectivo extends HttpServlet
 			{
 				Cliente x = (Cliente) resultados.get(i);
 				int y = i+1;
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Cliente "+ y + "</strong></label> ");
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Pedido "+ y + "</strong></label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x.getNombre() + "</label> ");
 				out.println("  </p>");
