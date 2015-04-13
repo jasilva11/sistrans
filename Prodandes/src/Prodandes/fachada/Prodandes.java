@@ -196,11 +196,17 @@ dao.agregarCliente(z);
 	
 	}
 	
-//	public boolean cancelarProducto(String nombreP) 
-//	{
-//    Producto jesus = darProducto(nombreP);
-//  
-//	}
+	
+	
+	public String cancelarProducto(String nombreP) throws Exception 
+	{
+   ArrayList jesus = darPedidos(nombreP, 1, "NOMBRE");
+if (jesus.size()== 0 )
+{
+	throw new Exception("No se ha encontrado el pedido asociado al producto");
+	}
+return "";
+	}
 	
 	
     // ---------------------------------------------------
