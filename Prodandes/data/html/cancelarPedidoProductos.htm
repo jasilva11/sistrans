@@ -36,7 +36,7 @@
 		<h4>Cancelar un pedido de productos</h4>
 		<p>Dada producto, se cancela el pedido si toda la informacion requerida es consistente. </p>
 		</div>
-		<form id="form1" name="form1" method="post" action="servletCambiarEstado.htm">
+		<form id="form1" name="form1" method="post" action="CancelarPedido.htm">
 		  
 		   <p>
 		    <label for="nombre"><FONT SIZE=7>Nombre del usuario:</font></label> 
@@ -44,14 +44,14 @@
 		  </p>
 		    <p>
 		    <label for="pass"><FONT SIZE=7>Contraseña del usuario:</font></label> 
-		    <input type="password" name="nombre" size="12" style="border: 1px solid #666666; font-size:20pt">
+		    <input type="text" name="pass" size="12" style="border: 1px solid #666666; font-size:20pt">
 		  </p>
 		  <p>
 		    <label for="producto"><FONT SIZE=7>Nombre del producto:</font></label> 
-		    <input type="text" name="nombre" size="12" style="border: 1px solid #666666; font-size:20pt">
+		    <input type="text" name="producto" size="12" style="border: 1px solid #666666; font-size:20pt">
 		  </p>
           <p>
-		<input type="submit" name="button" id="button" value="Cancelar" />
+		<input type="submit" name="button" id="button" value="Verificar Pedidos" />
 		</p>
 		</form>
 		<p>&nbsp;</p>

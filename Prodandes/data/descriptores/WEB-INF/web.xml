@@ -88,8 +88,7 @@ Autor: Pablo Barvo - 05-Mayo-2006
 </servlet><servlet>
  	<servlet-name>DarPedidos</servlet-name>
  	<servlet-class>Prodandes.servlets.ServletDarPedidosEfectivo</servlet-class>
-</servlet>
- <!-- MAPPING -->
+</servlet><!-- MAPPING -->
 	<servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
   <url-pattern>/registrarCliente.htm</url-pattern>

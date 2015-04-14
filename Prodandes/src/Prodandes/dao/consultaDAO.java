@@ -808,21 +808,36 @@ public class consultaDAO {
 
 	public String darTipoUsuario(String usr, String pass) 
 	{
-		PreparedStatement prepStmt = null;
 
 		try {
 			inicializar();
+
 			establecerConexion();
-			prepStmt = conexion.prepareStatement("SELECT ROL_EN_SISTEMA FROM USUARIOS WHERE LOGIN =" +usr+ "AND PALABRACLAVE = " +pass+ ";" );
 
-			ResultSet rs = prepStmt.executeQuery();
+			String sql= "SELECT * FROM USUARIOS U WHERE U.LOGIN = '" +usr+ "' AND U.PALABRACLAVE = '" +pass+ "';" ;
+			System.out.print(sql);
 
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			ResultSet resultado = prepStmt.executeQuery( sql );
+			System.out.print("ALGO" );
 
-			String tipo = rs.getString("ROL_EN_SISTEMA");
+			String tipo = "";
+			
+			while( resultado.next( )) 
+			{
+				if(resultado.getString(1) != null)
+				{
+					tipo = resultado.getString(1) ;
+					System.out.print("ALGO" + tipo);
+
+				}
+			}
 			return tipo;
 		}
 		catch (Exception e)
 		{
+			System.out.print(e);
+
 			return "No existe";
 		}
 	}

@@ -17,6 +17,7 @@ import org.jboss.system.server.ServerConfig;
 import org.jboss.system.server.ServerConfigLocator;
 
 import Prodandes.fachada.Prodandes;
+import Prodandes.vod.Cliente;
 
 public class ServletCancelarPedido extends HttpServlet
 {
@@ -81,16 +82,24 @@ public class ServletCancelarPedido extends HttpServlet
 		
 		try {
 		String rol =joda.darTipoUsuario(nombre, pass);
-		if (rol.equals("No existe"))
+		ArrayList<String > jesus = joda.darPedidos(producto, 10, "NOM_PRODUCTO");
+
+		if (rol.equals("No existe") )
 		{
 			imprimirMensajeError(response.getWriter(), "No se ingresaron los datos correctamente", rol);	
+
+		}
+		else if(jesus.size()== 0)
+		{
+			
+			imprimirMensajeError(response.getWriter(), "El cliente no tiene asociado ningun pedido", nombre);	
 
 		}
 		else
 		{
 			
 		//Todo bien
-			
+			imprimirEncabezado(response, jesus);
 			
 			
 		}
@@ -101,7 +110,6 @@ public class ServletCancelarPedido extends HttpServlet
 			e.printStackTrace();
 		}
 
-		imprimirEncabezado(response, resp);
 
 }
 	}
@@ -133,7 +141,7 @@ public class ServletCancelarPedido extends HttpServlet
 	 * @param response Respuesta
 	 * @throws IOException Excepción al imprimir en el resultado
 	 */
-	private void imprimirEncabezado( HttpServletResponse response, boolean resultados ) throws IOException
+	private void imprimirEncabezado( HttpServletResponse response, ArrayList resultados ) throws IOException
 	{
 		// Obtiene el flujo de escritura de la respuesta
 		PrintWriter out = response.getWriter( );
@@ -142,7 +150,7 @@ public class ServletCancelarPedido extends HttpServlet
 		out.println("<head>");
 		out.println("<meta charset=\"utf-8\" />");
 		out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0\" />");
-		out.println("<title>ProdAndes</title>");
+		out.println("<title>Dar proveedores</title>");
 		out.println("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"css/images/icon.png\" />");
 		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" media=\"all\" />");
 		out.println("<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />");
@@ -177,25 +185,54 @@ public class ServletCancelarPedido extends HttpServlet
 		out.println("<body>");
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
-		out.println("<h3><FONT SIZE=8>Materiales</font></h3>");
+		out.println("<h3><FONT SIZE=8>Clientes</font></h3>");
 		out.println("</div>");
-		if (resultados == false)
+		for (int i = 0; i < resultados.size(); i++) 
 		{
-			out.println("    <label for=\"categoria2\" > No se pudo crear la etapa</label> ");
-			out.println("  </p>");
-		}
-		else
-		{
-			out.println("    <label for=\"categoria2\" > Se creo la etapa correctamente</label> ");
-			out.println("  </p>");
+			if (resultados.get(i) != null)
+			{
+				Cliente x = (Cliente) resultados.get(i);
+				int y = i+1;
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Cliente "+ y + "</strong></label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x.getNombre() + "</label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Identificacion:</strong> "+ x.getIdentificacion() + "</label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Deudas:</strong> "+ x.getDeudas() + "</label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Nombre representante legal:</strong> "+ x.getNomRepresentanteLegal() + "</label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Numero de registro:</strong> "+ x.getNumeroRegistro() + "</label> ");
+				out.println("  </p>");
+			    out.println("    <label for=\"categoria2\"><strong> Antiguedad:</strong> "+ x.getAntiguedad() + " </label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Es persona legal?</strong> "+ x.isPersonaNatural() + " </label> ");
+				out.println("  </p>");
+				out.println("    <label for=\"categoria2\"><strong> Productos:</strong></label> ");
+				out.println("  </p>");
+				if(x.darProductos().size() == 0)
+				{
+					out.println("  <label for=\"categoria2\"> No hay productos </label> ");
+				}
+				else
+				{
+					for (int j = 0; j < x.darProductos().size(); j++) 
+					{
+						if (x.darProductos().get(j) != null)
+						{
+							out.println("    <label for=\"categoria2\"> "+ x.darProductos().get(j) + "</label> ");
+							out.println("  </p>");	
+						}
+					}
+				}
+				out.println("  </p>");
+			}
 		}
 		out.println("<p>&nbsp;</p>");
 		out.println("</body>");
 		out.println("</html>");
 	}
-	
-	
-	
 	
 	
 	 /**
