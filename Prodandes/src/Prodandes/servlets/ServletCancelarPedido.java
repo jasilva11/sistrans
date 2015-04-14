@@ -66,13 +66,12 @@ public class ServletCancelarPedido extends HttpServlet
 	{
 		Prodandes joda = Prodandes.darInstancia();
 
-		String nombre = request.getParameter("nombre");
-		String pass = request.getParameter("pass");
+
 		String producto = request.getParameter("producto");
 
 		boolean resp = false;
 		
-		if (nombre == ""||pass == ""|| producto == "")
+		if ( producto == "")
 		{
 			
 			imprimirMensajeError(response.getWriter(), "No se ingresaron los datos correctamente", "Hay un campo vacio");	
@@ -81,28 +80,15 @@ public class ServletCancelarPedido extends HttpServlet
 		{
 		
 		try {
-		String rol =joda.darTipoUsuario(nombre, pass);
-		ArrayList<String > jesus = joda.darPedidos(producto, 10, "NOM_PRODUCTO");
-
-		if (rol.equals("No existe") )
-		{
-			imprimirMensajeError(response.getWriter(), "No se ingresaron los datos correctamente", rol);	
-
-		}
-		else if(jesus.size()== 0)
-		{
-			
-			imprimirMensajeError(response.getWriter(), "El cliente no tiene asociado ningun pedido", nombre);	
-
-		}
-		else
-		{
-			
+		ArrayList<Cliente > jesus = joda.darPedidos(producto, 10, "NOM_PRODUCTO");
+        
+		
 		//Todo bien
+		joda.cancelarProducto(jesus.get(0), producto);
 			imprimirEncabezado(response, jesus);
 			
 			
-		}
+		
 		
 		
 		} catch (Exception e) {
@@ -209,7 +195,7 @@ public class ServletCancelarPedido extends HttpServlet
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"><strong> Es persona legal?</strong> "+ x.isPersonaNatural() + " </label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Productos:</strong></label> ");
+				out.println("    <label for=\"Producto\"><strong> Productos:</strong></label> ");
 				out.println("  </p>");
 				if(x.darProductos().size() == 0)
 				{
@@ -229,6 +215,16 @@ public class ServletCancelarPedido extends HttpServlet
 				out.println("  </p>");
 			}
 		}
+		out.println("  <p>");
+		out.println("  <p>");
+		out.println("  <p>");
+		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"servletVerificarPedido.htm\">");
+		out.println("  <p>");	
+		out.println("    <label for=\"producto2\">Esta seguro que desea eliminar el pedido del producto:</label> ");
+		out.println("      <input type=\"text\" name=\"Producto\" Producto=\"Producto\" />");
+		out.println("  </p>");
+		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Eliminar\" />");
+		out.println("</form>");
 		out.println("<p>&nbsp;</p>");
 		out.println("</body>");
 		out.println("</html>");

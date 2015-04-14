@@ -814,7 +814,7 @@ public class consultaDAO {
 
 			establecerConexion();
 
-			String sql= "SELECT * FROM USUARIOS U WHERE U.LOGIN = '" +usr+ "' AND U.PALABRACLAVE = '" +pass+ "';" ;
+			String sql= "SELECT * FROM USUARIOS U WHERE U.LOGIN = '" +usr+ "' AND U.PALABRACLAVE = '" +pass+ "'" ;
 			System.out.print(sql);
 
 			PreparedStatement prepStmt = conexion.prepareStatement(sql);
@@ -1147,7 +1147,7 @@ public class consultaDAO {
 			   else
 			   {
 			 infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
-			+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + "- </p>" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
+			+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + " </p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
 			+ " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
 			+idPedido + " hecho al proveedor de id " + resultado.getString( 24 )+ ", de donde se solicitan " + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 28 ) + " horas "+ "a un costo de" +resultado.getString( 29 ) +   "</p>" ) ;
 
@@ -1326,6 +1326,96 @@ public class consultaDAO {
            }
 		}
 		return clientes;
+	}
+
+
+
+	public void cacelarPedidosCliente(int i, String producto) throws Exception 
+	{
+		String sql = "DELETE FROM PEDIDOSCLIENTE WHERE ID__CLIENTE = "+ i+"  AND NOM_PRODUCTO = '"+producto+ "'";
+		
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		int resultado = prepStmt.executeUpdate( sql );
+		prepStmt.setQueryTimeout(100);
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int darUnidadesEnEsperaDeSerProducidas(int i,
+			String producto) throws Exception
+	{
+
+		String sql = "SELECT UNIANDEADES_REQ FROM PEDIDOSCLIENTE WHERE ID__CLIENTE = "+ i+" AND NOM_PRODUCTO = '"+producto+ "'";
+		
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		
+	int id = 0;
+		
+		while( resultado.next( )) 
+		{
+			if(resultado.getString(1) != null)
+			{
+				id = Integer.parseInt(resultado.getString(1)) ;
+			}
+			else
+			{
+				throw new Exception("ERROR");
+			}
+		}
+		return id;
+		
+		
+	}
+
+	public int darUnidadesProducto(String producto) throws Exception 
+	{
+String sql = "SELECT UNIDADES_ESPERA FROM PRODUCTO WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
+		
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		
+	int id = 0;
+		
+		while( resultado.next( )) 
+		{
+			if(resultado.getString(1) != null)
+			{
+				id = Integer.parseInt(resultado.getString(1)) ;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return id;
+	}
+
+	public void actualizarUnidadesEnEspera(int unidadesFinales,String producto) throws SQLException 
+	{
+String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
+		
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		int resultado = prepStmt.executeUpdate( sql );
+		prepStmt.setQueryTimeout(100);
+		
 	}
 
 

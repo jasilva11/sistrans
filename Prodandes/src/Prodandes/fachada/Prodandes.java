@@ -198,13 +198,46 @@ dao.agregarCliente(z);
 	
 	
 	
-	public String cancelarProducto(String nombreP) throws Exception 
+	public String cancelarProducto(Cliente jesus2,String producto) throws Exception 
 	{
-   ArrayList jesus = darPedidos(nombreP, 1, "NOMBRE");
-if (jesus.size()== 0 )
+		
+	Cliente jesus = jesus2;	
+   try
+   {
+	   
+	 if(jesus.darProductos().get(0).contains("existen 0 unindades en espera de ser producidas."))
+	 {
+			dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
+
+	 }
+	 else
+	 {
+		int unidadesProblematicas = dao.darUnidadesEnEsperaDeSerProducidas(jesus.getIdentificacion(), producto);
+	    int unidadesEnEspera = dao.darUnidadesProducto(producto);
+	    int unidadesFinales = unidadesEnEspera - unidadesProblematicas;
+	    if (unidadesFinales < 0)
+	    {
+	    	dao.actualizarUnidadesEnEspera(0, producto);
+	    }
+	    else
+	    {
+	    	dao.actualizarUnidadesEnEspera(unidadesFinales, producto);
+
+	    	
+	    }
+	 
+	 }
+	   
+
+   
+   } 
+   
+   catch (Exception e)
 {
-	throw new Exception("No se ha encontrado el pedido asociado al producto");
-	}
+	// TODO: handle exception
+}
+   
+   
 return "";
 	}
 	
