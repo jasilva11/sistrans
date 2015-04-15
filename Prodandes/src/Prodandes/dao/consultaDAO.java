@@ -957,12 +957,10 @@ public class consultaDAO {
 			establecerConexion();
 
 			String sql= "SELECT * FROM USUARIOS U WHERE U.LOGIN = '" +usr+ "' AND U.PALABRACLAVE = '" +pass+ "'" ;
-			System.out.print(sql);
 
 			PreparedStatement prepStmt = conexion.prepareStatement(sql);
 			ResultSet resultado = prepStmt.executeQuery( sql );
-			System.out.print("ALGO" );
-
+            
 			String tipo = "";
 
 			while( resultado.next( )) 
@@ -970,7 +968,6 @@ public class consultaDAO {
 				if(resultado.getString(1) != null)
 				{
 					tipo = resultado.getString(1) ;
-					System.out.print("ALGO" + tipo);
 
 				}
 			}
@@ -1076,6 +1073,7 @@ public class consultaDAO {
 			prepStmt = conexion.prepareStatement(agregar);
 
 			ResultSet rs = prepStmt.executeQuery();
+			prepStmt.setQueryTimeout(10);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1101,6 +1099,7 @@ public class consultaDAO {
 			establecerConexion();
 			prepStmt = conexion.prepareStatement(agregar);
 			ResultSet rs = prepStmt.executeQuery();
+			prepStmt.setQueryTimeout(10);
 
 			String pNombre = rs.getString( "NOMBRE" );
 			int id = rs.getInt("ID_COMPONENTE");
@@ -1205,6 +1204,7 @@ public class consultaDAO {
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
 
 		int contador = 0;
 
@@ -1443,6 +1443,7 @@ public class consultaDAO {
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
 
 		int contador = 0;
 		String sql2 ="";
@@ -1523,6 +1524,7 @@ public class consultaDAO {
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
 
 		int id = 0;
 
@@ -1552,6 +1554,7 @@ public class consultaDAO {
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
 
 		int id = 0;
 
@@ -1579,7 +1582,6 @@ public class consultaDAO {
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
-		prepStmt.setQueryTimeout(100);
 		prepStmt.setQueryTimeout(10);
 	}
 

@@ -234,7 +234,6 @@ dao.agregarCliente(z);
 
 	     }
 	   
-	     // tengo que mirar si hay pedido y ya
 	   } 
 	   
 	   
