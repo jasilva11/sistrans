@@ -381,14 +381,29 @@ public class consultaDAO {
 	}
 
 
-	public ArrayList<MateriasPrimas> darMateriasDeUnProducto(String x ) throws SQLException
+	public ArrayList<String> darMateriasDeUnProducto(String x ) throws SQLException
 	{
-		PreparedStatement prepStmt = null;
-		ArrayList<MateriasPrimas> jesus = new ArrayList<MateriasPrimas>();
+		ArrayList<String> jesus = new ArrayList<String>();
 		inicializar();
 		establecerConexion();
+		String sql = "SELECT * FROM MATERIALESDEPRODUCTOS WHERE PRODUCTO = '"+x+"'";
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
 
+		int id = 0;
 
+		while( resultado.next( )) 
+		{
+			if(resultado.getString(1) != null)
+			{
+				jesus.add(resultado.getString(1) ) ;
+				jesus.add(resultado.getString(3) );
+			}
+			else
+			{
+				break;
+			}
+		}
 
 
 		return jesus;
@@ -558,9 +573,9 @@ public class consultaDAO {
 
 		conexion.setAutoCommit(true);
 		Savepoint save1 = conexion.setSavepoint();
-		
+
 		ResultSet resultado = null;
-		
+
 		try 
 		{
 			PreparedStatement prepStmt = conexion.prepareStatement(sql);
@@ -572,7 +587,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 
 		int contador = 0;
 		System.out.println("A");
@@ -607,7 +622,7 @@ public class consultaDAO {
 				// TODO: handle exception
 				conexion.rollback(save1);
 			}
-			
+
 			while( resultado2.next( )) 
 			{
 				registro.agregarPedido(Integer.parseInt(resultado2.getString( 1 )));
@@ -627,7 +642,7 @@ public class consultaDAO {
 				// TODO: handle exception
 				conexion.rollback(save1);
 			}
-			
+
 			while( resultado3.next( )) 
 			{
 				registro.agregarProducto(resultado3.getString( 1 ));
@@ -647,7 +662,7 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
-		
+
 		conexion.setAutoCommit(true);
 		Savepoint save1 = conexion.setSavepoint();
 
@@ -663,7 +678,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		String estado = "";
 
 		while( resultado.next( )) 
@@ -685,7 +700,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		int mayor = 0;
 
 		while( resultado2.next( ))  
@@ -727,7 +742,7 @@ public class consultaDAO {
 				// TODO: handle exception
 				conexion.rollback(save1);
 			}
-			
+
 			int mayor2 = 0;
 			int cont = 0;
 			int num = 0;
@@ -743,7 +758,7 @@ public class consultaDAO {
 			}
 
 			String sql6 = "SELECT ID_ETAPA FROM ETAPAS_DE_ESTACION WHERE ID_ESTACION =" + num;
-			
+
 			ResultSet resultado4 = null;
 			try 
 			{
@@ -756,7 +771,7 @@ public class consultaDAO {
 				// TODO: handle exception
 				conexion.rollback(save1);
 			}
-						
+
 			ArrayList etapas = new ArrayList();
 			int contador = 0;
 			int res = 0;
@@ -786,7 +801,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		try 
 		{
 			PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
@@ -798,7 +813,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		return estado;
 	}
 
@@ -854,7 +869,7 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
-		
+
 		conexion.setAutoCommit(true);
 		Savepoint save1 = conexion.setSavepoint();
 
@@ -902,7 +917,7 @@ public class consultaDAO {
 				// TODO: handle exception
 				conexion.rollback(save1);
 			}
-			
+
 			while( resultado2.next( )) 
 			{
 				String nombre = resultado2.getString( 7 );
@@ -1002,7 +1017,7 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
-		
+
 		conexion.setAutoCommit(true);
 		Savepoint save1 = conexion.setSavepoint();
 
@@ -1018,7 +1033,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		int id = 0;
 
 		while( resultado.next( )) 
@@ -1565,6 +1580,50 @@ public class consultaDAO {
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(100);
+		prepStmt.setQueryTimeout(10);
+	}
 
+	public void actualizarCantidadReservada(int unidadesFinales,String producto) throws SQLException 
+	{
+		String sql = "UPDATE MATERIALES SET CANTIDAD_RESERVADA =  "+ unidadesFinales+" WHERE NOMBRE = '"+producto+ "'";
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		int resultado = prepStmt.executeUpdate( sql );
+		prepStmt.setQueryTimeout(10);
+
+	}
+
+	public int darCantidadReservadaMaterial(String material) throws SQLException
+	{
+
+		String sql = "SELECT CANTIDAD_RESERVADA FROM MATERIALES WHERE NOMBRE = '"+material+ "'";
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
+
+
+		int id = 0;
+
+		while( resultado.next( )) 
+		{
+			if(resultado.getString(1) != null)
+			{
+				id = Integer.parseInt(resultado.getString(1)) ;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return id;
 	}
 }

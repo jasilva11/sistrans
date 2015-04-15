@@ -215,16 +215,43 @@ dao.agregarCliente(z);
 		int unidadesProblematicas = dao.darUnidadesEnEsperaDeSerProducidas(jesus.getIdentificacion(), producto);
 	    int unidadesEnEspera = dao.darUnidadesProducto(producto);
 	    int unidadesFinales = unidadesEnEspera - unidadesProblematicas;
-	    if (unidadesFinales < 0)
+	   ArrayList<String> materialsCantidad= dao.darMateriasDeUnProducto(producto);
+	   for (int i = 0; i < materialsCantidad.size(); i=i+2)
+	   {
+		 String x = materialsCantidad.get(i);
+		 String cantidad = materialsCantidad.get(i+1);
+         int comparacion = Integer.parseInt(cantidad);
+		 int numero =dao.darCantidadReservadaMaterial(x);
+	     int diferencia = comparacion - numero;
+	     if (diferencia < 0)
+	     {
+	    	 dao.actualizarCantidadReservada(0, producto);
+
+	     }
+	     else
+	     {
+	    	 dao.actualizarCantidadReservada(diferencia, producto);
+
+	     }
+	   
+	     // tengo que mirar si hay pedido y ya
+	   } 
+	   
+	   
+	   if (unidadesFinales < 0)
 	    {
+	    	
+	    	
 	    	dao.actualizarUnidadesEnEspera(0, producto);
 	    }
 	    else
 	    {
 	    	dao.actualizarUnidadesEnEspera(unidadesFinales, producto);
-
+            
 	    	
 	    }
+		dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
+
 	 
 	 }
 	   
