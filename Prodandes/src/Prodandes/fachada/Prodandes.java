@@ -222,8 +222,18 @@ dao.agregarCliente(z);
 		 String cantidad = materialsCantidad.get(i+1);
          int comparacion = Integer.parseInt(cantidad);
 		 int numero =dao.darCantidadReservadaMaterial(x);
-	     int diferenecia = comparacion - numero;
-	     //Pongo diferente como reservado
+	     int diferencia = comparacion - numero;
+	     if (diferencia < 0)
+	     {
+	    	 dao.actualizarCantidadReservada(0, producto);
+
+	     }
+	     else
+	     {
+	    	 dao.actualizarCantidadReservada(diferencia, producto);
+
+	     }
+	   
 	     // tengo que mirar si hay pedido y ya
 	   } 
 	   
@@ -240,6 +250,8 @@ dao.agregarCliente(z);
             
 	    	
 	    }
+		dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
+
 	 
 	 }
 	   

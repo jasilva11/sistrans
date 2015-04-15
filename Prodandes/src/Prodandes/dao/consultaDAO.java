@@ -1432,6 +1432,20 @@ String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE N
 		prepStmt.setQueryTimeout(10);
 		
 	}
+	
+	public void actualizarCantidadReservada(int unidadesFinales,String producto) throws SQLException 
+	{
+String sql = "UPDATE MATERIALES SET CANTIDAD_RESERVADA =  "+ unidadesFinales+" WHERE NOMBRE = '"+producto+ "'";
+		
+		inicializar();
+
+		establecerConexion();
+		
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		int resultado = prepStmt.executeUpdate( sql );
+		prepStmt.setQueryTimeout(10);
+		
+	}
 
 	public int darCantidadReservadaMaterial(String material) throws SQLException
 	{
