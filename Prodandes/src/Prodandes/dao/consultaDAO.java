@@ -379,14 +379,29 @@ public class consultaDAO {
 	}
 
 
-	public ArrayList<MateriasPrimas> darMateriasDeUnProducto(String x ) throws SQLException
+	public ArrayList<String> darMateriasDeUnProducto(String x ) throws SQLException
 	{
-		PreparedStatement prepStmt = null;
-		ArrayList<MateriasPrimas> jesus = new ArrayList<MateriasPrimas>();
+		ArrayList<String> jesus = new ArrayList<String>();
 		inicializar();
 		establecerConexion();
+String sql = "SELECT * FROM MATERIALESDEPRODUCTOS WHERE PRODUCTO = '"+x+"'";
+PreparedStatement prepStmt = conexion.prepareStatement(sql);
+ResultSet resultado = prepStmt.executeQuery( sql );
 
+int id = 0;
 
+while( resultado.next( )) 
+{
+	if(resultado.getString(1) != null)
+	{
+		jesus.add(resultado.getString(1) ) ;
+		jesus.add(resultado.getString(3) );
+	}
+	else
+	{
+		break;
+	}
+}
 
 
 		return jesus;
@@ -1414,8 +1429,38 @@ String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE N
 		
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
-		prepStmt.setQueryTimeout(100);
+		prepStmt.setQueryTimeout(10);
 		
+	}
+
+	public int darCantidadReservadaMaterial(String material) throws SQLException
+	{
+
+		String sql = "SELECT CANTIDAD_RESERVADA FROM MATERIALES WHERE NOMBRE = '"+material+ "'";
+				
+				inicializar();
+
+				establecerConexion();
+				
+				PreparedStatement prepStmt = conexion.prepareStatement(sql);
+				ResultSet resultado = prepStmt.executeQuery( sql );
+				prepStmt.setQueryTimeout(10);
+
+				
+			int id = 0;
+				
+				while( resultado.next( )) 
+				{
+					if(resultado.getString(1) != null)
+					{
+						id = Integer.parseInt(resultado.getString(1)) ;
+					}
+					else
+					{
+						break;
+					}
+				}
+				return id;
 	}
 
 
