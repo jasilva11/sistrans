@@ -81,7 +81,7 @@ public class ServletCancelacion  extends HttpServlet
 		
 		try {
 		String rol =joda.darTipoUsuario(nombre, pass);
-		ArrayList<String > jesus = joda.darPedidos(producto, 10, "NOM_PRODUCTO");
+		ArrayList<Cliente > jesus = joda.darPedidos(producto, 10, "NOM_PRODUCTO");
 
 		if (rol.equals("No existe") )
 		{
@@ -96,7 +96,9 @@ public class ServletCancelacion  extends HttpServlet
 		}
 		else
 		{
-			
+		
+			joda.cancelarProducto(jesus.get(0), producto);
+
 		//Todo bien
 			imprimirEncabezado(response, jesus);
 			
@@ -184,7 +186,7 @@ public class ServletCancelacion  extends HttpServlet
 		out.println("<body>");
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
-		out.println("<h3><FONT SIZE=8>Clientes</font></h3>");
+		out.println("<h3><FONT SIZE=8>Se ha eliminado el siguiente pedido</font></h3>");
 		out.println("</div>");
 		for (int i = 0; i < resultados.size(); i++) 
 		{
@@ -231,13 +233,6 @@ public class ServletCancelacion  extends HttpServlet
 		out.println("  <p>");
 		out.println("  <p>");
 		out.println("  <p>");
-		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"servletVerificarPedido.htm\">");
-		out.println("  <p>");	
-		out.println("    <label for=\"producto2\">Esta seguro que desea eliminar el pedido del producto:</label> ");
-		out.println("      <input type=\"text\" name=\"Producto\" Producto=\"Producto\" />");
-		out.println("  </p>");
-		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Eliminar\" />");
-		out.println("</form>");
 		out.println("<p>&nbsp;</p>");
 		out.println("</body>");
 		out.println("</html>");

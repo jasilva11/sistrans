@@ -84,7 +84,6 @@ public class ServletCancelarPedido extends HttpServlet
         
 		
 		//Todo bien
-		joda.cancelarProducto(jesus.get(0), producto);
 			imprimirEncabezado(response, jesus);
 			
 			
@@ -221,8 +220,16 @@ public class ServletCancelarPedido extends HttpServlet
 		out.println("  <p>");
 		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"Cancelacion.htm\">");
 		out.println("  <p>");	
-		out.println("    <label for=\"producto2\">Esta seguro que desea eliminar el pedido del producto:</label> ");
-		out.println("      <input type=\"text\" name=\"Producto\" Producto=\"Producto\" />");
+		out.println("    <label for=\"producto2\">Reingrese el nombre:</label> ");
+		out.println("      <input type=\"text\" name=\"nombre\" nombre=\"nombre\" />");
+		out.println("  </p>");
+		out.println("  <p>");	
+		out.println("    <label for=\"producto3\">Reingrese la contrasena:</label> ");
+		out.println("      <input type=\"text\" name=\"pass\" pass=\"pass\" />");
+		out.println("  </p>");
+		out.println("  <p>");	
+		out.println("    <label for=\"producto4\">Esta seguro que desea eliminar el pedido del producto:</label> ");
+		out.println("      <input type=\"text\" name=\"producto\" producto=\"producto\" />");
 		out.println("  </p>");
 		out.println("    <input type=\"submit\" name=\"button\" id=\"button\" value=\"Eliminar\" />");
 		out.println("</form>");
