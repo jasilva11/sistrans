@@ -35,6 +35,8 @@ public class consultaDAO {
 	 */
 	private static final String ARCHIVO_CONEXION = "data/conexion.properties";
 
+	private static final String ARCHIVO = "./data/log.txt";
+
 	/**
 	 * nombre de la tabla videos
 	 */
@@ -75,6 +77,8 @@ public class consultaDAO {
 	private static String password = "ncullbuilt";
 	private static String url = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
 
+	public File archivo;
+
 
 	/**
 	 * constructor de la clase. No inicializa ningun atributo.
@@ -97,9 +101,6 @@ public class consultaDAO {
 	{
 		try
 		{
-
-
-
 			final String driver = "oracle.jdbc.driver.OracleDriver";
 			Class.forName(driver);
 
@@ -108,6 +109,7 @@ public class consultaDAO {
 		{
 			e.printStackTrace();
 		}	
+
 	}
 
 	/**
@@ -522,7 +524,6 @@ public class consultaDAO {
 	{
 		ArrayList proveedores = new ArrayList();
 
-
 		Proveedores registro = null;
 
 		String sql = "";
@@ -555,14 +556,29 @@ public class consultaDAO {
 
 		establecerConexion();
 
-		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-		ResultSet resultado = prepStmt.executeQuery( sql );
+		conexion.setAutoCommit(true);
+		Savepoint save1 = conexion.setSavepoint();
+		
+		ResultSet resultado = null;
+		
+		try 
+		{
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			resultado = prepStmt.executeQuery( sql );
+			prepStmt.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		
 
 		int contador = 0;
 		System.out.println("A");
 
 		String sql2 ="";
-		
+
 		while( resultado.next( ) && contador < numero) 
 		{
 			String nombre = resultado.getString( 5 );
@@ -576,25 +592,50 @@ public class consultaDAO {
 			int id = Integer.parseInt(resultado.getString(1));
 			System.out.println(nombre);
 			registro = new Proveedores(direccion, nombre, telefono, codPos, tipoId, material, id, volumen, tiempo, 0);
-			
+
 			sql2 = "SELECT ID_PEDIDO FROM PEDIDOS_MATERIAL WHERE ID_PROVEEDOR = " + id;
-			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
-			ResultSet resultado2 = prepStmt2.executeQuery( sql2 );
+
+			ResultSet resultado2 = null;
+			try 
+			{
+				PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+				resultado2 = prepStmt2.executeQuery( sql2 );
+				prepStmt2.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+			
 			while( resultado2.next( )) 
 			{
 				registro.agregarPedido(Integer.parseInt(resultado2.getString( 1 )));
 			}
-			
+
 			sql2 = "SELECT PRODUCTO FROM MATERIALESDEPRODUCTOS WHERE MATERIAL = '" + material + "'";
-			PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
-			ResultSet resultado3 = prepStmt2.executeQuery( sql2 );
+
+			ResultSet resultado3 = null;
+			try 
+			{
+				PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
+				resultado3 = prepStmt3.executeQuery( sql2 );
+				prepStmt3.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+			
 			while( resultado3.next( )) 
 			{
 				registro.agregarProducto(resultado3.getString( 1 ));
 			}
-			
+
 			proveedores.add(registro);
 			contador++;
+
 		}
 		return proveedores;
 	}
@@ -606,10 +647,23 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
+		
+		conexion.setAutoCommit(true);
+		Savepoint save1 = conexion.setSavepoint();
 
-		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-		ResultSet resultado = prepStmt.executeQuery( sql );
-
+		ResultSet resultado = null;
+		try 
+		{
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			resultado = prepStmt.executeQuery( sql );
+			prepStmt.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		
 		String estado = "";
 
 		while( resultado.next( )) 
@@ -619,9 +673,19 @@ public class consultaDAO {
 
 		String sql4 = "SELECT max(ID_ESTACION) FROM ETAPAS_DE_ESTACION";
 
-		PreparedStatement prepStmt4 = conexion.prepareStatement(sql4);
-		ResultSet resultado2 = prepStmt4.executeQuery( sql4 );
-
+		ResultSet resultado2 = null;
+		try 
+		{
+			PreparedStatement prepStmt4 = conexion.prepareStatement(sql4);
+			resultado2 = prepStmt4.executeQuery( sql4 );
+			prepStmt4.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		
 		int mayor = 0;
 
 		while( resultado2.next( ))  
@@ -651,9 +715,19 @@ public class consultaDAO {
 
 			String sql5 = "SELECT COUNT (ID_ESTACION), ID_ESTACION FROM ETAPAS_DE_ESTACION GROUP BY ID_ESTACION";
 
-			PreparedStatement prepStmt5 = conexion.prepareStatement(sql5);
-			ResultSet resultado3 = prepStmt5.executeQuery( sql5 );
-
+			ResultSet resultado3 = null;
+			try 
+			{
+				PreparedStatement prepStmt5 = conexion.prepareStatement(sql5);
+				resultado3 = prepStmt5.executeQuery( sql5 );
+				prepStmt5.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+			
 			int mayor2 = 0;
 			int cont = 0;
 			int num = 0;
@@ -669,8 +743,20 @@ public class consultaDAO {
 			}
 
 			String sql6 = "SELECT ID_ETAPA FROM ETAPAS_DE_ESTACION WHERE ID_ESTACION =" + num;
-			PreparedStatement prepStmt6 = conexion.prepareStatement(sql6);
-			ResultSet resultado4 = prepStmt6.executeQuery( sql6 );
+			
+			ResultSet resultado4 = null;
+			try 
+			{
+				PreparedStatement prepStmt6 = conexion.prepareStatement(sql6);
+				resultado4 = prepStmt6.executeQuery( sql6 );
+				prepStmt6.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+						
 			ArrayList etapas = new ArrayList();
 			int contador = 0;
 			int res = 0;
@@ -689,12 +775,30 @@ public class consultaDAO {
 			}
 		}
 
-		PreparedStatement prepStmt2 = conexion.prepareStatement(sql);
-		PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
-
-		ResultSet rs = prepStmt2.executeQuery();
-		ResultSet rs2 = prepStmt3.executeQuery();
-
+		try 
+		{
+			PreparedStatement prepStmt2 = conexion.prepareStatement(sql);
+			ResultSet rs = prepStmt2.executeQuery();
+			prepStmt2.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		
+		try 
+		{
+			PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
+			ResultSet rs2 = prepStmt3.executeQuery();
+			prepStmt3.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		
 		return estado;
 	}
 
@@ -750,9 +854,22 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
+		
+		conexion.setAutoCommit(true);
+		Savepoint save1 = conexion.setSavepoint();
 
-		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-		ResultSet resultado = prepStmt.executeQuery( sql );
+		ResultSet resultado = null;
+		try 
+		{
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			resultado = prepStmt.executeQuery( sql );
+			prepStmt.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
 
 		while( resultado.next( )) 
 		{
@@ -773,9 +890,19 @@ public class consultaDAO {
 				sql2="SELECT * FROM PROVEEDORES RIGHT OUTER JOIN PERSONAS ON IDENTIFICACION = ID_PERSONA WHERE MATERIA_PRIMA = '" + materiales.get(i) + "' AND VOLUMEN_MAXIMO >= "+ cantidad.get(i) +" AND TIEMPO_ENTREGA <= all(SELECT TIEMPO_ENTREGA FROM PROVEEDORES WHERE MATERIA_PRIMA = '"+ materiales.get(i) +"')";
 			}
 
-			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
-			ResultSet resultado2 = prepStmt2.executeQuery( sql2 );
-
+			ResultSet resultado2 = null;
+			try 
+			{
+				PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+				resultado2 = prepStmt2.executeQuery( sql2 );
+				prepStmt2.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+			
 			while( resultado2.next( )) 
 			{
 				String nombre = resultado2.getString( 7 );
@@ -822,7 +949,7 @@ public class consultaDAO {
 			System.out.print("ALGO" );
 
 			String tipo = "";
-			
+
 			while( resultado.next( )) 
 			{
 				if(resultado.getString(1) != null)
@@ -871,16 +998,29 @@ public class consultaDAO {
 	public PedidoMaterial crearPedido(int pIdProveedor, String pMaterial, int pCantidad, int pTiempo, int pCosto) throws SQLException
 	{
 		String sql = "SELECT max(ID_PEDIDO) FROM PEDIDOS_MATERIAL";
-				
+
 		inicializar();
 
 		establecerConexion();
 		
-		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-		ResultSet resultado = prepStmt.executeQuery( sql );
+		conexion.setAutoCommit(true);
+		Savepoint save1 = conexion.setSavepoint();
+
+		ResultSet resultado = null;
+		try 
+		{
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			resultado = prepStmt.executeQuery( sql );
+			prepStmt.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
 		
 		int id = 0;
-		
+
 		while( resultado.next( )) 
 		{
 			if(resultado.getString(1) != null)
@@ -888,14 +1028,24 @@ public class consultaDAO {
 				id = Integer.parseInt(resultado.getString(1)) + 1;
 			}
 		}
-		
+
 		String sql2 = "INSERT INTO PEDIDOS_MATERIAL (ID_PEDIDO, ID_PROVEEDOR, MATERIAL, CANTIDAD, TIEMPO_ENTREGA, COSTO) VALUES (" + id + ", " + pIdProveedor + ", '" + pMaterial + "'," + pCantidad + ", " + pTiempo + ", " + pCosto + ")";
-		
-		PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
-		ResultSet resultado2 = prepStmt.executeQuery( sql2 );
-		
+
+		ResultSet resultado2 = null;
+		try 
+		{
+			PreparedStatement prepStmt2 = conexion.prepareStatement(sql2);
+			resultado2 = prepStmt2.executeQuery( sql2 );
+			prepStmt2.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+
 		PedidoMaterial pedido = new PedidoMaterial(id, pIdProveedor, pMaterial, pCantidad, pTiempo, pCosto);
-		
+
 		return pedido;
 	}
 
@@ -999,7 +1149,7 @@ public class consultaDAO {
 		{
 			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE UNIDADES_PRODUCCION " + "<'"	+ parametro +"'"  ;
 		}
-		
+
 		else if(tipo.equals("CANTIDAD_MATERIALMAYORA"))
 		{
 			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE CANTIDAD_MATERIAL " + ">'"	+ parametro +"'"  ;
@@ -1016,8 +1166,8 @@ public class consultaDAO {
 		{
 			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE TIEMPO_ENTREGA " + "<'"	+ parametro +"'"  ;
 		}
-		
-	
+
+
 		else if(tipo.equalsIgnoreCase("TIEMPO_ENTREGAMenor"))
 		{
 			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE TIEMPO_ENTREGA " + "<'"	+ parametro +"'"  ;
@@ -1026,7 +1176,7 @@ public class consultaDAO {
 		{
 			sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE LEFT OUTER JOIN CLIENTES C ON PC.ID__CLIENTE= C.IDENTIFICACION LEFT OUTER JOIN PEDIDOS_MATERIAL PD ON M.NOMBRE = PD.MATERIAL WHERE TIEMPO_ENTREGA " + "<'"	+ parametro +"'"  ;
 		}
-		
+
 		else
 		{			
 
@@ -1042,174 +1192,174 @@ public class consultaDAO {
 		ResultSet resultado = prepStmt.executeQuery( sql );
 
 		int contador = 0;
-		
+
 		while( resultado.next( ) && contador != numero) 
 		{
-	           contador++;
-		
+			contador++;
+
 			int id = Integer.parseInt(resultado.getString( 1 ));
 			int deudas = Integer.parseInt(resultado.getString( 19));
 			int numReg = Integer.parseInt(resultado.getString( 20 ));
 			int antiguedad = Integer.parseInt(resultado.getString( 21 ));
 			String nomREPL = resultado.getString( 22 );
-			
+
 			String person = resultado.getString( 23 );
-            boolean personaNatural = false;
+			boolean personaNatural = false;
 			if (person == null ||person.equals("TRUE") )
-            {
+			{
 				personaNatural = true;
-            }
+			}
 
 			jesus = new Cliente("", "", 0, "", id, "", antiguedad, deudas, numReg, nomREPL, personaNatural);
-		    
+
 			String material = resultado.getString( 9 );
-   
+
 			String infoProducto = "NO";
 			boolean aux = false;
-		   if (material != null )
-		   {
+			if (material != null )
+			{
 				String producto = resultado.getString( 2 );
 
-			   int unidades = Integer.parseInt(resultado.getString( 3 ));
-			   int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
-			   int costo = Integer.parseInt(resultado.getString( 5 ));
-			   int unidadesEnEspera = 0;
+				int unidades = Integer.parseInt(resultado.getString( 3 ));
+				int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
+				int costo = Integer.parseInt(resultado.getString( 5 ));
+				int unidadesEnEspera = 0;
 
-			   boolean estado= false;
-			   String jesusMio = resultado.getString( 7 );
-			   if (jesusMio != null && jesusMio.equals("TRUE"))
-			   {
-				   estado = true;
-			   }
-			   if(estado)
-			   {
-				 unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
-
-			   }
-				String idPedido = resultado.getString( 24 );
-			
-
-		   
-			   for (int i = 0; i < clientes.size() ; i++)
+				boolean estado= false;
+				String jesusMio = resultado.getString( 7 );
+				if (jesusMio != null && jesusMio.equals("TRUE"))
 				{
-				   
+					estado = true;
+				}
+				if(estado)
+				{
+					unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
+
+				}
+				String idPedido = resultado.getString( 24 );
+
+
+
+				for (int i = 0; i < clientes.size() ; i++)
+				{
+
 					Cliente algo =(Cliente) clientes.get(i);
 					if (algo.getIdentificacion() == id)
 					{
 
-					ArrayList<String> mat = algo.darProductos();
+						ArrayList<String> mat = algo.darProductos();
 
-					for (int j = 0; j < mat.size(); j++)
-					{
-
-						String productoDesado = mat.get(j);
-						System.out.print( productoDesado);
-
-						if(productoDesado.startsWith(producto))
+						for (int j = 0; j < mat.size(); j++)
 						{
 
-							String suma = "";
+							String productoDesado = mat.get(j);
+							System.out.print( productoDesado);
 
-							if(idPedido==null)
-				                {
-								suma = "</p> - " + resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>";
+							if(productoDesado.startsWith(producto))
+							{
 
-				                }
-							 else
-							 {
+								String suma = "";
+
+								if(idPedido==null)
+								{
+									suma = "</p> - " + resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>";
+
+								}
+								else
+								{
 
 									suma = "</p> -" + resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
-									+idPedido + " hecho al proveedor " + resultado.getString( 24 )+ ", de donde se solicitan" + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 26 ) + " horas "+ "a un costo de" +resultado.getString( 27 ) +   "</p>"  ;
+											+idPedido + " hecho al proveedor " + resultado.getString( 24 )+ ", de donde se solicitan" + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 26 ) + " horas "+ "a un costo de" +resultado.getString( 27 ) +   "</p>"  ;
 
-							 
-							 }
 
-							productoDesado =productoDesado + suma;
-							mat.remove(j);
-							mat.add(productoDesado);
+								}
 
-							aux = true;
-						 break;
+								productoDesado =productoDesado + suma;
+								mat.remove(j);
+								mat.add(productoDesado);
+
+								aux = true;
+								break;
+							}
+
+
 						}
-					
-					
-					}
-					
+
 					}
 				}
-			
-			   
-			   if (idPedido == null && !aux)
-			   {
-			   infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
-			   + "</p>" + "El producto esta compuesto de los siguientes materiales: "  + "</p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>");
-			   }
-			   else
-			   {
-			 infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
-			+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + " </p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
-			+ " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
-			+idPedido + " hecho al proveedor de id " + resultado.getString( 24 )+ ", de donde se solicitan " + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 28 ) + " horas "+ "a un costo de" +resultado.getString( 29 ) +   "</p>" ) ;
+
+
+				if (idPedido == null && !aux)
+				{
+					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+							+ "</p>" + "El producto esta compuesto de los siguientes materiales: "  + "</p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>");
+				}
+				else
+				{
+					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+							+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + " </p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
+									+ " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
+									+idPedido + " hecho al proveedor de id " + resultado.getString( 24 )+ ", de donde se solicitan " + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 28 ) + " horas "+ "a un costo de" +resultado.getString( 29 ) +   "</p>" ) ;
+
+				}
 
 			}
-				   
-		   }
-		   else
-		   {
-			   String producto = resultado.getString( 2 );
-
-			   int unidades = Integer.parseInt(resultado.getString( 3 ));
-			   int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
-			   int costo = Integer.parseInt(resultado.getString( 5 ));
-			   int unidadesEnEspera = 0;
-
-			   boolean estado= false;
-			   String jesusMio = resultado.getString( 7 );
-			   if (jesusMio != null && jesusMio.equals("TRUE"))
-			   {
-				   estado = true;
-			   }
-			   if(estado)
-			   {
-				 unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
-
-			   }
-
-			   infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y " + unidadesEnEspera + " unidades en espera de ser producidas"
-			   + "\n" + "Este producto, no necesita ningun material para su fabricacion "  ;
-
-			 
-		   }
-		   boolean papitas = false;
-			
-		   if(!aux)
-		   {
-		   for (int i = 0; i < clientes.size() ; i++)
+			else
 			{
+				String producto = resultado.getString( 2 );
 
-				Cliente algo =(Cliente) clientes.get(i);
-				if (algo.getIdentificacion() == id)
+				int unidades = Integer.parseInt(resultado.getString( 3 ));
+				int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
+				int costo = Integer.parseInt(resultado.getString( 5 ));
+				int unidadesEnEspera = 0;
+
+				boolean estado= false;
+				String jesusMio = resultado.getString( 7 );
+				if (jesusMio != null && jesusMio.equals("TRUE"))
+				{
+					estado = true;
+				}
+				if(estado)
+				{
+					unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
+
+				}
+
+				infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y " + unidadesEnEspera + " unidades en espera de ser producidas"
+						+ "\n" + "Este producto, no necesita ningun material para su fabricacion "  ;
+
+
+			}
+			boolean papitas = false;
+
+			if(!aux)
+			{
+				for (int i = 0; i < clientes.size() ; i++)
 				{
 
-					algo.agregarProducto(infoProducto);
-					papitas = true;
+					Cliente algo =(Cliente) clientes.get(i);
+					if (algo.getIdentificacion() == id)
+					{
+
+						algo.agregarProducto(infoProducto);
+						papitas = true;
+					}
+				}
+				if (!papitas)
+				{
+
+					jesus.agregarProducto(infoProducto);
+					clientes.add(jesus);
 				}
 			}
-           if (!papitas)
-           {
-
-        	 jesus.agregarProducto(infoProducto);
-			clientes.add(jesus);
-           }
-		   }
 		}
 
 		return clientes;
 	}
-	
-	
-	
-	
+
+
+
+
 	public ArrayList darClientesBusqueda(String parametro, int numero, String tipo)throws Exception
 	{
 		ArrayList clientes = new ArrayList();
@@ -1223,7 +1373,7 @@ public class consultaDAO {
 		{
 			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE IDENTIFICACION =" + "'" + parametro + "'" ;
 		}
-		
+
 		else if(tipo.equalsIgnoreCase("deudasMayor"))
 		{
 			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE DEUDAS >" + "'" + parametro+ "'" ;
@@ -1252,7 +1402,7 @@ public class consultaDAO {
 		{
 			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE NOM_RP_LEGAL =" + "'" + parametro+ "'" ;
 		}
-		
+
 		else if(tipo.equalsIgnoreCase("pnNatural"))
 		{
 			sql ="SELECT * FROM CLIENTES C LEFT OUTER JOIN PEDIDOSCLIENTE PC ON C.IDENTIFICACION=PC.ID__CLIENTE  LEFT OUTER JOIN PERSONAS P ON C.IDENTIFICACION = P.ID_PERSONA WHERE PERSONANATURAL =" + "'" + parametro+ "'" ;
@@ -1281,36 +1431,36 @@ public class consultaDAO {
 
 		int contador = 0;
 		String sql2 ="";
-		
+
 		while( resultado.next( ) && contador != numero) 
 		{
-	           contador++;
-		
+			contador++;
+
 			int id = Integer.parseInt(resultado.getString( 1 ));
 			int deudas = Integer.parseInt(resultado.getString( 2));
 			int numReg = Integer.parseInt(resultado.getString( 3 ));
 			int antiguedad = Integer.parseInt(resultado.getString( 4 ));
 			String nomREPL = resultado.getString( 5 );
-			
+
 			String person = resultado.getString( 6 );
-            boolean personaNatural = false;
+			boolean personaNatural = false;
 			if (person == null ||person.equals("TRUE") )
-            {
+			{
 				personaNatural = true;
-            }
+			}
 			String nombre = resultado.getString( 11 );
 
 			jesus = new Cliente("", nombre, 0, "", id, "", antiguedad, deudas, numReg, nomREPL, personaNatural);
-		    
+
 			String producto = resultado.getString( 8 );
-   
+
 			String infoProducto = "NO";
-		   if (producto != null )
-		   {
+			if (producto != null )
+			{
 				int unidades = Integer.parseInt(resultado.getString( 9 ));
-			   infoProducto = producto +  " con estas unidades requeridas: " + unidades;
-		   }
-		   boolean papitas = false;
+				infoProducto = producto +  " con estas unidades requeridas: " + unidades;
+			}
+			boolean papitas = false;
 			for (int i = 0; i < clientes.size() ; i++)
 			{
 				Cliente algo =(Cliente) clientes.get(i);
@@ -1320,10 +1470,10 @@ public class consultaDAO {
 					papitas = true;
 				}
 			}
-           if (!papitas)
-           {
-			clientes.add(jesus);
-           }
+			if (!papitas)
+			{
+				clientes.add(jesus);
+			}
 		}
 		return clientes;
 	}
@@ -1333,17 +1483,17 @@ public class consultaDAO {
 	public void cacelarPedidosCliente(int i, String producto) throws Exception 
 	{
 		String sql = "DELETE FROM PEDIDOSCLIENTE WHERE ID__CLIENTE = "+ i+"  AND NOM_PRODUCTO = '"+producto+ "'";
-		
+
 		inicializar();
 
 		establecerConexion();
-		
+
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(100);
-		
+
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int darUnidadesEnEsperaDeSerProducidas(int i,
@@ -1351,16 +1501,16 @@ public class consultaDAO {
 	{
 
 		String sql = "SELECT UNIANDEADES_REQ FROM PEDIDOSCLIENTE WHERE ID__CLIENTE = "+ i+" AND NOM_PRODUCTO = '"+producto+ "'";
-		
+
 		inicializar();
 
 		establecerConexion();
-		
+
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
-		
-	int id = 0;
-		
+
+		int id = 0;
+
 		while( resultado.next( )) 
 		{
 			if(resultado.getString(1) != null)
@@ -1373,23 +1523,23 @@ public class consultaDAO {
 			}
 		}
 		return id;
-		
-		
+
+
 	}
 
 	public int darUnidadesProducto(String producto) throws Exception 
 	{
-String sql = "SELECT UNIDADES_ESPERA FROM PRODUCTO WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
-		
+		String sql = "SELECT UNIDADES_ESPERA FROM PRODUCTO WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
+
 		inicializar();
 
 		establecerConexion();
-		
+
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
-		
-	int id = 0;
-		
+
+		int id = 0;
+
 		while( resultado.next( )) 
 		{
 			if(resultado.getString(1) != null)
@@ -1406,17 +1556,15 @@ String sql = "SELECT UNIDADES_ESPERA FROM PRODUCTO WHERE NOMBRE_PRODUCTO = '"+pr
 
 	public void actualizarUnidadesEnEspera(int unidadesFinales,String producto) throws SQLException 
 	{
-String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
-		
+		String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
+
 		inicializar();
 
 		establecerConexion();
-		
+
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(100);
-		
+
 	}
-
-
 }
