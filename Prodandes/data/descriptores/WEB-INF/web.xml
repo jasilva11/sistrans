@@ -88,6 +88,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
 </servlet><servlet>
  	<servlet-name>DarPedidos</servlet-name>
  	<servlet-class>Prodandes.servlets.ServletDarPedidosEfectivo</servlet-class>
+</servlet><servlet>
+		<servlet-name>Cancelacion</servlet-name>
+		<servlet-class>Prodandes.servlets.ServletCancelacion</servlet-class>
 </servlet><!-- MAPPING -->
 	<servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -168,5 +171,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
  	<servlet-name>CancelarPedido</servlet-name>
  	<url-pattern>/CancelarPedido.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+ 	<servlet-name>Cancelacion</servlet-name>
+ 	<url-pattern>/Cancelacion.htm</url-pattern>
  </servlet-mapping>
 </web-app>
