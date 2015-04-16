@@ -577,7 +577,8 @@ public class consultaDAO {
 
 		establecerConexion();
 
-		conexion.setAutoCommit(true);
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 		Savepoint save1 = conexion.setSavepoint();
 
 		ResultSet resultado = null;
@@ -593,8 +594,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-
-
+		
 		int contador = 0;
 		System.out.println("A");
 
@@ -658,6 +658,7 @@ public class consultaDAO {
 			contador++;
 
 		}
+		conexion.commit();
 		return proveedores;
 	}
 
@@ -669,7 +670,8 @@ public class consultaDAO {
 
 		establecerConexion();
 
-		conexion.setAutoCommit(true);
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 		Savepoint save1 = conexion.setSavepoint();
 
 		ResultSet resultado = null;
@@ -819,7 +821,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-
+		conexion.commit();
 		return estado;
 	}
 
@@ -876,7 +878,8 @@ public class consultaDAO {
 
 		establecerConexion();
 
-		conexion.setAutoCommit(true);
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 		Savepoint save1 = conexion.setSavepoint();
 
 		ResultSet resultado = null;
@@ -941,6 +944,7 @@ public class consultaDAO {
 				proveedores.add(registro);
 			}
 		}
+		conexion.commit();
 		return proveedores;
 	}
 
@@ -1021,7 +1025,8 @@ public class consultaDAO {
 
 		establecerConexion();
 
-		conexion.setAutoCommit(true);
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 		Savepoint save1 = conexion.setSavepoint();
 
 		ResultSet resultado = null;
@@ -1064,6 +1069,7 @@ public class consultaDAO {
 
 		PedidoMaterial pedido = new PedidoMaterial(id, pIdProveedor, pMaterial, pCantidad, pTiempo, pCosto);
 
+		conexion.commit();
 		return pedido;
 	}
 
