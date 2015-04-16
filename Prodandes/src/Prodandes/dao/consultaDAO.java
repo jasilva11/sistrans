@@ -77,6 +77,12 @@ public class consultaDAO {
 	private static String password = "ncullbuilt";
 	private static String url = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
 
+	
+	Savepoint primero = null;
+	Savepoint segundo = null;
+	Savepoint tercero = null;
+
+	
 	public File archivo;
 
 
@@ -1246,7 +1252,7 @@ public class consultaDAO {
 				{
 					estado = true;
 				}
-				if(estado)
+				if(!estado)
 				{
 					unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
 
@@ -1306,12 +1312,12 @@ public class consultaDAO {
 
 				if (idPedido == null && !aux)
 				{
-					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unidades en espera de ser producidas."
 							+ "</p>" + "El producto esta compuesto de los siguientes materiales: "  + "</p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado " + "</p>");
 				}
 				else
 				{
-					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unindades en espera de ser producidas."
+					infoProducto = producto +  " tiene estas unidades requeridas: " + unidades + ", se disponen de "+ unidadesDisponibles + " unidades en el inventario, con un costo unitario de " +costo + " y existen " + unidadesEnEspera + " unidades en espera de ser producidas."
 							+ "</p>  " + "El producto esta compuesto de los siguientes materiales: "  + " </p> -" + (resultado.getString( 9 ) + " con  " + resultado.getString( 11 )+  " de cantidad necesitada. " + "Este material es de tipo: " +resultado.getString( 14 )+ " y en el inventario hay " + resultado.getString( 16 ) +  resultado.getString( 15 ) + " con " + resultado.getString( 18 ) +  resultado.getString( 15 )+ " reservado "
 									+ " Dado que no estan todos materiales, existe un pedido en progreso, con el id: "
 									+idPedido + " hecho al proveedor de id " + resultado.getString( 24 )+ ", de donde se solicitan " + resultado.getString( 25 )+  " unidades,con un tiempo de entrega aproximado de: " + resultado.getString( 28 ) + " horas "+ "a un costo de" +resultado.getString( 29 ) +   "</p>" ) ;
@@ -1440,10 +1446,11 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
-
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
 		prepStmt.setQueryTimeout(10);
+		
+	
 
 		int contador = 0;
 		String sql2 ="";
@@ -1503,11 +1510,17 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
+
+		primero = conexion.setSavepoint("jesusCristo");
+		
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+        
 		int resultado = prepStmt.executeUpdate( sql );
-		prepStmt.setQueryTimeout(100);
-
+		prepStmt.setQueryTimeout(10);
+        conexion.commit();
 		// TODO Auto-generated method stub
 
 	}
@@ -1521,7 +1534,6 @@ public class consultaDAO {
 		inicializar();
 
 		establecerConexion();
-
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
 		prepStmt.setQueryTimeout(10);
@@ -1577,12 +1589,14 @@ public class consultaDAO {
 		String sql = "UPDATE PRODUCTO SET UNIDADES_ESPERA = "+ unidadesFinales+" WHERE NOMBRE_PRODUCTO = '"+producto+ "'";
 
 		inicializar();
-
 		establecerConexion();
-
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
+		segundo = conexion.setSavepoint("opeth");
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(10);
+		conexion.commit();
 	}
 
 	public void actualizarCantidadReservada(int unidadesFinales,String producto) throws SQLException 
@@ -1593,9 +1607,15 @@ public class consultaDAO {
 
 		establecerConexion();
 
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
+
+		tercero = conexion.setSavepoint("yeah");
+		
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(10);
+		conexion.commit();
 
 	}
 
@@ -1627,5 +1647,25 @@ public class consultaDAO {
 			}
 		}
 		return id;
+	}
+
+	public void hiperRollback() throws SQLException 
+	{
+		if (primero != null)
+		{
+		conexion.rollback(primero);
+		}
+		if (segundo != null)
+		{
+		conexion.rollback(segundo);
+		}
+		if (tercero != null)
+		{
+		conexion.rollback(tercero);
+
+		}
+
+		// TODO Auto-generated method stub
+		
 	}
 }

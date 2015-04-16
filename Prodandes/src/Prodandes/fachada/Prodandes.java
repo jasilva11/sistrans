@@ -205,7 +205,7 @@ dao.agregarCliente(z);
    try
    {
 	   
-	 if(jesus.darProductos().get(0).contains("existen 0 unindades en espera de ser producidas."))
+	 if(jesus.darProductos().get(0).contains("existen 0 unidades en espera de ser producidas."))
 	 {
 			dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
 
@@ -216,21 +216,26 @@ dao.agregarCliente(z);
 	    int unidadesEnEspera = dao.darUnidadesProducto(producto);
 	    int unidadesFinales = unidadesEnEspera - unidadesProblematicas;
 	   ArrayList<String> materialsCantidad= dao.darMateriasDeUnProducto(producto);
+	   System.out.print(materialsCantidad.size() + "ASDASDASD");
+
 	   for (int i = 0; i < materialsCantidad.size(); i=i+2)
 	   {
 		 String x = materialsCantidad.get(i);
 		 String cantidad = materialsCantidad.get(i+1);
          int comparacion = Integer.parseInt(cantidad);
 		 int numero =dao.darCantidadReservadaMaterial(x);
-	     int diferencia = comparacion - numero;
-	     if (diferencia < 0)
+	     		 
+		 int diferencia = numero - comparacion ;
+		   System.out.print("MAter" + cantidad);
+
+		 if (diferencia <= 0)
 	     {
-	    	 dao.actualizarCantidadReservada(0, producto);
+	    	 dao.actualizarCantidadReservada(0, x);
 
 	     }
 	     else
 	     {
-	    	 dao.actualizarCantidadReservada(diferencia, producto);
+	    	 dao.actualizarCantidadReservada(diferencia, x);
 
 	     }
 	   
@@ -242,6 +247,7 @@ dao.agregarCliente(z);
 	    	
 	    	
 	    	dao.actualizarUnidadesEnEspera(0, producto);
+	    
 	    }
 	    else
 	    {
@@ -249,9 +255,9 @@ dao.agregarCliente(z);
             
 	    	
 	    }
-		dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
 
-	 
+		dao.cacelarPedidosCliente(jesus.getIdentificacion(), producto);
+        dao.conexion.close();
 	 }
 	   
 
@@ -260,8 +266,8 @@ dao.agregarCliente(z);
    
    catch (Exception e)
 {
-	// TODO: handle exception
-}
+	   System.out.print("ALGO");
+dao.hiperRollback();}
    
    
 return "";

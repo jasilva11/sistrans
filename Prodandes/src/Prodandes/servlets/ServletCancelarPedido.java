@@ -84,9 +84,14 @@ public class ServletCancelarPedido extends HttpServlet
         
 		
 		//Todo bien
+		if(jesus.size() != 0)
+		{
 			imprimirEncabezado(response, jesus);
-			
-			
+		}
+		else
+		{
+			imprimirMensajeError(response.getWriter(), "No se ingresaron los datos correctamente", "No se encontro el pedido");	
+		}
 		
 		
 		
