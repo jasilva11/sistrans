@@ -540,6 +540,63 @@ public class consultaDAO {
 		}
 		return materiales;
 	}
+	
+	public ArrayList buscarMateriales2(String parametro, String parametro2, String tipo) throws SQLException
+	{
+		ArrayList materiales = new ArrayList();
+
+
+		MateriasPrimas registro = null;
+
+		String sql = "";
+
+		if(tipo.equalsIgnoreCase("tipo"))
+		{
+			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE TIPO =" + "'" + parametro + "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("volumen"))
+		{
+			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE CANTIDAD_INICIAL =" + "'" + parametro+ "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("costo"))
+		{
+			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE COSTO =" + "'" + parametro+ "'" ;
+		}
+
+		else if(tipo.equalsIgnoreCase("rango"))
+		{
+			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE to_date('"+parametro+"','dd/mm/yyyy') < FECHA_INICIO AND to_date('"+parametro2+"','dd/mm/yyyy')>FECHA_FINAL";
+		}
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		System.out.println("A");
+
+		while( resultado.next( )) 
+		{
+			String nombre = resultado.getString( 1 );
+			String loComponen = resultado.getString( 2 );
+			String compone = resultado.getString( 3 );
+			String producto = resultado.getString( 4 );
+			String pTipo = resultado.getString( 5 );
+			int volumen = Integer.parseInt(resultado.getString(6));
+			int costo = Integer.parseInt(resultado.getString(7));
+			int etapa = Integer.parseInt(resultado.getString(8));
+			Date inicio = resultado.getDate( 9 );
+			Date fin = resultado.getDate( 10 );
+			System.out.println(nombre);
+			registro = new MateriasPrimas(nombre, loComponen, compone, producto, tipo, volumen, costo, etapa, inicio, fin);
+			materiales.add(registro);
+		}
+		return materiales;
+	}
 
 	public ArrayList buscarProveedores(String parametro, int numero, String tipo) throws SQLException
 	{
@@ -1673,68 +1730,5 @@ public class consultaDAO {
 
 		// TODO Auto-generated method stub
 		
-	}
-
-	public ArrayList darPedidosBusqueda(String tipo, int costoMayor) throws SQLException
-	{
-		ArrayList pedidos = new ArrayList();
-
-
-		String jesus = "";
-
-		String sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE WHERE TIPO = " + tipo + " AND COSTO_VENTA >'"	+ costoMayor +"'"  ;
-		
-
-	
-
-
-		inicializar();
-
-		establecerConexion();
-
-		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-		ResultSet resultado = prepStmt.executeQuery( sql );
-		prepStmt.setQueryTimeout(10);
-
-		int contador = 0;
-
-		while( resultado.next( )) 
-		{
-			contador++;
-
-			int id = Integer.parseInt(resultado.getString( 1 ));
-			String material = resultado.getString( 9 );
-
-			String infoProducto = "NO";
-			boolean aux = false;
-			if (material != null )
-			{
-				String producto = resultado.getString( 2 );
-
-				int unidades = Integer.parseInt(resultado.getString( 3 ));
-				int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
-				int costo = Integer.parseInt(resultado.getString( 5 ));
-				int unidadesEnEspera = 0;
-
-				boolean estado= false;
-				String jesusMio = resultado.getString( 7 );
-				if (jesusMio != null && jesusMio.equals("TRUE"))
-				{
-					estado = true;
-				}
-				if(!estado)
-				{
-					unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
-
-				}
-				String idPedido = resultado.getString( 24 );
-
-
-
-				
-	}
-}
-		return pedidos;
-
 	}
 }
