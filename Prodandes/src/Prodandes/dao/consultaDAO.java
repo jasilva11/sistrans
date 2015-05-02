@@ -18,6 +18,7 @@ import java.util.*;
 import Prodandes.vod.Cliente;
 import Prodandes.vod.ComponentesProduccion;
 import Prodandes.vod.EtapasDeProducion;
+import Prodandes.vod.MaterialPedido;
 import Prodandes.vod.MateriasPrimas;
 import Prodandes.vod.Operario;
 import Prodandes.vod.PedidoMaterial;
@@ -77,12 +78,12 @@ public class consultaDAO {
 	private static String password = "ncullbuilt";
 	private static String url = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
 
-	
+
 	Savepoint primero = null;
 	Savepoint segundo = null;
 	Savepoint tercero = null;
 
-	
+
 	public File archivo;
 
 
@@ -531,7 +532,11 @@ public class consultaDAO {
 			String pTipo = resultado.getString( 5 );
 			int volumen = Integer.parseInt(resultado.getString(6));
 			int costo = Integer.parseInt(resultado.getString(7));
-			int etapa = Integer.parseInt(resultado.getString(8));
+			int etapa = 0;			
+			if(resultado.getString(8) != null)
+			{
+				etapa = Integer.parseInt(resultado.getString(8));
+			}
 			Date inicio = resultado.getDate( 9 );
 			Date fin = resultado.getDate( 10 );
 			System.out.println(nombre);
@@ -540,35 +545,17 @@ public class consultaDAO {
 		}
 		return materiales;
 	}
-	
-	public ArrayList buscarMateriales2(String parametro, String parametro2, String tipo) throws SQLException
+
+	public ArrayList buscarMateriales2(int pId) throws SQLException
 	{
 		ArrayList materiales = new ArrayList();
 
 
-		MateriasPrimas registro = null;
+		MaterialPedido registro = null;
 
 		String sql = "";
 
-		if(tipo.equalsIgnoreCase("tipo"))
-		{
-			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE TIPO =" + "'" + parametro + "'" ;
-		}
-
-		else if(tipo.equalsIgnoreCase("volumen"))
-		{
-			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE CANTIDAD_INICIAL =" + "'" + parametro+ "'" ;
-		}
-
-		else if(tipo.equalsIgnoreCase("costo"))
-		{
-			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE COSTO =" + "'" + parametro+ "'" ;
-		}
-
-		else if(tipo.equalsIgnoreCase("rango"))
-		{
-			sql ="SELECT NOMBRE, NOMBRE_COMPONENTE as LO_COMPONEN, COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL as VOLUMEN, COSTO, ID_ETAPA, FECHA_INICIO,FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN (SELECT NOMBRE, NOMBRE_COMPUESTO as COMPONE, NOMBRE_PRODUCTO, TIPO, CANTIDAD_INICIAL, COSTO, ID_ETAPA, FECHA_INICIO, FECHA_FINAL FROM COMPONE RIGHT OUTER JOIN ((MATERIALES RIGHT OUTER JOIN PRODUCTO ON Nombre = Material)RIGHT OUTER JOIN ETAPAS_PRODUCCION ON Id_Etapa = identificador) ON NOMBRE_COMPONENTE = NOMBRE) ON NOMBRE_COMPUESTO = NOMBRE WHERE to_date('"+parametro+"','dd/mm/yyyy') < FECHA_INICIO AND to_date('"+parametro2+"','dd/mm/yyyy')>FECHA_FINAL";
-		}
+		sql ="SELECT * FROM PEDIDOS_MATERIAL RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE ID =" + "'" + pId + "'" ;
 
 		inicializar();
 
@@ -581,18 +568,16 @@ public class consultaDAO {
 
 		while( resultado.next( )) 
 		{
-			String nombre = resultado.getString( 1 );
-			String loComponen = resultado.getString( 2 );
-			String compone = resultado.getString( 3 );
-			String producto = resultado.getString( 4 );
-			String pTipo = resultado.getString( 5 );
-			int volumen = Integer.parseInt(resultado.getString(6));
-			int costo = Integer.parseInt(resultado.getString(7));
-			int etapa = Integer.parseInt(resultado.getString(8));
-			Date inicio = resultado.getDate( 9 );
-			Date fin = resultado.getDate( 10 );
+			int idPedido = Integer.parseInt(resultado.getString( 1 ));
+			String nombre = resultado.getString( 3 );
+			String pTipo = resultado.getString( 12 );
+			int volumen = Integer.parseInt(resultado.getString(4));
+			int costo = Integer.parseInt(resultado.getString(6));
+			int etapa = Integer.parseInt(resultado.getString(7));
+			Date inicio = resultado.getDate( 8 );
+			Date fin = resultado.getDate( 9 );
 			System.out.println(nombre);
-			registro = new MateriasPrimas(nombre, loComponen, compone, producto, tipo, volumen, costo, etapa, inicio, fin);
+			registro = new MaterialPedido(pId, idPedido, nombre, pTipo, volumen, costo, etapa, inicio, fin);
 			materiales.add(registro);
 		}
 		return materiales;
@@ -651,7 +636,7 @@ public class consultaDAO {
 			// TODO: handle exception
 			conexion.rollback(save1);
 		}
-		
+
 		int contador = 0;
 		System.out.println("A");
 
@@ -1027,7 +1012,7 @@ public class consultaDAO {
 
 			PreparedStatement prepStmt = conexion.prepareStatement(sql);
 			ResultSet resultado = prepStmt.executeQuery( sql );
-            
+
 			String tipo = "";
 
 			while( resultado.next( )) 
@@ -1512,8 +1497,8 @@ public class consultaDAO {
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
 		prepStmt.setQueryTimeout(10);
-		
-	
+
+
 
 		int contador = 0;
 		String sql2 ="";
@@ -1577,13 +1562,13 @@ public class consultaDAO {
 		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 
 		primero = conexion.setSavepoint("jesusCristo");
-		
+
 
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
-        
+
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(10);
-        conexion.commit();
+		conexion.commit();
 		// TODO Auto-generated method stub
 
 	}
@@ -1674,7 +1659,7 @@ public class consultaDAO {
 		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
 
 		tercero = conexion.setSavepoint("yeah");
-		
+
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		int resultado = prepStmt.executeUpdate( sql );
 		prepStmt.setQueryTimeout(10);
@@ -1716,19 +1701,19 @@ public class consultaDAO {
 	{
 		if (primero != null)
 		{
-		conexion.rollback(primero);
+			conexion.rollback(primero);
 		}
 		if (segundo != null)
 		{
-		conexion.rollback(segundo);
+			conexion.rollback(segundo);
 		}
 		if (tercero != null)
 		{
-		conexion.rollback(tercero);
+			conexion.rollback(tercero);
 
 		}
 
 		// TODO Auto-generated method stub
-		
+
 	}
 }

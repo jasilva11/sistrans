@@ -328,6 +328,11 @@ return "";
 		return dao.darPedidosBusqueda(parametro, numero, tipo);
 	}
 
+	public ArrayList conMateriales2(int pId) throws SQLException
+	{
+		return dao.buscarMateriales2(pId);
+	}
+	
 //	public ArrayList darLosPedidos2(String tipo, int costoMayor)
 //	{
 //		return dao.darPedidosBusqueda(tipo, costoMayor);

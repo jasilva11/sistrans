@@ -77,22 +77,31 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-class>Prodandes.servlets.ServletGenerarPedidosRes</servlet-class>
  </servlet>
  <servlet>
- 	<servlet-name>darClientes</servlet-name>
- 	<servlet-class>Prodandes.servlets.ServletDarClientesEfectivo</servlet-class>
-</servlet><servlet>
+  <servlet-name>darClientes</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarClientesEfectivo</servlet-class>
+ </servlet>
+ <servlet>
   <servlet-name>CrearPedido</servlet-name>
   <servlet-class>Prodandes.servlets.ServletCrearPedidoMaterial</servlet-class>
- </servlet><servlet>
- 	<servlet-name>CancelarPedido</servlet-name>
- 	<servlet-class>Prodandes.servlets.ServletCancelarPedido</servlet-class>
-</servlet><servlet>
- 	<servlet-name>DarPedidos</servlet-name>
- 	<servlet-class>Prodandes.servlets.ServletDarPedidosEfectivo</servlet-class>
-</servlet><servlet>
-		<servlet-name>Cancelacion</servlet-name>
-		<servlet-class>Prodandes.servlets.ServletCancelacion</servlet-class>
-</servlet><!-- MAPPING -->
-	<servlet-mapping>
+ </servlet>
+ <servlet>
+  <servlet-name>CancelarPedido</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletCancelarPedido</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>DarPedidos</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarPedidosEfectivo</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>Cancelacion</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletCancelacion</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>MaterialesID</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletBuscarMaterialesIDResp</servlet-class>
+ </servlet>
+ <!-- MAPPING -->
+ <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
   <url-pattern>/registrarCliente.htm</url-pattern>
  </servlet-mapping>
@@ -161,19 +170,23 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <url-pattern>/crearPedido.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>darClientes</servlet-name>
- 	<url-pattern>/darClientesPro.htm</url-pattern>
+  <servlet-name>darClientes</servlet-name>
+  <url-pattern>/darClientesPro.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>DarPedidos</servlet-name>
- 	<url-pattern>/DarPedidos.htm</url-pattern>
+  <servlet-name>DarPedidos</servlet-name>
+  <url-pattern>/DarPedidos.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>CancelarPedido</servlet-name>
- 	<url-pattern>/CancelarPedido.htm</url-pattern>
+  <servlet-name>CancelarPedido</servlet-name>
+  <url-pattern>/CancelarPedido.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>Cancelacion</servlet-name>
- 	<url-pattern>/Cancelacion.htm</url-pattern>
+  <servlet-name>Cancelacion</servlet-name>
+  <url-pattern>/Cancelacion.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>MaterialesID</servlet-name>
+  <url-pattern>materialesId.htm</url-pattern>
  </servlet-mapping>
 </web-app>
