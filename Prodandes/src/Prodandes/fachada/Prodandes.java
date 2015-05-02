@@ -327,6 +327,11 @@ return "";
 	{
 		return dao.darPedidosBusqueda(parametro, numero, tipo);
 	}
+
+	public ArrayList darLosPedidos2(String tipo, int costoMayor)
+	{
+		return dao.darPedidosBusqueda(tipo, costoMayor);
+	}
 	
 	
 }

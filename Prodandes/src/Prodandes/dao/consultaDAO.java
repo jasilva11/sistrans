@@ -1674,4 +1674,67 @@ public class consultaDAO {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public ArrayList darPedidosBusqueda(String tipo, int costoMayor) throws SQLException
+	{
+		ArrayList pedidos = new ArrayList();
+
+
+		String jesus = "";
+
+		String sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT OUTER JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE WHERE TIPO = " + tipo + " AND COSTO_VENTA >'"	+ costoMayor +"'"  ;
+		
+
+	
+
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
+
+		int contador = 0;
+
+		while( resultado.next( )) 
+		{
+			contador++;
+
+			int id = Integer.parseInt(resultado.getString( 1 ));
+			String material = resultado.getString( 9 );
+
+			String infoProducto = "NO";
+			boolean aux = false;
+			if (material != null )
+			{
+				String producto = resultado.getString( 2 );
+
+				int unidades = Integer.parseInt(resultado.getString( 3 ));
+				int unidadesDisponibles = Integer.parseInt(resultado.getString( 6 ));
+				int costo = Integer.parseInt(resultado.getString( 5 ));
+				int unidadesEnEspera = 0;
+
+				boolean estado= false;
+				String jesusMio = resultado.getString( 7 );
+				if (jesusMio != null && jesusMio.equals("TRUE"))
+				{
+					estado = true;
+				}
+				if(!estado)
+				{
+					unidadesEnEspera = Integer.parseInt(resultado.getString( 8 ));
+
+				}
+				String idPedido = resultado.getString( 24 );
+
+
+
+				
+	}
+}
+		return pedidos;
+
+	}
 }
