@@ -1820,12 +1820,21 @@ public class consultaDAO {
 			int cantidadMaterialDisponibles = Integer.parseInt(resultado.getString( 16));
 			String unidad = resultado.getString( 15 );
 
+<<<<<<< HEAD
 
 			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido" +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
 					" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" unidades disponibles"  ;
 
 
 
+=======
+   
+			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido " +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
+			" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" disponibles"  ;
+			
+			
+			
+>>>>>>> branch 'master' of ssh://git@github.com/uniandes-jasilva11/sistrans.git
 			pedidos.add(jesus);
 		}
 
