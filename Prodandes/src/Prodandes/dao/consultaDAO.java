@@ -555,7 +555,7 @@ public class consultaDAO {
 
 		String sql = "";
 
-		sql ="SELECT * FROM PEDIDOS_MATERIAL RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE ID =" + "'" + pId + "'" ;
+		sql ="SELECT ID_PEDIDO, MATERIAL, TIPO, CANTIDAD, PEDIDOS_MATERIAL.COSTO, ETAPA, INICIO, FIN FROM PEDIDOS_MATERIAL RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE ID =" + "'" + pId + "'" ;
 
 		inicializar();
 
@@ -569,17 +569,17 @@ public class consultaDAO {
 		while( resultado.next( )) 
 		{
 			int idPedido = Integer.parseInt(resultado.getString( 1 ));
-			String nombre = resultado.getString( 3 );
-			String pTipo = resultado.getString( 12 );
+			String nombre = resultado.getString( 2 );
+			String pTipo = resultado.getString( 3 );
 			int volumen = Integer.parseInt(resultado.getString(4));
-			int costo = Integer.parseInt(resultado.getString(6));
+			int costo = Integer.parseInt(resultado.getString(5));
 			int etapa = 0;
-			if(resultado.getString(7)!=null)
+			if(resultado.getString(6)!=null)
 			{
-				etapa = Integer.parseInt(resultado.getString(7));
+				etapa = Integer.parseInt(resultado.getString(6));
 			}
-			Date inicio = resultado.getDate( 8 );
-			Date fin = resultado.getDate( 9 );
+			Date inicio = resultado.getDate( 7 );
+			Date fin = resultado.getDate( 8 );
 			System.out.println(nombre);
 			registro = new MaterialPedido(pId, idPedido, nombre, pTipo, volumen, costo, etapa, inicio, fin);
 			materiales.add(registro);
