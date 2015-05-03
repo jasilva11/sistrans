@@ -343,5 +343,10 @@ return "";
 		return dao.darLosPedidosBusqueda(tipo, costoMayor);
 	}
 	
+	public ArrayList buscarEtapasNOFecha(String fecha1, String fecha2, String parametro, String tema) throws SQLException
+	{
+		return dao.buscarEtapasNOFecha(fecha1, fecha2, parametro, tema);
+	}
+	
 	
 }
