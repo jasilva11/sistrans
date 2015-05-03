@@ -161,7 +161,7 @@ public class ServletDarLosPedidosEfectivo extends HttpServlet
 			if (resultados.get(i) != null)
 			{
 				String x = (String) resultados.get(i);
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Pedido "+ i + "</strong></label> ");
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Pedido "+ i  + "</strong></label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x + "</label> ");
 				out.println("  </p>");

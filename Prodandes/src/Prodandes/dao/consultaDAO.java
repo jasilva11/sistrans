@@ -1817,8 +1817,8 @@ public class consultaDAO {
 			String unidad = resultado.getString( 15 );
 
    
-			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido" +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
-			" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" unidades disponibles"  ;
+			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido " +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
+			" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" disponibles"  ;
 			
 			
 			
