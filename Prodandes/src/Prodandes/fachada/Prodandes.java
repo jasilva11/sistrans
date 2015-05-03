@@ -338,10 +338,10 @@ return "";
 		return dao.buscarEtapasFecha(fecha1, fecha2, parametro, tema);
 	}
 	
-//	public ArrayList darLosPedidos2(String tipo, int costoMayor)
-//	{
-//		return dao.darPedidosBusqueda(tipo, costoMayor);
-//	}
+	public ArrayList darLosPedidos2(String tipo, int costoMayor) throws SQLException
+	{
+		return dao.darLosPedidosBusqueda(tipo, costoMayor);
+	}
 	
 	
 }

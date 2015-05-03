@@ -68,15 +68,14 @@ public class ServletDarLosPedidosEfectivo extends HttpServlet
 	{
 		Prodandes joda = Prodandes.darInstancia();
 
-		String parametro = request.getParameter("nombre");
+		String parametro = request.getParameter("tipo");
 
-		int numero = Integer.parseInt(request.getParameter("numero"));
+		int numero = Integer.parseInt(request.getParameter("costoMayor"));
 
-		String tipo = request.getParameter("opcion");
 
 		ArrayList resp = new ArrayList();
 		try {
-			resp = joda.darPedidos(parametro,numero, tipo);
+			resp = joda.darLosPedidos2(parametro,numero);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -161,42 +160,12 @@ public class ServletDarLosPedidosEfectivo extends HttpServlet
 		{
 			if (resultados.get(i) != null)
 			{
-				Cliente x = (Cliente) resultados.get(i);
-				int y = i+1;
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Cliente "+ y + "</strong></label> ");
+				String x = (String) resultados.get(i);
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Pedido "+ i + "</strong></label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x.getNombre() + "</label> ");
+				out.println("    <label for=\"categoria2\"><strong> Nombre:</strong> "+ x + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Identificacion:</strong> "+ x.getIdentificacion() + "</label> ");
-				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Deudas:</strong> "+ x.getDeudas() + "</label> ");
-				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Nombre representante legal:</strong> "+ x.getNomRepresentanteLegal() + "</label> ");
-				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Numero de registro:</strong> "+ x.getNumeroRegistro() + "</label> ");
-				out.println("  </p>");
-			    out.println("    <label for=\"categoria2\"><strong> Antiguedad:</strong> "+ x.getAntiguedad() + " </label> ");
-				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Es persona legal?</strong> "+ x.isPersonaNatural() + " </label> ");
-				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"><strong> Productos:</strong></label> ");
-				out.println("  </p>");
-				if(x.darProductos().size() == 0)
-				{
-					out.println("  <label for=\"categoria2\"> No hay productos </label> ");
-				}
-				else
-				{
-					for (int j = 0; j < x.darProductos().size(); j++) 
-					{
-						if (x.darProductos().get(j) != null)
-						{
-							out.println("    <label for=\"categoria2\"> "+ x.darProductos().get(j) + "</label> ");
-							out.println("  </p>");	
-						}
-					}
-				}
-				out.println("  </p>");
+				
 			}
 		}
 		out.println("<p>&nbsp;</p>");

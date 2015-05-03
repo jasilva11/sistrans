@@ -1776,4 +1776,56 @@ public class consultaDAO {
 		// TODO Auto-generated method stub
 
 	}
+
+	public ArrayList darLosPedidosBusqueda(String tipo, int costoMayor) throws SQLException 
+	{
+		ArrayList pedidos = new ArrayList();
+
+
+		String jesus = "";
+
+		String sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE WHERE M.TIPO =  '"+ tipo   +"' AND M.COSTO > "+ costoMayor ; 
+
+	
+
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+		prepStmt.setQueryTimeout(10);
+		
+		
+		
+		while( resultado.next( ) ) 
+		{
+			
+         jesus = "";
+			int id = Integer.parseInt(resultado.getString( 1 ));
+			String nombreProducto = resultado.getString( 2);
+			int unidadesRequeridas = Integer.parseInt(resultado.getString( 3 ));
+			int costoProducto = Integer.parseInt(resultado.getString( 5));
+			int unidadesDisponibles = Integer.parseInt(resultado.getString( 6));
+
+
+			String material = resultado.getString( 9 );
+			int costo = Integer.parseInt(resultado.getString( 13));
+			String tipoMat = resultado.getString( 14 );
+			int cantidadMaterialDisponibles = Integer.parseInt(resultado.getString( 16));
+			String unidad = resultado.getString( 15 );
+
+   
+			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido" +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
+			" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" unidades disponibles"  ;
+			
+			
+			
+			pedidos.add(jesus);
+		}
+		
+		
+		return pedidos;
+	}
 }
