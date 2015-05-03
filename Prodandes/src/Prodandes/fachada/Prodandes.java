@@ -333,6 +333,11 @@ return "";
 		return dao.buscarMateriales2(pId);
 	}
 	
+	public ArrayList buscarEtapasFecha(String fecha1, String fecha2, String parametro, String tema) throws SQLException
+	{
+		return dao.buscarEtapasFecha(fecha1, fecha2, parametro, tema);
+	}
+	
 //	public ArrayList darLosPedidos2(String tipo, int costoMayor)
 //	{
 //		return dao.darPedidosBusqueda(tipo, costoMayor);

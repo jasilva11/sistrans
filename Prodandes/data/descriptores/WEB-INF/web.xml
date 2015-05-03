@@ -100,6 +100,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-name>MaterialesID</servlet-name>
   <servlet-class>Prodandes.servlets.ServletBuscarMaterialesIDResp</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>EtapaFechas</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarEtapasFechaRes</servlet-class>
+ </servlet>
  <!-- MAPPING -->
  <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
@@ -188,5 +192,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
   <servlet-name>MaterialesID</servlet-name>
   <url-pattern>materialesId.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>EtapaFechas</servlet-name>
+  <url-pattern>etapaFechas.htm</url-pattern>
  </servlet-mapping>
 </web-app>

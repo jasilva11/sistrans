@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Properties;
 import java.io.*;
 import java.sql.*;
@@ -583,6 +583,66 @@ public class consultaDAO {
 		return materiales;
 	}
 
+	public ArrayList buscarEtapasFecha(String fecha1, String fecha2, String parametro, String tema) throws SQLException
+	{
+		ArrayList materiales = new ArrayList();
+
+
+		EtapasDeProducion registro = null;
+
+		String sql = "";
+
+		if(tema.equalsIgnoreCase("material"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') AND MATERIAL = '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("tipo"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') AND TIPO = '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("pedido"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') AND ID_PEDIDO = '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("costoMayor"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') PEDIDOS_MATERIAL.COSTO > '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("costoMenor"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') PEDIDOS_MATERIAL.COSTO < '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("cantidadMayor"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') PEDIDOS_MATERIAL.CANTIDAD > '"+ parametro +"'";
+		}
+		else if(tema.equalsIgnoreCase("cantidadMenor"))
+		{
+			sql ="SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE('" + fecha1 + "') AND FECHA_FINAL < TO_DATE('" + fecha2 + "') PEDIDOS_MATERIAL.CANTIDAD < '"+ parametro +"'";
+		}
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		System.out.println("A");
+
+		while( resultado.next( )) 
+		{
+			int id = Integer.parseInt(resultado.getString( 4 ));
+			String nombre = resultado.getString( 3 );
+			Date inicio = resultado.getDate( 5 );
+			Date fin = resultado.getDate( 6 );
+			System.out.println(nombre);
+			registro = new EtapasDeProducion(id, nombre, inicio, fin);
+			materiales.add(registro);
+		}
+		return materiales;
+	}
+
 	public ArrayList buscarProveedores(String parametro, int numero, String tipo) throws SQLException
 	{
 		ArrayList proveedores = new ArrayList();
@@ -990,15 +1050,15 @@ public class consultaDAO {
 		return proveedores;
 	}
 
-	public ArrayList<EtapasDeProducion> darMayorMovimientoSistema ()
-	{
-		PreparedStatement prepStmt = null;
-
-		ArrayList<EtapasDeProducion> videos = new ArrayList<EtapasDeProducion>();
-		EtapasDeProducion vidValue = new EtapasDeProducion();
-
-		return videos;
-	}
+//	public ArrayList<EtapasDeProducion> darMayorMovimientoSistema ()
+//	{
+//		PreparedStatement prepStmt = null;
+//
+//		ArrayList<EtapasDeProducion> videos = new ArrayList<EtapasDeProducion>();
+//		EtapasDeProducion vidValue = new EtapasDeProducion();
+//
+//		return videos;
+//	}
 
 	public String darTipoUsuario(String usr, String pass) 
 	{

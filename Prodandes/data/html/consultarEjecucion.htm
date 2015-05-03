@@ -39,14 +39,29 @@
 		<h3><FONT SIZE=8>CONSULTAR EJECUCIÓN DE ETAPAS DE PRODUCCIÓN</font></h3>
 		<p>&nbsp;</p>
 		</div>
-		<form id="form1" name="form1" method="post" action="buscarMaterialRes.htm">
+		<form id="form1" name="form1" method="post" action="etapaFechas.htm">
 		  <p>
 		    <label for="material"><FONT SIZE=7>Fecha 1:</font></label> 
-		    <input type="text" name="material"  placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
+		    <input type="text" name="fecha1"  placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
 		  </p>
 <p>
 		    <label for="material"><FONT SIZE=7>Fecha 2:</font></label> 
-		    <input type="text" name="material" placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
+		    <input type="text" name="fecha2" placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
+		  </p>
+           <label for="nombre2"><FONT SIZE=7>Parametro:</font></label>
+            <input type="text" name="parametro" size="12" style="border: 1px solid #666666; font-size:20pt">
+          </p>
+           <p>
+		 <label for="opcion"><FONT SIZE=7>Filtrar por:</font></label> 
+		 <select name="opcion">
+		 <option value="material">Material</option> 
+         <option value="tipo">Tipo</option> 
+         <option value="pedido">Pedido</option>  
+		 <option value="costoMenor">Costo menor a</option> 
+		 <option value="costoMayor">Costo mayor a </option>
+         <option value="cantidadMenor">Cantidad menor a</option> 
+		 <option value="cantidadMayor">Cantidad mayor a </option>
+		 </select>
 		  </p>
 		    <input type="submit" name="button" id="button" class = "green-btn" value="Buscar" />
 		  </p>
