@@ -184,8 +184,6 @@ public class ServletBuscarMaterialesIDResp extends HttpServlet
 					out.println("  </p>");
 					out.println("    <label for=\"categoria2\"> Fecha Inicio: "+ x.darInicio() + "</label> ");
 					out.println("  </p>");
-					out.println("    <label for=\"categoria2\"> Fecha Fin: "+ x.darFin() + "</label> ");
-					out.println("  </p>");	
 				}
 				else
 				{

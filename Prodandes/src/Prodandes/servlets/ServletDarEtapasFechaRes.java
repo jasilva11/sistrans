@@ -162,7 +162,7 @@ public class ServletDarEtapasFechaRes extends HttpServlet
 			{
 				EtapasDeProducion x = (EtapasDeProducion) resultados.get(i);
 				int y = i+1;
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Proveedor "+ y + "</strong></label> ");
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Etapa "+ y + "</strong></label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"><strong> Identificacion:</strong> "+ x.darId() + "</label> ");
 				out.println("  </p>");

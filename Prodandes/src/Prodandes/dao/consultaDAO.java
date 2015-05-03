@@ -573,7 +573,11 @@ public class consultaDAO {
 			String pTipo = resultado.getString( 12 );
 			int volumen = Integer.parseInt(resultado.getString(4));
 			int costo = Integer.parseInt(resultado.getString(6));
-			int etapa = Integer.parseInt(resultado.getString(7));
+			int etapa = 0;
+			if(resultado.getString(7)!=null)
+			{
+				etapa = Integer.parseInt(resultado.getString(7));
+			}
 			Date inicio = resultado.getDate( 8 );
 			Date fin = resultado.getDate( 9 );
 			System.out.println(nombre);
@@ -1050,15 +1054,15 @@ public class consultaDAO {
 		return proveedores;
 	}
 
-//	public ArrayList<EtapasDeProducion> darMayorMovimientoSistema ()
-//	{
-//		PreparedStatement prepStmt = null;
-//
-//		ArrayList<EtapasDeProducion> videos = new ArrayList<EtapasDeProducion>();
-//		EtapasDeProducion vidValue = new EtapasDeProducion();
-//
-//		return videos;
-//	}
+	//	public ArrayList<EtapasDeProducion> darMayorMovimientoSistema ()
+	//	{
+	//		PreparedStatement prepStmt = null;
+	//
+	//		ArrayList<EtapasDeProducion> videos = new ArrayList<EtapasDeProducion>();
+	//		EtapasDeProducion vidValue = new EtapasDeProducion();
+	//
+	//		return videos;
+	//	}
 
 	public String darTipoUsuario(String usr, String pass) 
 	{
@@ -1786,7 +1790,7 @@ public class consultaDAO {
 
 		String sql = "SELECT *FROM PEDIDOSCLIENTE PC LEFT OUTER JOIN PRODUCTO P ON P.NOMBRE_PRODUCTO = PC.NOM_PRODUCTO LEFT OUTER JOIN MATERIALESDEPRODUCTOS MDP ON PC.NOM_PRODUCTO = MDP.PRODUCTO LEFT JOIN MATERIALES M ON  MDP.MATERIAL = M.NOMBRE WHERE M.TIPO =  '"+ tipo   +"' AND M.COSTO > "+ costoMayor ; 
 
-	
+
 
 
 		inicializar();
@@ -1796,13 +1800,13 @@ public class consultaDAO {
 		PreparedStatement prepStmt = conexion.prepareStatement(sql);
 		ResultSet resultado = prepStmt.executeQuery( sql );
 		prepStmt.setQueryTimeout(10);
-		
-		
-		
+
+
+
 		while( resultado.next( ) ) 
 		{
-			
-         jesus = "";
+
+			jesus = "";
 			int id = Integer.parseInt(resultado.getString( 1 ));
 			String nombreProducto = resultado.getString( 2);
 			int unidadesRequeridas = Integer.parseInt(resultado.getString( 3 ));
@@ -1816,16 +1820,16 @@ public class consultaDAO {
 			int cantidadMaterialDisponibles = Integer.parseInt(resultado.getString( 16));
 			String unidad = resultado.getString( 15 );
 
-   
+
 			jesus = "Exsite un pedido para el cliente de id: " + id + " del pedido" +nombreProducto+ " solicitando " + unidadesRequeridas +" unidades. </p> Este producto tiene un costo de: " + costoProducto+
-			" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" unidades disponibles"  ;
-			
-			
-			
+					" </p> En el inventario hay: " + unidadesDisponibles + " unidades disponibles, las cuales estan compuestas de:  " + material + " que tiene un costo de " + costo + " y es del tipo " +tipo+ ", hay " + cantidadMaterialDisponibles + unidad  +" unidades disponibles"  ;
+
+
+
 			pedidos.add(jesus);
 		}
-		
-		
+
+
 		return pedidos;
 	}
 }
