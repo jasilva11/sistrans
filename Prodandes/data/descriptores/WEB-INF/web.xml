@@ -107,7 +107,10 @@ Autor: Pablo Barvo - 05-Mayo-2006
  	<servlet-name>DarLosPedidosEfectivo</servlet-name>
  	<servlet-class>Prodandes.servlets.ServletDarLosPedidosEfectivo</servlet-class>
 </servlet>
- <!-- MAPPING -->
+ <servlet>
+ 	<servlet-name>DarNOEtapasFechaRes</servlet-name>
+ 	<servlet-class>Prodandes.servlets.ServletDarNOEtapasFechaRes</servlet-class>
+</servlet><!-- MAPPING -->
 	<servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
   <url-pattern>/registrarCliente.htm</url-pattern>
@@ -203,5 +206,9 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
  	<servlet-name>DarLosPedidosEfectivo</servlet-name>
  	<url-pattern>/DarLosPedidosEfectivo.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+ 	<servlet-name>DarNOEtapasFechaRes</servlet-name>
+ 	<url-pattern>/DarNOEtapasFechaRes.htm</url-pattern>
  </servlet-mapping>
 </web-app>

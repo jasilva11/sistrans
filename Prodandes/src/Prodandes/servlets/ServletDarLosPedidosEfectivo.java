@@ -1,4 +1,4 @@
-package Prodandes.servlets;
+	package Prodandes.servlets;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -154,7 +154,7 @@ public class ServletDarLosPedidosEfectivo extends HttpServlet
 		out.println("<body>");
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
-		out.println("<h3><FONT SIZE=8>Clientes</font></h3>");
+		out.println("<h3><FONT SIZE=8>Pedidos</font></h3>");
 		out.println("</div>");
 		for (int i = 0; i < resultados.size(); i++) 
 		{

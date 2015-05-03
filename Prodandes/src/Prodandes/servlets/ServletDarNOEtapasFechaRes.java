@@ -75,8 +75,8 @@ public class ServletDarNOEtapasFechaRes extends HttpServlet
 
 		ArrayList resp = new ArrayList();
 		try {
-			resp = joda.buscarEtapasFecha(fecha1, fecha2, parametro, tipo);
-		} catch (SQLException e) {
+			resp = joda.buscarEtapasNOFecha(fecha1, fecha2, parametro, tipo);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
