@@ -1832,4 +1832,13 @@ public class consultaDAO {
 
 		return pedidos;
 	}
+
+	public ArrayList buscarEtapasNOFecha(String fecha1, String fecha2,
+			String parametro, String tema) 
+	{
+		
+		String sql = "SELECT * FROM (ETAPAS_PRODUCCION RIGHT OUTER JOIN PEDIDOS_MATERIAL ON IDENTIFICADOR = ETAPA) RIGHT OUTER JOIN MATERIALES ON MATERIAL = NOMBRE WHERE FECHA_INICIO > TO_DATE ('06-MAR-12') AND FECHA_FINAL < TO_DATE ('06-MAR-20') AND MATERIAL != 'STEPHANITE'";	
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

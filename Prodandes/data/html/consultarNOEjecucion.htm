@@ -1,0 +1,72 @@
+<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+		<title>Consultar ejecucion</title>
+		<link rel="shortcut icon" type="image/x-icon" href="css/images/icon.png" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+		<link href='http://fonts.googleapis.com/css?family=Coda' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Jura:400,500,600,300' rel='stylesheet' type='text/css' />
+		<script src="js/jquery-1.8.0.min.js" type="text/javascript"></script>
+		<script src="js/jquery.touchwipe.1.1.1.js" type="text/javascript"></script>
+		<script src="js/jquery.carouFredSel-5.5.0-packed.js" type="text/javascript"></script>
+			<!--[if lt IE 9]>
+		<script src="js/modernizr.custom.js"></script>
+		<![endif]-->
+		<script src="js/functions.js" type="text/javascript"></script>
+		<header class="header">
+		<div class="shell">
+		<div class="header-top">
+		<h1 id="logo"><a href="home.html">Prodandes</a></h1>
+		<nav id="navigation">
+			<a href="#" class="nav-btn">Home<span></span></a>
+			<ul>
+		<li><a href="home.html">Inicio</a></li>
+		<li><a href="buscar.htm">Buscar</a></li>
+		<li><a href="registrarse.htm">Registrarse</a></li>
+		<li><a href="servletModificar.htm">Modificar</a></li>
+		<li><a href="#">Jobs</a></li>
+		<li><a href="#">Blog</a></li>
+		<li><a href="#">Contacts</a></li>
+		</ul>
+		</nav>
+		<div class="cl">&nbsp;</div>
+		</div>
+		</head>
+		
+		<body>
+		<div id="bg"></div>
+		<div id="carousel"><div>
+		<h3><FONT SIZE=8>CONSULTAR EJECUCIÓN DE ETAPAS DE PRODUCCIÓN</font></h3>
+		<p>&nbsp;</p>
+		</div>
+		<form id="form1" name="form1" method="post" action="etapaFechas.htm">
+		  <p>
+		    <label for="material"><FONT SIZE=7>Fecha 1:</font></label> 
+		    <input type="text" name="fecha1"  placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
+		  </p>
+<p>
+		    <label for="material"><FONT SIZE=7>Fecha 2:</font></label> 
+		    <input type="text" name="fecha2" placeholder="DD-MM-YYYY" size="12" style="border: 1px solid #666666; font-size:20pt">
+		  </p>
+           <label for="nombre2"><FONT SIZE=7>Parametro:</font></label>
+            <input type="text" name="parametro" size="12" style="border: 1px solid #666666; font-size:20pt">
+          </p>
+           <p>
+		 <label for="opcion"><FONT SIZE=7>Filtrar por:</font></label> 
+		 <select name="opcion">
+		 <option value="material">Material</option> 
+         <option value="tipo">Tipo</option> 
+         <option value="pedido">Pedido</option>  
+		 <option value="costoMenor">Costo menor a</option> 
+		 <option value="costoMayor">Costo mayor a </option>
+         <option value="cantidadMenor">Cantidad menor a</option> 
+		 <option value="cantidadMayor">Cantidad mayor a </option>
+		 </select>
+		  </p>
+		    <input type="submit" name="button" id="button" class = "green-btn" value="Buscar" />
+		  </p>
+		</form>
+		<p>&nbsp;</p>
+		</body>
+		</html>
+
