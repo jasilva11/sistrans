@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="lib/ojdbc5.jar"/>
+	<classpathentry kind="lib" path="lib/jms.jar"/>
+	<classpathentry kind="lib" path="lib/jndi.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
