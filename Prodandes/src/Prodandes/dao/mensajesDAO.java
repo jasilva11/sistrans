@@ -33,6 +33,10 @@ public class mensajesDAO
 			ds2 = (DataSource)ictx.lookup("java:jesusRules");
             cf = (ConnectionFactory)ictx.lookup("java:JmsXA");
             cola = (Queue) ictx.lookup("que/WebAPP2");
+			c = (Connection) cf.createConnection();
+			c.start();
+			
+
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
