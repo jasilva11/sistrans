@@ -19,6 +19,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.transaction.UserTransaction;
 
 public class RespuestaConsultaValue 
 {
@@ -62,9 +63,9 @@ public class RespuestaConsultaValue
 			ds1 = (DataSource) context.lookup("java:transaccionesConsulta");
 			cf =(ConnectionFactory) context.lookup("java:JmsXA");
 			colaDefinida = (Queue) context.lookup("queue/WebApp2");
-			//UserTransaction utx =(UserTransaction) context.list("/UserTransaction");
+			UserTransaction utx =(UserTransaction) context.list("/UserTransaction");
 			iniciarConexion();
-			//utx.begin();
+			utx.begin();
 			Statement st = conexion.createStatement();
 			st.close();
 		
@@ -75,7 +76,7 @@ public class RespuestaConsultaValue
 			//msg.setText(peticion);
 			producer.send(msg);
 			
-			//utx.xommit();
+			utx.commit();
 			closeConnection();
 		} 
 		catch (SQLException e) 
