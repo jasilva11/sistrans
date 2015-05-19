@@ -3,7 +3,11 @@ package Prodandes.dao;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
 import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -22,9 +26,10 @@ public class mensajesDAO
 
 	private Connection c;
 
-
+ private Session s;		
 	private Queue cola;
-	
+	private MessageProducer mp;
+
 	
 	public mensajesDAO()
 	{
@@ -45,6 +50,20 @@ public class mensajesDAO
 		
 	}
 
+	/**
+	 * Envia un mensaje a JMS.
+	 * @param mensaje
+	 */
+	public void send(String mensaje) throws Exception{
+		try {
+			TextMessage tm = this.s.createTextMessage(mensaje);
+			this.mp.send(tm);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		} finally {
+			c.close();
+		}
+	}
 
 
 }
