@@ -99,15 +99,33 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet>
   <servlet-name>EtapaFechas</servlet-name>
   <servlet-class>Prodandes.servlets.ServletDarEtapasFechaRes</servlet-class>
- </servlet><servlet>
- 	<servlet-name>DarLosPedidosEfectivo</servlet-name>
- 	<servlet-class>Prodandes.servlets.ServletDarLosPedidosEfectivo</servlet-class>
-</servlet>
+ </servlet>
  <servlet>
- 	<servlet-name>DarNOEtapasFechaRes</servlet-name>
- 	<servlet-class>Prodandes.servlets.ServletDarNOEtapasFechaRes</servlet-class>
-</servlet><!-- MAPPING -->
-	<servlet-mapping>
+  <servlet-name>DarLosPedidosEfectivo</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarLosPedidosEfectivo</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>DarNOEtapasFechaRes</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletDarNOEtapasFechaRes</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>ServletRegistrarPedido2</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletRegistroPedido2</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>ServletConsultarEtapas2</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletConsultarEtapasProduccion2</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>CambiarEstado2</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletCambiarEstado2</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>MaterialMasUsado</servlet-name>
+  <servlet-class>Prodandes.servlets.ServletMaterialMasUsado</servlet-class>
+ </servlet>
+ <!-- MAPPING -->
+ <servlet-mapping>
   <servlet-name>RegistrarCliente</servlet-name>
   <url-pattern>/registrarCliente.htm</url-pattern>
  </servlet-mapping>
@@ -196,11 +214,27 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <url-pattern>/etapaFechas.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>DarLosPedidosEfectivo</servlet-name>
- 	<url-pattern>/DarLosPedidosEfectivo.htm</url-pattern>
+  <servlet-name>DarLosPedidosEfectivo</servlet-name>
+  <url-pattern>/DarLosPedidosEfectivo.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
- 	<servlet-name>DarNOEtapasFechaRes</servlet-name>
- 	<url-pattern>/DarNOEtapasFechaRes.htm</url-pattern>
+  <servlet-name>DarNOEtapasFechaRes</servlet-name>
+  <url-pattern>/DarNOEtapasFechaRes.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ServletRegistrarPedido2</servlet-name>
+  <url-pattern>servletRegistrarPedido2.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ServletConsultarEtapas2</servlet-name>
+  <url-pattern>servletConsultarEtapas2.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CambiarEstado2</servlet-name>
+  <url-pattern>cambiarEstado2.htm</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>MaterialMasUsado</servlet-name>
+  <url-pattern>materialMasUsado.htm</url-pattern>
  </servlet-mapping>
 </web-app>

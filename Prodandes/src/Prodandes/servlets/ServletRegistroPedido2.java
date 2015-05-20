@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,26 +19,19 @@ import org.jboss.system.server.ServerConfigLocator;
 import Prodandes.fachada.Prodandes;
 
 public class ServletRegistroPedido2 extends HttpServlet
-{	
-	public final static String RUTA_ARCHIVO_SERIALIZADO = "/prodAndes.data";
+{
+	public final static String RUTA_ARCHIVO_SERIALIZADO = "/cupiMemes.data";
 
 	// -----------------------------------------------------------------
 	// Métodos
 	// -----------------------------------------------------------------
-
-	/**
-	 * Inicialización del Servlet
-	 */
-	public void init( ) throws ServletException
-	{
-	}
 
 	public void destroy( )
 	{
 		System.out.println("Destruyendo instancia");
 		try
 		{
-			if ( Prodandes.darInstancia() != null ) 
+			if ( Prodandes.darInstancia( ) != null ) 
 			{
 				ServerConfig config = ServerConfigLocator.locate( );
 				File dataDir = config.getServerDataDir();
@@ -47,7 +42,7 @@ public class ServletRegistroPedido2 extends HttpServlet
 
 				FileOutputStream fos = new FileOutputStream( tmp );
 				ObjectOutputStream oos = new ObjectOutputStream( fos );
-				oos.writeObject( Prodandes.darInstancia() );
+				oos.writeObject( Prodandes.darInstancia( ) );
 				oos.close();
 				fos.close();
 				System.out.println("Album Serializado");
@@ -59,41 +54,52 @@ public class ServletRegistroPedido2 extends HttpServlet
 		}
 	}
 
+
+
 	private void procesarSolicitud( HttpServletRequest request, HttpServletResponse response ) throws IOException
 	{
-		imprimirEncabezado(response);
+		
+		String nombreP =  request.getParameter("producto");
+		String asd =  request.getParameter("volumen");
+		String f =  request.getParameter("fecha");
+		
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+		Date fecha = null;
+		
+		int volumen  = -1;
+		
+		try
+		{
+			volumen = Integer.parseInt(asd);
+			fecha = formatoDelTexto.parse(f);
 
 
-	}
+		}
+		   catch (Exception e) 
+	        {
+	            imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Debe llenar los campos de texto." );
+			}
+		
+	  
+		
+		if (nombreP != "" && fecha != null && volumen != -1)
+		{
+        		Prodandes joda = Prodandes.darInstancia();
+        		String nuevo = joda.estaEnCapacidad(nombreP, volumen, fecha);
+        		imprimirEncabezadoNuevo( response, nuevo );
+		}
+		
+		
+		
+        	else
+        	{
+        		imprimirMensajeError( response.getWriter( ), "Error en los parámetros", "Nombre de usuario o contraseña incorrectos." );
+        	}
+        }
+    
+	
 
-	/**
-	 * Maneja un pedido GET de un cliente
-	 * @param request Pedido del cliente
-	 * @param response Respuesta
-	 */
-	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
-	{
-		// Maneja el GET y el POST de la misma manera
-		procesarSolicitud( request, response );
-	}
-
-	/**
-	 * Maneja un pedido POST de un cliente
-	 * @param request Pedido del cliente
-	 * @param response Respuesta
-	 */
-	protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
-	{
-		// Maneja el GET y el POST de la misma manera
-		procesarSolicitud( request, response );
-	}
-
-	/**
-	 * Imprime el encabezado con el diseño de la página
-	 * @param response Respuesta
-	 * @throws IOException Excepción al imprimir en el resultado
-	 */
-	private void imprimirEncabezado( HttpServletResponse response ) throws IOException
+	private void imprimirEncabezadoNuevo(HttpServletResponse response, String memes) throws IOException 
 	{
 		// Obtiene el flujo de escritura de la respuesta
 		PrintWriter out = response.getWriter( );
@@ -134,27 +140,79 @@ public class ServletRegistroPedido2 extends HttpServlet
 		out.println("</div>");
 		out.println("</head>");
 		out.println("");
-		out.println("<body>");
-		out.println("<h3>Solicitar la produccion de un cierto volumen de productos</h3>");
-		out.println("</div>");
-		out.println("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"servletVerificarPedido.htm\">");
-		out.println("  <p>");	
-		out.println("    <label for=\"producto2\">Producto:</label> ");
-		out.println("      <input type=\"text\" name=\"producto\" producto=\"producto2\" />");
+		out.println("<body>");;
+		out.println("<blockquote>");
+		out.println("  <blockquote>");
+		out.println("    <blockquote>");
+		out.println("      <blockquote>");
+		out.println("        <blockquote>");
+		out.println("          <blockquote>");
+		out.println("            <h1>Se ha creado el cliente</h1>");
+		
+		out.println("    <label for=\"categoria2\"> "+ memes+ "</label> ");
 		out.println("  </p>");
-		out.println("  <p>");
-		out.println("    <label for=\"volumen\">Volumen:</label>");
-		out.println("    <input type=\"text\" name=\"volumen\" volumen=\"volumen2\" />");
+		
+		out.println("            <p>.</p>");
+		out.println("          </blockquote>");
+		out.println("        </blockquote>");
+		out.println("      </blockquote>");
+		out.println("    </blockquote>");
+		out.println("  </blockquote>");
+		out.println("</blockquote>");
 		out.println("  </p>");
-		out.println("  <p>");
-		out.println("    <label for=\"fecha2\">Fecha Entrega:</label>");
-		out.println("    <input type=\"date\" name=\"fecha\" fecha=\"fecha2\" />");
-		out.println("  </p>");
-				
 		out.println("</form>");
 		out.println("<p>&nbsp;</p>");
-		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
+
+		System.out.print("_LAERASDASd");
+
+
+	}	// TODO Auto-generated method stub
+		
+	
+
+	/**
+	 * Maneja un pedido GET de un cliente
+	 * @param request Pedido del cliente
+	 * @param response Respuesta
+	 */
+	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+	{
+		// Maneja el GET y el POST de la misma manera
+		procesarSolicitud( request, response );
 	}
+
+	/**
+	 * Maneja un pedido POST de un cliente
+	 * @param request Pedido del cliente
+	 * @param response Respuesta
+	 */
+	protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+	{
+		// Maneja el GET y el POST de la misma manera
+		procesarSolicitud( request, response );
+	}
+
+	
+	
+	
+	 /**
+     * Imprime un mensaje de error
+     * @param respuesta Respuesta al cliente
+     * @param titulo Título del error
+     * @param mensaje Mensaje del error
+     */
+    private void imprimirMensajeError( PrintWriter respuesta ,String x, String z)
+    {
+    	respuesta.println( "<p><img src=\"imagenes/Untitled-1342.png\" width=\"375\" height=\"210\" /></p>" );
+    	respuesta.println( "                      <p class=\"error\"><b>Ha ocurrido un error!:<br>" );
+        respuesta.println( "                      </b>" + "No se puede crear el pedido" + "</p><p>" + "Ha quedado en pendiente" + ". </p>" );
+        respuesta.println( "                      <p>Intente la " );
+        respuesta.println( "                      operación nuevamente. Si el problema persiste, contacte" );
+        respuesta.println( "                      al administrador del sistema.</p>" );
+        respuesta.println( "<p><img src=\"imagenes/error.JPG\" width=\"375\" height=\"210\" /></p>" );
+        respuesta.println( "</body>" );
+		respuesta.println( "</html>" );
+    }
 }
