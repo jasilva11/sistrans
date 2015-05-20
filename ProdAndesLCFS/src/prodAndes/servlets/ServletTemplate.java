@@ -63,7 +63,7 @@ public abstract class ServletTemplate extends HttpServlet {
     private void procesarPedido( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
     	//TODO Si hay otras fachadas, ellas tambien deben inicializar la ruta.
-    	prodAndes.getInstance().inicializarRuta("C:/Users/Laura/Downloads/jboss-as-7.1.0.Final/docs");
+    	prodAndes.getInstance().inicializarRuta();
         //
         // Comienza con el Header del template
         imprimirHeader( request, response );

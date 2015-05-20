@@ -2,13 +2,11 @@ package prodAndes.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import prodAndes.fachado.prodAndes;
-import prodAndes.vos.PedidoCliente;
 
 
 
@@ -49,15 +47,15 @@ public class ServletRFC12 extends ServletTemplate {
 		out.println("                                            </div>");
 		out.println("                                        </div>");
 		out.println("                                        <div class=\"form-group\">");
-		out.println("                                            <div id=\"texto\">Etapas de producción:</div>");
+		out.println("                                            <div id=\"texto\">Etapas de produccion:</div>");
 		out.println("                                            <table id=\"myTable\" cellspacing=\"10\" cellpadding=\"10\" border=\"4\"> ");
 		out.println("                                                 <tr> ");
 		out.println("                                                    <td align=\"center\">ID</td> ");
 		out.println("                                                    <td align=\"center\">Producto</td> ");
 		out.println("<td align=\"center\">Nombre</td> ");
-		out.println("<td align=\"center\">Tiempo inicio ejecución</td> ");
-		out.println("<td align=\"center\">Tiempo fin ejecución </td> ");
-		out.println("<td align=\"center\">Número de secuencia</td> ");
+		out.println("<td align=\"center\">Tiempo inicio ejecucion</td> ");
+		out.println("<td align=\"center\">Tiempo fin ejecucion </td> ");
+		out.println("<td align=\"center\">Numero de secuencia</td> ");
 		out.println("<td align=\"center\">Completada</td> ");
 		out.println("");
 		out.println("");
