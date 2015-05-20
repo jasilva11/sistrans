@@ -29,10 +29,6 @@ Autor: Pablo Barvo - 05-Mayo-2006
   <servlet-class>Prodandes.servlets.ServletRegistrarPedidoProducto</servlet-class>
  </servlet>
  <servlet>
-  <servlet-name>ServletVerificarPedido</servlet-name>
-  <servlet-class>Prodandes.servlets.ServletVerificarPedido</servlet-class>
- </servlet>
- <servlet>
   <servlet-name>RegistrarCliente</servlet-name>
   <servlet-class>Prodandes.servlets.ServletRegistrarCliente</servlet-class>
  </servlet>
@@ -130,10 +126,6 @@ Autor: Pablo Barvo - 05-Mayo-2006
  <servlet-mapping>
   <servlet-name>PedidoCliente</servlet-name>
   <url-pattern>/pedidoCliente.htm</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>ServletVerificarPedido</servlet-name>
-  <url-pattern>/servletVerificarPedido.htm</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>ServletModificarEtapaEfectivo</servlet-name>

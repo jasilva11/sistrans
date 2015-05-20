@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -17,9 +16,8 @@ import org.jboss.system.server.ServerConfig;
 import org.jboss.system.server.ServerConfigLocator;
 
 import Prodandes.fachada.Prodandes;
-import Prodandes.vod.Cliente;
-import Prodandes.vod.MateriasPrimas;
-import Prodandes.vod.Proveedores;
+
+
 
 public class ServletDarLosPedidosEfectivo extends HttpServlet
 {
@@ -106,9 +104,9 @@ public class ServletDarLosPedidosEfectivo extends HttpServlet
 	}
 
 	/**
-	 * Imprime el encabezado con el diseño de la página
+	 * Imprime el encabezado con el diseño de la pgina
 	 * @param response Respuesta
-	 * @throws IOException Excepción al imprimir en el resultado
+	 * @throws IOException Excepcion al imprimir en el resultado
 	 */
 	private void imprimirEncabezado( HttpServletResponse response, ArrayList resultados ) throws IOException
 	{
