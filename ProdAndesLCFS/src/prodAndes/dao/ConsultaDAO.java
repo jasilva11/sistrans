@@ -103,28 +103,11 @@ public class ConsultaDAO
 		 * Los datos se obtienen a partir de un archivo properties.
 		 * @param path ruta donde se encuentra el archivo properties.
 		 */
-		public void inicializar(String path)
+		public void inicializar()
 		{
-			try
-			{
-				File arch= new File(path+ARCHIVO_CONEXION);
-				Properties prop = new Properties();
-				FileInputStream in = new FileInputStream( arch );
-
-		        prop.load( in );
-		        in.close( );
-
-				cadenaConexion = prop.getProperty("url");
-				usuario = prop.getProperty("usuario");	
-				clave = prop.getProperty("clave");	
-				final String driver = prop.getProperty("driver");
-				Class.forName(driver);
-			
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}	
+				cadenaConexion = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
+				usuario = "ISIS2304191510";	
+				clave = "dareavying";	
 		}
 
 		/**
@@ -1077,8 +1060,6 @@ public class ConsultaDAO
 			try
 			{
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_ETAPA);");
-				prepStmt1.execute();
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1119,8 +1100,6 @@ public class ConsultaDAO
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1164,8 +1143,6 @@ public class ConsultaDAO
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
 				return resp;
 			}
 			catch(SQLException e)
@@ -1179,9 +1156,9 @@ public class ConsultaDAO
 			ArrayList<PedidoCliente> resp=new ArrayList<PedidoCliente>();
 			try
 			{
+				System.out.println("no ha establecido");
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_MATERIA)");
-				prepStmt1.execute();
+				
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1222,8 +1199,6 @@ public class ConsultaDAO
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1266,8 +1241,7 @@ public class ConsultaDAO
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
+
 				return resp;
 			}
 			catch(SQLException e)
