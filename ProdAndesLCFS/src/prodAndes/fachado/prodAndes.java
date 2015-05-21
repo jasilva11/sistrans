@@ -74,9 +74,9 @@ public class prodAndes {
 	 * el archivo properties.
 	 * @param ruta ruta donde se encuentra el archivo properties
 	 */
-	public void inicializarRuta(String ruta)
+	public void inicializarRuta()
 	{
-		dao.inicializar(ruta);
+		dao.inicializar();
 	}
 	
 	  public void iniciarPaginacion()
@@ -330,6 +330,28 @@ public class prodAndes {
 	public ArrayList<EtapaProduccion> RFC9(String filtro, String info, String tiempoMin, String tiempoMax, String tipoMaterial, int cantMinMaterial, int cantMaxMaterial) throws Exception 
 	{
 		return dao.RFC9(filtro, info,tiempoMin,tiempoMax, tipoMaterial,cantMinMaterial, cantMaxMaterial);
+	}
+
+	public void inicRF18() {
+		// TODO Auto-generated method stub
+		dao.inicRF18();
+	}
+
+	public ArrayList<ProductoPedido> getRF18() {
+		// TODO Auto-generated method stub
+		return dao.getRF18();
+	}
+
+	public PedidoCliente terminarRF18(String fechaEsperada) {
+		PedidoCliente resp = null;
+		try 
+		{
+			resp=dao.terminarRF18(fechaEsperada);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resp;
 	}
 
 }

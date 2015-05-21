@@ -1,7 +1,6 @@
 package prodAndes.dao;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,9 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Properties;
-
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
@@ -26,13 +23,6 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import org.jboss.mq.SpyConnectionFactory;
-
-
-
-
-
 import prodAndes.vos.EstacionProduccion;
 import prodAndes.vos.EtapaProduccion;
 import prodAndes.vos.MateriaPrima;
@@ -43,15 +33,14 @@ import prodAndes.vos.ProductoPedido;
 
 
 
+
+
 public class ConsultaDAO implements MessageListener
 {
 		//----------------------------------------------------
 		//Constantes
 		//----------------------------------------------------
-		/**
-		 * ruta donde se encuentra el archivo de conexi�n.
-		 */
-		private static final String ARCHIVO_CONEXION = "/conexion.properties";
+
 		
 	private final static String ADMIN = "Admin";
 		
@@ -96,6 +85,11 @@ public class ConsultaDAO implements MessageListener
 		 * Carrito temporal de compras
 		 */
 		private ArrayList<ProductoPedido> RF12;
+		
+		/**
+		 * 
+		 */
+		private ArrayList<ProductoPedido> RF18;
 		
 
 		private int paginacion;
@@ -149,7 +143,7 @@ public class ConsultaDAO implements MessageListener
 		 * Los datos se obtienen a partir de un archivo properties.
 		 * @param path ruta donde se encuentra el archivo properties.
 		 */
-		public void inicializar(String path)
+		public void inicializar()
 		{
 			try
 			{
@@ -171,7 +165,7 @@ public class ConsultaDAO implements MessageListener
 					queueConnection2.start( );
 
 					cola = new RespuestaConsultaValue();
- System.out.print("asdasd");
+					System.out.print("asdasd");
 				} catch (NamingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -179,38 +173,16 @@ public class ConsultaDAO implements MessageListener
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				File arch= new File(path+ARCHIVO_CONEXION);
-				Properties prop = new Properties();
-				
-				
-				
-				
-				
-				
-				
-				FileInputStream in = new FileInputStream( arch );
-
-		        prop.load( in );
-		        in.close( );
-
-				cadenaConexion = prop.getProperty("url");
-				usuario = prop.getProperty("usuario");	
-				clave = prop.getProperty("clave");	
-				final String driver = prop.getProperty("driver");
-				Class.forName(driver);
-				
+				cadenaConexion = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
+				usuario = "ISIS2304191510";	
+				clave = "dareavying";	
+		
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}	
-				
-				
-				
-				
-				
-	
-				
+		
 		}
 		
 
@@ -1712,5 +1684,125 @@ public class ConsultaDAO implements MessageListener
 			}
 			closeConnection(conexion);
 			return resp;
+		}
+
+
+
+		public void inicRF18()
+		{
+	    	
+			RF18 = new ArrayList<ProductoPedido>();
+			
+		}
+
+
+
+		public ArrayList<ProductoPedido> getRF18() 
+		{
+			return RF18;
+		}
+
+
+
+		public PedidoCliente terminarRF18(String fechaEsperada) throws Exception
+		{
+			PreparedStatement prepStm = null;
+	    	PreparedStatement prepStmt = null;
+	    	PreparedStatement prepStmt2=null;
+	    	PreparedStatement prepStmt3=null;
+	    	PreparedStatement prepStmt4=null;
+	    	PreparedStatement prepStmt5=null;
+	    	PreparedStatement prepStmt6=null;
+	    	PedidoCliente resp = null;
+	    	boolean posible = true;
+			try {
+				establecerConexion(cadenaConexion, usuario, clave);
+				for(int i = 0; i<RF18.size()&&posible;i++)
+				{
+					prepStmt = conexion.prepareStatement("SELECT CANTIDAD, CANTIDADRESERVADA, NECESITADA FROM COMPONENTE INNER JOIN ( SELECT ID_COMPONENTE, CANTIDAD AS NECESITADA FROM NECESITACOMPONENTE WHERE ID_ETAPA IN"+
+							"(SELECT ID FROM ETAPA_PRODUCCION WHERE ID_PROCESO IN ( SELECT ID_PROCESO FROM PROCESO_PRODUCCIOn WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+"))) ON ID=ID_COMPONENTE");				
+					ResultSet rs = prepStmt.executeQuery();
+					while(rs.next())
+					{
+						int cantidad= rs.getInt("CANTIDAD");
+						int cantidadReservada = rs.getInt("CANTIDADRESERVADA");
+						int necesitada= rs.getInt("NECESITADA")*RF18.get(i).getCantidad();
+					
+						if(necesitada>(cantidad-cantidadReservada))
+							posible=false;
+						
+					}
+				}
+				for(int i = 0; i<RF18.size()&&posible;i++)
+				{
+					prepStmt2 = conexion.prepareStatement("SELECT CANTIDAD, CANTIDADRESERVADA, NECESITADA FROM MATERIA_PRIMA INNER JOIN( SELECT ID_MATERIA, CANTIDAD AS NECESITADA FROM NECESITAmaterial "
+							+ "WHERE ID_ETAPA IN (SELECT ID FROM ETAPA_PRODUCCION WHERE  ID_PROCESO IN ( SELECT ID_PROCESO FROM PROCESO_PRODUCCION WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+"))) ON ID=ID_MATERIA");				
+					ResultSet rs = prepStmt2.executeQuery();
+					while(rs.next())
+					{
+						int cantidad= rs.getInt("CANTIDAD");
+						int cantidadReservada = rs.getInt("CANTIDADRESERVADA");
+						int necesitada= rs.getInt("NECESITADA")*RF18.get(i).getCantidad();
+						
+						if(necesitada>(cantidad-cantidadReservada))
+							posible=false;			
+					}		
+				}
+				if(posible)
+				{
+					
+					char T='T';
+				
+					int idPedido= 0;
+					prepStm = conexion.prepareStatement("select max(id_pedido) from pedido_cliente");				
+					ResultSet rs3 =prepStm.executeQuery();
+					while(rs3.next())
+					{
+						idPedido= rs3.getInt("MAX(ID_PEDIDO)")+1;
+					}
+					String[] s= fechaEsperada.split("-");
+		    		String fecha=s[2]+"/"+s[1]+"/"+s[0];
+		    		ArrayList<ProductoPedido> pro= new ArrayList<ProductoPedido>();
+		    		for(int i=0;i<RF18.size();i++)
+		    		{
+		    			pro.add(RF18.get(i));
+		    		}
+					resp = new PedidoCliente(10, T, null, fecha,pro,idPedido);
+					prepStmt3 = conexion.prepareStatement("INSERT INTO PEDIDO_CLIENTE (ID_PEDIDO,ID_CLIENTE,FECHA_ESPERADA,ESTADO) VALUES ("+idPedido+",10,TO_DATE('"+fecha+"','DD/MM/YYYY'),'T')");				
+					prepStmt3.executeQuery();
+					;
+					for(int i=0; i<RF18.size();i++)
+					{
+						prepStmt4 = conexion.prepareStatement("INSERT INTO PRODUCTOSPEDIDOS (ID_PEDIDO,ID_PRODUCTO,VOLUMEN) VALUES ("+idPedido+","+RF18.get(i).getId_producto()+","+RF18.get(i).getCantidad()+")");
+						prepStmt4.executeQuery();
+						
+						prepStmt5 = conexion.prepareStatement("UPDATE COMPONENTE SET CANTIDADRESERVADA =(SELECT CANTIDAD FROM NECESITACOMPONENTE WHERE ID_ETAPA IN(SELECT ID FROM ETAPA_PRODUCCION WHERE ID_PROCESO IN (SELECT ID_PROCESO FROM PROCESO_PRODUCCION WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+"))AND ID_COMPONENTE=ID)WHERE ID IN (SELECT ID_COMPONENTE FROM NECESITACOMPONENTE WHERE ID_ETAPA IN(SELECT ID FROM ETAPA_PRODUCCION WHERE ID_PROCESO IN (SELECT ID_PROCESO FROM PROCESO_PRODUCCION WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+")))");
+						prepStmt5.executeQuery();
+						
+						prepStmt6 = conexion.prepareStatement("UPDATE MATERIA_PRIMA SET CANTIDADRESERVADA =(SELECT CANTIDAD FROM NECESITAMATERIAL WHERE ID_ETAPA IN(SELECT ID FROM ETAPA_PRODUCCION WHERE ID_PROCESO IN (SELECT ID_PROCESO FROM PROCESO_PRODUCCION WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+"))AND ID_MATERIA=ID) WHERE ID IN (SELECT ID_MATERIA FROM NECESITAMATERIAL WHERE ID_ETAPA IN(SELECT ID FROM ETAPA_PRODUCCION WHERE ID_PROCESO IN (SELECT ID_PROCESO FROM PROCESO_PRODUCCION WHERE ID_PRODUCTO="+RF18.get(i).getId_producto()+")))");
+						prepStmt6.executeQuery();
+						
+					}	
+				}
+				RF18.clear();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			}finally 
+			{
+				if (prepStmt != null) 
+				{
+					try {
+						prepStmt.close();
+					} catch (SQLException exception) {
+						
+						throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexi�n.");
+					}
+				}
+				closeConnection(conexion);
+			}	
+			System.out.println(resp.getProductos().size());
+			return resp;
+			
 		}
 }
