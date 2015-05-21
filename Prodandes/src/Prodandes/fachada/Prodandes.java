@@ -62,7 +62,7 @@ public class Prodandes
 		dao = new consultaDAO();
 		clientes = new ArrayList<Cliente>();
 		usuarios= new ArrayList<Usuario>();
-		dao.mensaje();
+		dao.inicializarMensajes();
 	}
 	
 	/**
@@ -309,6 +309,7 @@ return "";
 		return dao.cambiarEstado(estacion);
 	}
 	
+
 	public Producto darProducto(String nombre) 
 	{
 		return dao.buscarProducto(nombre);
@@ -348,6 +349,12 @@ return "";
 	{
 		return dao.buscarEtapasNOFecha(fecha1, fecha2, parametro, tema);
 	}
+	
+	public String cambiarEstadoMensaje(int estacion) throws SQLException
+	{
+		return dao.cambiarEstadoMensaje(estacion);
+	}
+	
 	
 	
 }

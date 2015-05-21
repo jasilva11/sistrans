@@ -100,16 +100,14 @@ public class ConsultaDAO implements MessageListener
 
 		private int paginacion;
 		
-		private RespuestaConsultaValue cola;
+		
 		
 		public ArrayList<ProductoPedido> getRF12() {
 			return RF12;
 		}
 		private Destination d;
-	    private QueueSession queueSession;
 
-		private java.sql.Connection conn2;
-		
+		private RespuestaConsultaValue cola;
 		private InitialContext ictx;
 		/**
 		 * constructor de la clase. No inicializa ningun atributo.
@@ -121,7 +119,8 @@ public class ConsultaDAO implements MessageListener
 		
 		
 	
-			public void onMessage(javax.jms.Message message) {
+			public void onMessage(javax.jms.Message message)
+			{
 				// TODO Auto-generated method stub
 				System.out.println("Entra Mensaje a cliente:");
 				String mensaje;
@@ -132,7 +131,7 @@ public class ConsultaDAO implements MessageListener
 		}
 				catch(Exception e)
 				{
-					System.out.println("Cagada");
+					System.out.println(e.getMessage());
 
 				}
 			}
@@ -149,7 +148,7 @@ public class ConsultaDAO implements MessageListener
 		 * Los datos se obtienen a partir de un archivo properties.
 		 * @param path ruta donde se encuentra el archivo properties.
 		 */
-		public void inicializar(String path)
+		public void inicializar()
 		{
 			try
 			{
@@ -168,37 +167,29 @@ public class ConsultaDAO implements MessageListener
 					QueueSession queueSession2 = queueConnection2.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE);
 					QueueReceiver queueReceiver2 = queueSession2.createReceiver( queue2 );
 					queueReceiver2.setMessageListener( this );
+				
+					
+					
+					
 					queueConnection2.start( );
-
 					cola = new RespuestaConsultaValue();
- System.out.print("asdasd");
-				} catch (NamingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JMSException e) {
+					
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				File arch= new File(path+ARCHIVO_CONEXION);
-				Properties prop = new Properties();
 				
 				
 				
 				
 				
 				
-				
-				FileInputStream in = new FileInputStream( arch );
-
-		        prop.load( in );
-		        in.close( );
-
-				cadenaConexion = prop.getProperty("url");
-				usuario = prop.getProperty("usuario");	
-				clave = prop.getProperty("clave");	
-				final String driver = prop.getProperty("driver");
-				Class.forName(driver);
-				
+				cadenaConexion = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
+						usuario = "ISIS2304191510";	
+							clave = "dareavying";	
+						
+				 				establecerConexion(cadenaConexion, usuario, clave);
+				 			
 			}
 			catch(Exception e)
 			{

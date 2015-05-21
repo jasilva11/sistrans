@@ -22,24 +22,19 @@ import javax.naming.InitialContext;
 {
 	
 	//base de datos
-	private Destination d;
     private QueueSession queueSession;
 
-	private java.sql.Connection conn2;
 	
 	private InitialContext ictx;
 	
-	private ConnectionFactory cf;
-
-	private Connection c;
-
- private Session s;		
-	private Queue cola;
-	
-	private MessageProducer mp;
 
 	private QueueConnection conn;
 	
+	private Connection c;
+
+	private Queue cola;
+	
+
 	public mensajesDAO()
 	{
 		try {
@@ -60,26 +55,8 @@ import javax.naming.InitialContext;
             queueSession = conn.createQueueSession(false,   QueueSession.AUTO_ACKNOWLEDGE);
 
             conn.start();
-
-            
-			/**
-			 * 
-		
-			
-			ictx = new InitialContext();
-            cf = (ConnectionFactory)ictx.lookup("RemoteConnectionFactory");
-        d = (Destination)ictx.lookup("Queue");
-c =  (Connection)cf.createConnection("sistrans","test");
-		c.start();
-		s = c.createSession(false,Session.AUTO_ACKNOWLEDGE);
-		mp = s.createProducer(d);
-						  QueueConnectionFactory queueConectionFactory = ( QueueConnectionFactory )context.lookup( "jms/RemoteConnectionFactory" );
-			  cola = ( Queue )context.lookup( "queue/queue_request" );
-		        QueueConnection queueConnection = queueConectionFactory.createQueueConnection( );
-		        queueSession = queueConnection.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE );
-		        queueConnection.start( );
-			 */
-	        
+           
+      
 	        
 
 		} catch (Exception e) {
@@ -98,10 +75,7 @@ c =  (Connection)cf.createConnection("sistrans","test");
 		    }
 		    
 
-	/**
-	 * Envia un mensaje a JMS.
-	 * @param mensaje
-	 */
+//Manda mesaje
 	public void send(String mensaje) throws Exception{
 		try {
 			
@@ -109,14 +83,12 @@ c =  (Connection)cf.createConnection("sistrans","test");
 		        TextMessage textMessage = queueSession.createTextMessage( mensaje );
 		        queueSender.send( textMessage );
 		        queueSender.close( );
-			
+
 			
 			
 		} catch (JMSException e) {
 			e.printStackTrace();
-		} finally {
-			c.close();
-		}
+		} 
 	}
 
 

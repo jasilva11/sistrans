@@ -72,7 +72,7 @@ public class ServletCambiarEstado2 extends HttpServlet
 
 		try 
 		{
-			estado = joda.cambiarEstado(numero);;
+			estado = joda.cambiarEstadoMensaje(numero);
 		} 
 		catch (SQLException e) 
 		{
