@@ -97,7 +97,6 @@ public class ServletRFC11 extends ServletTemplate {
 			id = Integer.valueOf(request.getParameter("id"));
 			prodAndes.getInstance().iniciarPaginacion();
 			ArrayList<PedidoCliente> resp=prodAndes.getInstance().getRFC11(tipo, id);
-			System.out.println(resp.size());
 			out.println("				<section id=\"intro\" class=\"container\" style=\"alingment:center;\">");
 			out.println("					<div class=\"panel-body\">");
 			out.println("					<div class=\"row\">");

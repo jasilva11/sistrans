@@ -70,29 +70,53 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <form role="form">	
-                                        <div class="form-group">                                            <div id="texto">Intervalo de fechas:</div>
-                                            <input type="date" name="fechaInicial">
-                                        </div>                                            <input type="date" name="fechaFinal"></input>
+                                        <div class="form-group">
+                                            <select name="tipo">
+                                                <option value="MateriaPrima">Materia Prima</option>
+                                                <option value="Componente">Componente</option>
+                                            </select>
+                                            <div id="texto">Identificador:</div>
+                                            <input type="number" value="idMateria" name="idMaterial">
+                                        </div>
+                                        <div class="form-group">
+                                            <div id="texto">Costo mayor a:</div>
+                                            <input type="number" id="costo"></input>
                                             <div class="button">
-                                                <div onclick="RFC12.htm">Buscar</div> 
+                                                <div onclick="RFC5.htm">Buscar</div> 
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div id="texto">Etapas de producción:</div>
+                                            <div id="texto">Pedidos:</div>
                                             <table id="myTable" cellspacing="10" cellpadding="10" border="4"> 
                                                  <tr> 
                                                     <td align="center">ID</td> 
                                                     <td align="center">Producto</td> 
-<td align="center">Nombre</td> 
-<td align="center">Tiempo inicio ejecución</td> 
-<td align="center">Tiempo fin ejecución </td> 
-<td align="center">Número de secuencia</td> 
-<td align="center">Completada</td> 
-
-
-                                                 </tr>                                                         </table> 
+                                                 </tr> 
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <table cellspacing="10" cellpadding="10" border="4"> 
+                                                       <tr> 
+                                                            <td align="center">ID producto</td> 
+                                                            <td align="center">Cantidad</td> 
+                                                       </tr> 
+                                                        </table> 
                                                     </td>                                                  
-                                                </tr>                                            </table>
+                                                </tr>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <table cellspacing="10" cellpadding="10" border="4"> 
+                                                       <tr>
+                                                           <td align="center"> 1 </td>
+                                                           <td align="center"> 1 </td>
+                                                        </tr> 
+                                                        <tr>
+                                                           <td align="center"> 2 </td>
+                                                           <td align="center"> 2 </td>
+                                                        </tr> 
+                                                    </table> 
+                                                </tr>
+                                            </table>
                                             <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
                                                 <ul class="pagination">
                                                     <li class="paginate_button previous" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">

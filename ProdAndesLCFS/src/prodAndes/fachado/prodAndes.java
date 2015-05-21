@@ -74,9 +74,9 @@ public class prodAndes {
 	 * el archivo properties.
 	 * @param ruta ruta donde se encuentra el archivo properties
 	 */
-	public void inicializarRuta()
+	public void inicializarRuta(String ruta)
 	{
-		dao.inicializar();
+		dao.inicializar(ruta);
 	}
 	
 	  public void iniciarPaginacion()
