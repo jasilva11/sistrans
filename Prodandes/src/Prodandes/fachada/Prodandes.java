@@ -355,6 +355,9 @@ return "";
 		return dao.cambiarEstadoMensaje(estacion);
 	}
 	
-	
+	public ArrayList buscarEtapasFecha2(String fecha1, String fecha2) throws SQLException
+	{
+		return dao.buscarEtapasFecha2(fecha1, fecha2);
+	}
 	
 }

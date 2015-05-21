@@ -2101,6 +2101,42 @@ public class consultaDAO implements MessageListener
 
 		return pedidos;
 	}
+	
+	
+	
+	public ArrayList buscarEtapasFecha2(String fecha1, String fecha2) throws SQLException
+	{
+		ArrayList etapas = new ArrayList();
+
+
+		EtapasDeProducion registro = null;
+
+		String sql ="SELECT *  FROM ETAPAS_PRODUCCION WHERE FECHA_INICIO > TO_DATE('"+fecha1+"') AND FECHA_FINAL < TO_DATE('"+fecha2+"')" ;
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		System.out.println("A");
+
+		while( resultado.next( )) 
+		{
+			int id = resultado.getInt( 4 );
+			String nombre = resultado.getString( 3 );
+			int personal = resultado.getInt( 1 );
+			int secuencia = resultado.getInt( 2 );
+			Date inicio = resultado.getDate( 5 );
+			Date fin = resultado.getDate( 6 );
+			System.out.println(nombre);
+			registro = new EtapasDeProducion(id, nombre, inicio, fin);
+			etapas.add(registro);
+		}
+		return etapas;
+	}
+	
 
 	public ArrayList buscarEtapasNOFecha(String fecha1, String fecha2,
 			String parametro, String tema) throws Exception

@@ -67,27 +67,26 @@ public class ServletConsultarEtapasProduccion2 extends HttpServlet
 
 	private void procesarSolicitud( HttpServletRequest request, HttpServletResponse response ) throws IOException
 	{
-		Prodandes joda = Prodandes.darInstancia();
 
-		String parametro = request.getParameter("fecha1");
+		String fecha1 = request.getParameter("fecha1");
 
-		String parametro2 = request.getParameter("fecha2");
+		String fecha2 = request.getParameter("fecha2");
 
 		String tipo = request.getParameter("opcion");
 		
-		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+		ArrayList resp = new ArrayList();
 		
-		Date fecha1 = null;
-		
-		Date fecha2 = null;
+		Prodandes joda = Prodandes.darInstancia();
 		
 		try {
-			fecha1 = (Date) formatoDelTexto.parse(parametro);
-			fecha2 = (Date) formatoDelTexto.parse(parametro2);
-		} catch (ParseException e1) {
+			resp = joda.buscarEtapasFecha2(fecha1, fecha2);
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
+
+		imprimirEncabezado(response, resp);
+		
 	}
 
 	/**
@@ -161,7 +160,7 @@ public class ServletConsultarEtapasProduccion2 extends HttpServlet
 		out.println("<body>");
 		out.println("<div id=\"bg\"></div>");
 		out.println("<div id=\"carousel\"><div>");
-		out.println("<h3><FONT SIZE=8>Materiales</font></h3>");
+		out.println("<h3><FONT SIZE=8>Etapas</font></h3>");
 		out.println("</div>");
 		for (int i = 0; i < resultados.size(); i++) 
 		{
@@ -169,15 +168,15 @@ public class ServletConsultarEtapasProduccion2 extends HttpServlet
 			{
 				EtapasDeProducion x = (EtapasDeProducion) resultados.get(i);
 				int y = i+1;
-				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Material "+ y + "</strong></label> ");
+				out.println("    <FONT SIZE=5><label for=\"categoria2\"><strong> Etapa "+ y + "</strong></label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Producto: "+ x.darId() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Id: "+ x.darId() + "</label> ");
 				out.println("  </p>");
 				out.println("    <label for=\"categoria2\"> Nombre: "+ x.darNombre() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Lo componen: "+ x.darInicio() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Fecha inicio: "+ x.darInicio() + "</label> ");
 				out.println("  </p>");
-				out.println("    <label for=\"categoria2\"> Compone: "+ x.darFin() + "</label> ");
+				out.println("    <label for=\"categoria2\"> Fecha fin: "+ x.darFin() + "</label> ");
 				out.println("  </p>");
 				out.println("  <p>&nbsp;</p>");
 				out.println("  <p>&nbsp;</p>");		
