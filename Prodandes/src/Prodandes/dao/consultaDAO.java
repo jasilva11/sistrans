@@ -15,8 +15,6 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
-
-
 import Prodandes.vod.Cliente;
 import Prodandes.vod.ComponentesProduccion;
 import Prodandes.vod.EtapasDeProducion;
@@ -88,7 +86,19 @@ public class consultaDAO {
 
 	public File archivo;
 
-
+public void mensaje()
+{
+    mensajesDAO jesus = new mensajesDAO();
+    try {
+		jesus.send("Sabogay");
+		System.out.print("Envio");
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+System.out.print("PAIALAAAAA");	}
+}
+	
+	
+	
 	/**
 	 * constructor de la clase. No inicializa ningun atributo.
 	 */

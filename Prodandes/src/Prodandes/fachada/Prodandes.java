@@ -62,6 +62,7 @@ public class Prodandes
 		dao = new consultaDAO();
 		clientes = new ArrayList<Cliente>();
 		usuarios= new ArrayList<Usuario>();
+		dao.mensaje();
 	}
 	
 	/**

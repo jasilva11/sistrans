@@ -1,0 +1,5 @@
+<mbean code="org.jboss.mq.server.jmxs.Queue"
+       name="jboss.mq.destination:service=Queue, name=WebApp2">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+</mbean>
+    

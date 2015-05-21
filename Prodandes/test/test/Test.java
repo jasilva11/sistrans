@@ -12,11 +12,11 @@ public class Test extends TestCase
 
 	consultaDAO x = null;
 
-
 	public void setupEscenario1()
 	{
 		x = new consultaDAO();
 		x.inicializar();
+		
 	}
 
 

@@ -11,7 +11,27 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Properties;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueSession;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.jboss.mq.SpyConnectionFactory;
+
+
+
+
 
 import prodAndes.vos.EstacionProduccion;
 import prodAndes.vos.EtapaProduccion;
@@ -23,7 +43,7 @@ import prodAndes.vos.ProductoPedido;
 
 
 
-public class ConsultaDAO
+public class ConsultaDAO implements MessageListener
 {
 		//----------------------------------------------------
 		//Constantes
@@ -80,11 +100,17 @@ public class ConsultaDAO
 
 		private int paginacion;
 		
+		private RespuestaConsultaValue cola;
 		
 		public ArrayList<ProductoPedido> getRF12() {
 			return RF12;
 		}
+		private Destination d;
+	    private QueueSession queueSession;
 
+		private java.sql.Connection conn2;
+		
+		private InitialContext ictx;
 		/**
 		 * constructor de la clase. No inicializa ningun atributo.
 		 */
@@ -92,6 +118,26 @@ public class ConsultaDAO
 		{		
 			
 		}
+		
+		
+	
+			public void onMessage(javax.jms.Message message) {
+				// TODO Auto-generated method stub
+				System.out.println("Entra Mensaje a cliente:");
+				String mensaje;
+				try 
+				{
+					mensaje = ( ( TextMessage )message ).getText( );
+					System.out.println(mensaje);
+		}
+				catch(Exception e)
+				{
+					System.out.println("Cagada");
+
+				}
+			}
+
+
 		
 		// -------------------------------------------------
 	    // M�todos
@@ -107,8 +153,41 @@ public class ConsultaDAO
 		{
 			try
 			{
+				try {
+					final Properties env = new Properties();
+				    env.put("org.jboss.ejb.client.scoped.context", true);
+		            env.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		            env.put("endpoint.name", "endpoint-client"); 
+		            
+		            ictx = new InitialContext(env);
+
+		            Object tmp = ictx.lookup("ConnectionFactory");
+		            QueueConnectionFactory qcf = (QueueConnectionFactory) tmp;
+					Queue queue2 = ( Queue )ictx.lookup( "queue/test" );
+					QueueConnection queueConnection2 = qcf.createQueueConnection( );
+					QueueSession queueSession2 = queueConnection2.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE);
+					QueueReceiver queueReceiver2 = queueSession2.createReceiver( queue2 );
+					queueReceiver2.setMessageListener( this );
+					queueConnection2.start( );
+
+					cola = new RespuestaConsultaValue();
+ System.out.print("asdasd");
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JMSException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				File arch= new File(path+ARCHIVO_CONEXION);
 				Properties prop = new Properties();
+				
+				
+				
+				
+				
+				
+				
 				FileInputStream in = new FileInputStream( arch );
 
 		        prop.load( in );
@@ -119,13 +198,21 @@ public class ConsultaDAO
 				clave = prop.getProperty("clave");	
 				final String driver = prop.getProperty("driver");
 				Class.forName(driver);
-			
+				
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}	
+				
+				
+				
+				
+				
+	
+				
 		}
+		
 
 		/**
 		 * M�todo que se encarga de crear la conexi�n con el Driver Manager

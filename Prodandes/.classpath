@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/jndi.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/javax.jms.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

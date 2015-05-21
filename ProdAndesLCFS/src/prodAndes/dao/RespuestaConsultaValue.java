@@ -15,8 +15,13 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.transaction.UserTransaction;
@@ -24,114 +29,90 @@ import javax.transaction.UserTransaction;
 public class RespuestaConsultaValue 
 {
 	private static final String ARCHIVO_CONEXION = "/conexion.properties";
-	
-	/**
-	 * nombre del usuario para conectarse a la base de datos.
-	 */
-	private String usuario;
-	
-	/**
-	 * clave de conexi�n a la base de datos.
-	 */
-	private String clave;
-	
-	/**
-	 * URL al cual se debe conectar para acceder a la base de datos.
-	 */
-	private String cadenaConexion;
-	
-	public java.sql.Connection conexion;
+	//base de datos
+	private DataSource ds2;
+    private QueueSession queueSession;
 
-	private InitialContext context;
-
-	private DataSource ds1;
-
+	private java.sql.Connection conn2;
+	
+	private InitialContext ictx;
+	
 	private ConnectionFactory cf;
 
-	private Queue colaDefinida;
+	private Connection c;
 
-	private Connection conm;
+ private Session s;		
+	private Queue cola;
+	private MessageProducer mp;
+
+	
 
 	/**
 	 * Constructor del encargado de enviar mensajes JMS.
 	 */
 	public RespuestaConsultaValue() 
 	{
-		try 
-		{
-			context = new InitialContext();
-			ds1 = (DataSource) context.lookup("java:transaccionesConsulta");
-			cf =(ConnectionFactory) context.lookup("java:JmsXA");
-			colaDefinida = (Queue) context.lookup("queue/WebApp2");
-			UserTransaction utx =(UserTransaction) context.list("/UserTransaction");
-			iniciarConexion();
-			utx.begin();
-			Statement st = conexion.createStatement();
-			st.close();
-		
-			Session session = conm.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			MessageProducer producer= session.createProducer(colaDefinida);
-			
-			TextMessage msg = session.createTextMessage();
-			//msg.setText(peticion);
-			producer.send(msg);
-			
-			utx.commit();
-			closeConnection();
+		try {
+				ictx = new InitialContext();
+				ds2 = (DataSource)ictx.lookup("java:jesusRules");
+	            cf = (ConnectionFactory)ictx.lookup("java:JmsXA");
+	        
+
+				
+				
+				Hashtable<String, String> env = new Hashtable<String, String>();
+		        env.put(Context.INITIAL_CONTEXT_FACTORY,
+		                "org.jnp.interfaces.NamingContextFactory");
+		        env.put(Context.PROVIDER_URL, "jnp://localhost:8080");
+		        env.put(Context.URL_PKG_PREFIXES,
+		                "org.jboss.naming:org.jnp.interfaces");
+		        
+	            Context context = new InitialContext(env);
+
+
+				
+				  QueueConnectionFactory queueConectionFactory = ( QueueConnectionFactory )context.lookup( "ConnectionFactory" );
+				  cola = ( Queue )context.lookup( "queue/queue_request" );
+			        QueueConnection queueConnection = queueConectionFactory.createQueueConnection( );
+			        queueSession = queueConnection.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE );
+			        queueConnection.start( );
+				
+				
+				
+				
+		        
+		        
 		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		} 
+
 		catch (JMSException e) 
 		{
 			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		
 		}
 	}
 	
-	/**
-	 * M�todo que se encarga de crear la conexi�n con el Driver Manager
-	 * a partir de los parametros recibidos.
-	 * @param url direccion url de la base de datos a la cual se desea conectar
-	 * @param usuario nombre del usuario que se va a conectar a la base de datos
-	 * @param clave clave de acceso a la base de datos
-	 * @throws SQLException si ocurre un error generando la conexi�n con la base de datos.
-	 */
-    private void iniciarConexion() 
-    {
-    	try
-		{
-			File arch= new File("/Applications/jboss-4.2.2.GA/server/default/data/prodAndes"+ARCHIVO_CONEXION);
-			Properties prop = new Properties();
-			FileInputStream in = new FileInputStream( arch );
-
-		    prop.load( in );
-		    in.close( );
-
-			cadenaConexion = prop.getProperty("url");
-			usuario = prop.getProperty("usuario");	
-			clave = prop.getProperty("clave");	
-			final String driver = prop.getProperty("driver");
-			Class.forName(driver);
-			conexion = DriverManager.getConnection(cadenaConexion,usuario,clave);
-		
+		/**
+		 * Envia un mensaje a JMS.
+		 * @param mensaje
+		 */
+		public void send(String mensaje) throws Exception{
+			try {
+				
+				 QueueSender queueSender = queueSession.createSender( cola );
+			        TextMessage textMessage = queueSession.createTextMessage( mensaje );
+			        queueSender.send( textMessage );
+			        queueSender.close( );
+				
+				
+				
+			} catch (JMSException e) {
+				e.printStackTrace();
+			} finally {
+				c.close();
+			}
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-    }
-    
-    /**
- 	 *Cierra la conexi�n activa a la base de datos. Adem�s, con=null.
-     * @param con objeto de conexi�n a la base de datos
-     * @throws SistemaCinesException Si se presentan errores de conexi�n
-     */
-    public void closeConnection() throws Exception {        
-		conexion.close();
-		conexion = null;
-    } 
-}
+
+	}
