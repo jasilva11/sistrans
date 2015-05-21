@@ -94,7 +94,7 @@ public void mensaje()
 		System.out.print("Envio");
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
-System.out.print("PAIALAAAAA");	}
+System.out.print("FUCK");	}
 }
 	
 	

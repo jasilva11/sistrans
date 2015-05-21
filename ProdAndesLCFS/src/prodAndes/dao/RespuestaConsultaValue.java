@@ -28,9 +28,7 @@ import javax.transaction.UserTransaction;
 
 public class RespuestaConsultaValue 
 {
-	private static final String ARCHIVO_CONEXION = "/conexion.properties";
-	//base de datos
-	private DataSource ds2;
+	private Destination d;
     private QueueSession queueSession;
 
 	private java.sql.Connection conn2;
@@ -43,39 +41,32 @@ public class RespuestaConsultaValue
 
  private Session s;		
 	private Queue cola;
-	private MessageProducer mp;
-
 	
-
+	private MessageProducer mp;
+	private QueueConnection conn;
 	/**
 	 * Constructor del encargado de enviar mensajes JMS.
 	 */
 	public RespuestaConsultaValue() 
 	{
 		try {
-				ictx = new InitialContext();
-				ds2 = (DataSource)ictx.lookup("java:jesusRules");
-	            cf = (ConnectionFactory)ictx.lookup("java:JmsXA");
-	        
-
-				
-				
-				Hashtable<String, String> env = new Hashtable<String, String>();
-		        env.put(Context.INITIAL_CONTEXT_FACTORY,
-		                "org.jnp.interfaces.NamingContextFactory");
-		        env.put(Context.PROVIDER_URL, "jnp://localhost:8080");
-		        env.put(Context.URL_PKG_PREFIXES,
-		                "org.jboss.naming:org.jnp.interfaces");
-		        
-	            Context context = new InitialContext(env);
+			final Properties env = new Properties();
+		    env.put("org.jboss.ejb.client.scoped.context", true);
+            env.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+            env.put("endpoint.name", "endpoint-client"); 
+            
+            ictx = new InitialContext(env);
 
 
-				
-				  QueueConnectionFactory queueConectionFactory = ( QueueConnectionFactory )context.lookup( "ConnectionFactory" );
-				  cola = ( Queue )context.lookup( "queue/queue_request" );
-			        QueueConnection queueConnection = queueConectionFactory.createQueueConnection( );
-			        queueSession = queueConnection.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE );
-			        queueConnection.start( );
+            Object tmp = ictx.lookup("ConnectionFactory");
+            QueueConnectionFactory qcf = (QueueConnectionFactory) tmp;
+            conn = qcf.createQueueConnection();
+            this.cola = (Queue) ictx.lookup("queue/test");
+
+            queueSession = conn.createQueueSession(false,      QueueSession.AUTO_ACKNOWLEDGE);
+
+            conn.start();
+
 				
 				
 				
@@ -94,25 +85,34 @@ public class RespuestaConsultaValue
 		}
 	}
 	
-		/**
-		 * Envia un mensaje a JMS.
-		 * @param mensaje
-		 */
-		public void send(String mensaje) throws Exception{
-			try {
-				
-				 QueueSender queueSender = queueSession.createSender( cola );
-			        TextMessage textMessage = queueSession.createTextMessage( mensaje );
-			        queueSender.send( textMessage );
-			        queueSender.close( );
-				
-				
-				
-			} catch (JMSException e) {
-				e.printStackTrace();
-			} finally {
-				c.close();
-			}
+	 public void stop()
+		        throws JMSException
+		    {
+		        conn.stop();
+		        queueSession.close();
+		        conn.close();
+		    }
+		    
+
+	/**
+	 * Envia un mensaje a JMS.
+	 * @param mensaje
+	 */
+	public void send(String mensaje) throws Exception{
+		try {
+			
+			 QueueSender queueSender = queueSession.createSender( cola );
+		        TextMessage textMessage = queueSession.createTextMessage( mensaje );
+		        queueSender.send( textMessage );
+		        queueSender.close( );
+			
+			
+			
+		} catch (JMSException e) {
+			e.printStackTrace();
+		} finally {
+			c.close();
 		}
+	}
 
 	}

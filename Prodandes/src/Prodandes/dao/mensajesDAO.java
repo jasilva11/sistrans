@@ -57,7 +57,7 @@ import javax.naming.InitialContext;
             conn = qcf.createQueueConnection();
             this.cola = (Queue) ictx.lookup("queue/test");
 
-            queueSession = conn.createQueueSession(false,      QueueSession.AUTO_ACKNOWLEDGE);
+            queueSession = conn.createQueueSession(false,   QueueSession.AUTO_ACKNOWLEDGE);
 
             conn.start();
 
