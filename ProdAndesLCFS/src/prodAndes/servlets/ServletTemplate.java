@@ -63,7 +63,8 @@ public abstract class ServletTemplate extends HttpServlet {
     private void procesarPedido( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
     	//TODO Si hay otras fachadas, ellas tambien deben inicializar la ruta.
-    	prodAndes.getInstance().inicializarRuta();        //
+    	prodAndes.getInstance().inicializarRuta();
+        //
         // Comienza con el Header del template
         imprimirHeader( request, response );
         //
