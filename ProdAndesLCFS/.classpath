@@ -9,6 +9,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jms.jar"/>
 	<classpathentry kind="lib" path="lib/jndi.jar"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="lib/jbossmq-3.2.3.jar"/>
+=======
+	<classpathentry kind="src" path="/CabAndesArregladoMiguel"/>
+>>>>>>> 5f208b50490c04d45f0c89b26167d44160e47a60
 	<classpathentry kind="output" path="classes"/>
 </classpath>

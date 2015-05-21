@@ -149,8 +149,9 @@ public class ConsultaDAO implements MessageListener
 		 * Los datos se obtienen a partir de un archivo properties.
 		 * @param path ruta donde se encuentra el archivo properties.
 		 */
-		public void inicializar(String path)
+		public void inicializar()
 		{
+<<<<<<< HEAD
 			try
 			{
 				try {
@@ -211,6 +212,11 @@ public class ConsultaDAO implements MessageListener
 				
 	
 				
+=======
+				cadenaConexion = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
+				usuario = "ISIS2304191510";	
+				clave = "dareavying";	
+>>>>>>> 5f208b50490c04d45f0c89b26167d44160e47a60
 		}
 		
 
@@ -1164,8 +1170,6 @@ public class ConsultaDAO implements MessageListener
 			try
 			{
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_ETAPA);");
-				prepStmt1.execute();
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1206,8 +1210,6 @@ public class ConsultaDAO implements MessageListener
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1251,8 +1253,6 @@ public class ConsultaDAO implements MessageListener
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
 				return resp;
 			}
 			catch(SQLException e)
@@ -1266,9 +1266,9 @@ public class ConsultaDAO implements MessageListener
 			ArrayList<PedidoCliente> resp=new ArrayList<PedidoCliente>();
 			try
 			{
+				System.out.println("no ha establecido");
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_MATERIA)");
-				prepStmt1.execute();
+				
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1309,8 +1309,6 @@ public class ConsultaDAO implements MessageListener
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1353,8 +1351,7 @@ public class ConsultaDAO implements MessageListener
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
+
 				return resp;
 			}
 			catch(SQLException e)

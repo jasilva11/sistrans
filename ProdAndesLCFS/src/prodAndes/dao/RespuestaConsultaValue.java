@@ -28,6 +28,7 @@ import javax.transaction.UserTransaction;
 
 public class RespuestaConsultaValue 
 {
+<<<<<<< HEAD
 	private static final String ARCHIVO_CONEXION = "/conexion.properties";
 	//base de datos
 	private DataSource ds2;
@@ -116,3 +117,7 @@ public class RespuestaConsultaValue
 		}
 
 	}
+=======
+	
+}
+>>>>>>> 5f208b50490c04d45f0c89b26167d44160e47a60
