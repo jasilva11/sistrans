@@ -1,6 +1,7 @@
 package prodAndes.dao;
 
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,7 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Properties;
+
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
@@ -23,6 +26,14 @@ import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
+import org.jboss.mq.SpyConnectionFactory;
+
+
+
+
+
+
 import prodAndes.vos.EstacionProduccion;
 import prodAndes.vos.EtapaProduccion;
 import prodAndes.vos.MateriaPrima;
@@ -33,14 +44,15 @@ import prodAndes.vos.ProductoPedido;
 
 
 
-
-
 public class ConsultaDAO implements MessageListener
 {
 		//----------------------------------------------------
 		//Constantes
 		//----------------------------------------------------
-
+		/**
+		 * ruta donde se encuentra el archivo de conexi�n.
+		 */
+		private static final String ARCHIVO_CONEXION = "/conexion.properties";
 		
 	private final static String ADMIN = "Admin";
 		
@@ -94,16 +106,14 @@ public class ConsultaDAO implements MessageListener
 
 		private int paginacion;
 		
-		private RespuestaConsultaValue cola;
+		
 		
 		public ArrayList<ProductoPedido> getRF12() {
 			return RF12;
 		}
 		private Destination d;
-	    private QueueSession queueSession;
 
-		private java.sql.Connection conn2;
-		
+		private RespuestaConsultaValue cola;
 		private InitialContext ictx;
 		/**
 		 * constructor de la clase. No inicializa ningun atributo.
@@ -115,7 +125,8 @@ public class ConsultaDAO implements MessageListener
 		
 		
 	
-			public void onMessage(javax.jms.Message message) {
+			public void onMessage(javax.jms.Message message)
+			{
 				// TODO Auto-generated method stub
 				System.out.println("Entra Mensaje a cliente:");
 				String mensaje;
@@ -126,7 +137,7 @@ public class ConsultaDAO implements MessageListener
 		}
 				catch(Exception e)
 				{
-					System.out.println("Cagada");
+					System.out.println(e.getMessage());
 
 				}
 			}
@@ -162,27 +173,35 @@ public class ConsultaDAO implements MessageListener
 					QueueSession queueSession2 = queueConnection2.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE);
 					QueueReceiver queueReceiver2 = queueSession2.createReceiver( queue2 );
 					queueReceiver2.setMessageListener( this );
+				
+					
+					
+					
 					queueConnection2.start( );
-
 					cola = new RespuestaConsultaValue();
-					System.out.print("asdasd");
-				} catch (NamingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JMSException e) {
+					
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 				cadenaConexion = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
 				usuario = "ISIS2304191510";	
 				clave = "dareavying";	
-		
+				establecerConexion(cadenaConexion, usuario, clave);
+				 			
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}	
-		
+				
+				
+				
+				
+				
+	
+				
 		}
 		
 
@@ -339,7 +358,7 @@ public class ConsultaDAO implements MessageListener
 	    	
 			try {
 				establecerConexion(cadenaConexion, usuario, clave);
-				prepStmt = conexion.prepareStatement("SELECT * FROM PRODUCTO");
+				prepStmt = conexion.prepareStatement("SELECT * FROM PRODUCTO WHERE rownum<=20");
 				
 				ResultSet rs = prepStmt.executeQuery();
 				
@@ -751,7 +770,7 @@ public class ConsultaDAO implements MessageListener
 	    	
 			try {
 				establecerConexion(cadenaConexion, usuario, clave);
-				prepStmt = conexion.prepareStatement("SELECT * FROM ESTACION_PRODUCCION WHERE ESTADO='T'");
+				prepStmt = conexion.prepareStatement("SELECT * FROM ESTACION_PRODUCCION WHERE ESTADO='T' AND rownum <= 20");
 				
 				ResultSet rs = prepStmt.executeQuery();
 				
@@ -792,7 +811,7 @@ public class ConsultaDAO implements MessageListener
 	    	
 			try {
 				establecerConexion(cadenaConexion, usuario, clave);
-				prepStmt = conexion.prepareStatement("SELECT * FROM ESTACION_PRODUCCION WHERE ESTADO='F'");
+				prepStmt = conexion.prepareStatement("SELECT * FROM ESTACION_PRODUCCION WHERE ESTADO='F' AND rownum <= 20");
 				
 				ResultSet rs = prepStmt.executeQuery();
 				
@@ -830,6 +849,12 @@ public class ConsultaDAO implements MessageListener
 	    	ProductoPedido nuevo= new ProductoPedido(cantidad, idProducto);
 	    	RF12.add(nuevo);
 	    	return RF12;
+	    }
+	    public ArrayList<ProductoPedido> agregarCarrito18(int idProducto, int cantidad)
+	    {
+	    	ProductoPedido nuevo= new ProductoPedido(cantidad, idProducto);
+	    	RF18.add(nuevo);
+	    	return RF18;
 	    }
 	    
 	    public PedidoCliente terminarRF12(String fechaEsperada) throws Exception
@@ -1136,8 +1161,7 @@ public class ConsultaDAO implements MessageListener
 			try
 			{
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_ETAPA);");
-				prepStmt1.execute();
+
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1178,8 +1202,7 @@ public class ConsultaDAO implements MessageListener
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
+
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1223,8 +1246,6 @@ public class ConsultaDAO implements MessageListener
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
 				return resp;
 			}
 			catch(SQLException e)
@@ -1239,8 +1260,6 @@ public class ConsultaDAO implements MessageListener
 			try
 			{
 				establecerConexion(cadenaConexion, usuario, clave);
-				PreparedStatement prepStmt1 = conexion.prepareStatement("CREATE INDEX nombre_indice ON NECESITAMATERIAL(ID_MATERIA)");
-				prepStmt1.execute();
 				if(tipo.equals(MATERIA_PRIMA))
 				{
 					int f = paginacion+20;
@@ -1281,8 +1300,7 @@ public class ConsultaDAO implements MessageListener
 						actual.setFechaPedido( pedidoConvertida);
 						resp.add(actual);
 					}
-					PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-					prepStmt2.execute();
+
 					return resp;
 				}
 				else if(tipo.equals(COMPONENTE))
@@ -1325,8 +1343,6 @@ public class ConsultaDAO implements MessageListener
 						resp.add(actual);
 					}
 				}
-				PreparedStatement prepStmt2 = conexion.prepareStatement("Drop INDEX nombre_indice");
-				prepStmt2.execute();
 				return resp;
 			}
 			catch(SQLException e)
@@ -1685,12 +1701,9 @@ public class ConsultaDAO implements MessageListener
 			closeConnection(conexion);
 			return resp;
 		}
-
-
-
 		public void inicRF18()
 		{
-	    	
+	    	RF12 = new ArrayList<ProductoPedido>();    	
 			RF18 = new ArrayList<ProductoPedido>();
 			
 		}
@@ -1803,6 +1816,144 @@ public class ConsultaDAO implements MessageListener
 			}	
 			System.out.println(resp.getProductos().size());
 			return resp;
+			
+		}
+		public boolean RF19Desactivar(int id) throws Exception
+		{
+			PreparedStatement prep = null;
+			PreparedStatement prepStmt = null;
+			PreparedStatement prepStmt2 = null;
+			PreparedStatement prepStmt3 = null;	
+			PreparedStatement prepStmt4 = null;	
+			PreparedStatement prepStmt5 = null;	
+			PreparedStatement prepStmt6 = null;	
+			PreparedStatement prepStmt7 = null;	
+			try {
+				establecerConexion(cadenaConexion, usuario, clave);
+				prep = conexion.prepareStatement("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+				prep.executeQuery();
+				prepStmt = conexion.prepareStatement("UPDATE ESTACION_PRODUCCION SET ESTADO= 'F' WHERE CODIGO="+id);
+				prepStmt.executeQuery();
+				
+				prepStmt4 = conexion.prepareStatement("SELECT ID_ESTACION FROM (SELECT MIN(COUNT(ID_ESTACION)) AS M FROM ESTACION_ETAPA GROUP BY ID_ESTACION)"+
+				"INNER JOIN (SELECT COUNT(ID_ESTACION) AS S, ID_ESTACION FROM ESTACION_ETAPA GROUP BY ID_ESTACION) ON M=S");
+				ResultSet rs= prepStmt4.executeQuery();
+				prepStmt5 = conexion.prepareStatement("SELECT ID_ETAPA FROM ESTACION_ETAPA WHERE ID_ESTACION="+id);
+				ResultSet rs2= prepStmt5.executeQuery();
+				while(rs2.next())
+				{
+					if(rs.next())
+					{
+						int idEstacion = rs.getInt("ID_ESTACION");
+						int idEtapa= rs2.getInt("ID_ETAPA");
+						prepStmt6 = conexion.prepareStatement("INSERT INTO ESTACION_ETAPA VALUES ("+idEstacion+","+idEtapa+")");
+						prepStmt6.executeQuery();
+						prepStmt7 = conexion.prepareStatement("COMMIT");
+						prepStmt7.executeQuery();
+					}
+					else
+					{
+						rs.beforeFirst();
+						rs.next();
+						int idEstacion = rs.getInt("ID_ESTACION");
+						int idEtapa= rs2.getInt("ID_ETAPA");
+						prepStmt6 = conexion.prepareStatement("INSERT INTO ESTACION_ETAPA VALUES ("+idEstacion+","+idEtapa+")");
+						prepStmt6.executeQuery();
+						prepStmt7 = conexion.prepareStatement("COMMIT");
+						prepStmt7.executeQuery();
+					}
+				}
+				prepStmt2 = conexion.prepareStatement("DELETE FROM ESTACION_ETAPA WHERE ID_ESTACION="+id);
+				prepStmt2.executeQuery();
+				return true;
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				
+				prepStmt3 = conexion.prepareStatement("ROLLBACK");
+				prepStmt3.executeQuery();
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+				
+			}finally 
+			{
+				
+				if (prepStmt != null) 
+				{
+					try {
+						prepStmt.close();
+					} catch (SQLException exception) {
+						prepStmt3 = conexion.prepareStatement("ROLLBACK");
+						prepStmt3.executeQuery();
+						throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexi�n.");
+					}
+				}
+				closeConnection(conexion);
+			}	
+			
+		}
+		
+		public boolean RF19Activar(int id) throws Exception
+		{
+			PreparedStatement prep = null;
+			PreparedStatement prepStmt = null;
+			PreparedStatement prepStmt2 = null;
+			PreparedStatement prepStmt3 = null;	
+			PreparedStatement prepStmt4 = null;	
+			PreparedStatement prepStmt5 = null;	
+			PreparedStatement prepStmt6 = null;	
+			PreparedStatement prepStmt7 = null;	
+			try {
+				
+				establecerConexion(cadenaConexion, usuario, clave);
+				prep = conexion.prepareStatement("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+				prep.executeQuery();
+				prepStmt = conexion.prepareStatement("UPDATE ESTACION_PRODUCCION SET ESTADO= 'T' WHERE CODIGO="+id);
+				prepStmt.executeQuery();
+				prepStmt2 = conexion.prepareStatement("DELETE FROM ESTACION_ETAPA WHERE ID_ESTACION="+id);
+				prepStmt2.executeQuery();
+				prepStmt5 = conexion.prepareStatement("SELECT ID_ETAPA, ID_ESTACION FROM ESTACION_ETAPA WHERE ID_ESTACION IN (SELECT ID_ESTACION FROM"+ 
+				"(SELECT MAX(COUNT(ID_ESTACION)) AS M FROM ESTACION_ETAPA GROUP BY ID_ESTACION)"+
+				"INNER JOIN (SELECT COUNT(ID_ESTACION) AS S, ID_ESTACION FROM ESTACION_ETAPA GROUP BY ID_ESTACION) ON M=S) ORDER BY ID_ESTACION");
+				ResultSet rs2= prepStmt5.executeQuery();
+				while(rs2.next())
+				{
+					int idEtapa= rs2.getInt("ID_ETAPA");
+					int idEstacion =rs2.getInt("ID_ESTACION");
+					prepStmt6 = conexion.prepareStatement("INSERT INTO ESTACION_ETAPA VALUES ("+id+","+idEtapa+")");
+					prepStmt6.executeQuery();
+					prepStmt4 = conexion.prepareStatement("DELETE FROM ESTACION_ETAPA WHERE ID_ESTACION="+idEstacion+"AND ID_ETAPA="+idEtapa);
+					prepStmt4.executeQuery();
+					while(rs2.getInt("ID_ESTACION")==idEstacion)
+					{
+						rs2.next();
+					}
+				}
+				prepStmt7 = conexion.prepareStatement("COMMIT");
+				prepStmt7.executeQuery();
+				return true;
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				
+				prepStmt3 = conexion.prepareStatement("ROLLBACK");
+				prepStmt3.executeQuery();
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+				
+			}finally 
+			{
+				
+				if (prepStmt != null) 
+				{
+					try {
+						prepStmt.close();
+					} catch (SQLException exception) {
+						prepStmt3 = conexion.prepareStatement("ROLLBACK");
+						prepStmt3.executeQuery();
+						throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexi�n.");
+					}
+				}
+				closeConnection(conexion);
+			}	
 			
 		}
 }

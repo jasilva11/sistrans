@@ -269,6 +269,18 @@ public class prodAndes {
 		}
 		return resp;
 	}
+	public ArrayList<ProductoPedido> agregarCarrito18(int idProducto, int cantidad)
+	{
+		ArrayList<ProductoPedido> resp =new ArrayList<ProductoPedido>();
+		try 
+		{
+			resp=dao.agregarCarrito18(idProducto, cantidad);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resp;
+	}
 	
 	public PedidoCliente terminarRF12(String fechaEsperada)
 	{
@@ -331,7 +343,6 @@ public class prodAndes {
 	{
 		return dao.RFC9(filtro, info,tiempoMin,tiempoMax, tipoMaterial,cantMinMaterial, cantMaxMaterial);
 	}
-
 	public void inicRF18() {
 		// TODO Auto-generated method stub
 		dao.inicRF18();
@@ -353,5 +364,29 @@ public class prodAndes {
 		}
 		return resp;
 	}
+
+
+	public boolean RF19Desactivar(int id)
+	{
+		try {
+			return dao.RF19Desactivar(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();return false;
+		}
+	}
+	
+	public boolean RF19Activar(int id)
+	{
+		try {
+			return dao.RF19Activar(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();return false;
+		}
+	}
+
 
 }

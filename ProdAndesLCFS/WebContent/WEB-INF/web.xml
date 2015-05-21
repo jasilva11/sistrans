@@ -117,11 +117,19 @@
   <welcome-file>default.jsp</welcome-file>
  </welcome-file-list>
  <servlet>
- 	<servlet-name>ServletRFC18</servlet-name>
- 	<servlet-class>prodAndes.servlets.ServletRFC18</servlet-class>
+ 	<servlet-name>ServletRF18</servlet-name>
+ 	<servlet-class>prodAndes.servlets.ServletRF18</servlet-class>
  </servlet>
  <servlet-mapping>
- 	<servlet-name>ServletRFC18</servlet-name>
- 	<url-pattern>/RFC18.htm</url-pattern>
+ 	<servlet-name>ServletRF18</servlet-name>
+ 	<url-pattern>/RF18.htm</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ 	<servlet-name>ServletRF19</servlet-name>
+ 	<servlet-class>prodAndes.servlets.ServletRF19</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ 	<servlet-name>ServletRF19</servlet-name>
+ 	<url-pattern>/RF19.htm</url-pattern>
  </servlet-mapping>
 </web-app>

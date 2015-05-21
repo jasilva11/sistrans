@@ -101,7 +101,7 @@ public class ServletRF18 extends ServletTemplate {
 			{
 				int cantidad= Integer.valueOf(request.getParameter("cantidad"));
 				int idProducto = Integer.valueOf(request.getParameter("producto"));
-				prodAndes.getInstance().agregarCarrito(idProducto, cantidad);
+				prodAndes.getInstance().agregarCarrito18(idProducto, cantidad);
 				out.println("				<section id=\"intro\" class=\"container\" style=\"alingment:center;\">");
 				out.println("					<div class=\"panel-body\">");
 				out.println("					<div class=\"row\">");
