@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="prodAndestest"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jms.jar"/>
+	<classpathentry kind="lib" path="lib/jndi.jar"/>
+<<<<<<< HEAD
+	<classpathentry kind="lib" path="lib/jbossmq-3.2.3.jar"/>
+=======
+	<classpathentry kind="src" path="/CabAndesArregladoMiguel"/>
+>>>>>>> 5f208b50490c04d45f0c89b26167d44160e47a60
+	<classpathentry kind="output" path="classes"/>
 </classpath>

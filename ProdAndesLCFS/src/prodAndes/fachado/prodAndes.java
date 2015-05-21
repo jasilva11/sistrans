@@ -332,26 +332,4 @@ public class prodAndes {
 		return dao.RFC9(filtro, info,tiempoMin,tiempoMax, tipoMaterial,cantMinMaterial, cantMaxMaterial);
 	}
 
-	public void inicRF18() {
-		// TODO Auto-generated method stub
-		dao.inicRF18();
-	}
-
-	public ArrayList<ProductoPedido> getRF18() {
-		// TODO Auto-generated method stub
-		return dao.getRF18();
-	}
-
-	public PedidoCliente terminarRF18(String fechaEsperada) {
-		PedidoCliente resp = null;
-		try 
-		{
-			resp=dao.terminarRF18(fechaEsperada);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return resp;
-	}
-
 }

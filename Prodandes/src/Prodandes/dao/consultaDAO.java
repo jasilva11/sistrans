@@ -15,6 +15,18 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import javax.jms.Destination;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueSession;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
 import Prodandes.vod.Cliente;
 import Prodandes.vod.ComponentesProduccion;
 import Prodandes.vod.EtapasDeProducion;
@@ -26,7 +38,8 @@ import Prodandes.vod.Personas;
 import Prodandes.vod.Producto;
 import Prodandes.vod.Proveedores;
 
-public class consultaDAO {
+public class consultaDAO implements MessageListener
+{
 
 	//----------------------------------------------------
 	//Constantes
@@ -83,20 +96,39 @@ public class consultaDAO {
 	Savepoint segundo = null;
 	Savepoint tercero = null;
 
+	private Destination d;
 
+	private mensajesDAO jesus;
+	private InitialContext ictx;
+	
 	public File archivo;
 
-public void mensaje()
-{
-    mensajesDAO jesus = new mensajesDAO();
-    try {
-		jesus.send("Sabogay");
-		System.out.print("Envio");
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-System.out.print("FUCK");	}
-}
+	public boolean sirvio;
 	
+	
+	public String etapa;
+	
+	
+	
+	public void mensaje(String sirve)
+	{
+	    
+	    try
+	    {
+			System.out.print("Envio");
+
+			jesus.send(sirve);
+
+
+		}
+	    catch (Exception e)
+	    {
+			// TODO Auto-generated catch block
+	System.out.println("FUCK" + e.getMessage());	
+	}
+	    
+	}
+		
 	
 	
 	/**
@@ -111,6 +143,38 @@ System.out.print("FUCK");	}
 	// Métodos
 	// -------------------------------------------------
 
+	
+	public void inicializarMensajes()
+	{
+		
+		 try {
+				final Properties env = new Properties();
+			    env.put("org.jboss.ejb.client.scoped.context", true);
+	            env.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+	            env.put("endpoint.name", "endpoint-client"); 
+	            
+	            ictx = new InitialContext(env);
+
+	            Object tmp = ictx.lookup("ConnectionFactory");
+	            QueueConnectionFactory qcf = (QueueConnectionFactory) tmp;
+				Queue queue2 = ( Queue )ictx.lookup( "queue/test" );
+				QueueConnection queueConnection2 = qcf.createQueueConnection( );
+				QueueSession queueSession2 = queueConnection2.createQueueSession( false, QueueSession.AUTO_ACKNOWLEDGE);
+				QueueReceiver queueReceiver2 = queueSession2.createReceiver( queue2 );
+				queueReceiver2.setMessageListener( this );
+				 jesus = new mensajesDAO();
+				
+				
+				queueConnection2.start( );
+			
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	
 	/**
 	 * obtiene ls datos necesarios para establecer una conexion
 	 * Los datos se obtienen a partir de un archivo properties.
@@ -122,6 +186,7 @@ System.out.print("FUCK");	}
 		{
 			final String driver = "oracle.jdbc.driver.OracleDriver";
 			Class.forName(driver);
+			
 
 		}
 		catch(Exception e)
@@ -942,6 +1007,201 @@ System.out.print("FUCK");	}
 		conexion.commit();
 		return estado;
 	}
+	
+	public String cambiarEstadoMensaje(int estacion) throws SQLException
+	{
+		String sql = "SELECT ESTADO FROM ESTACION_PRODUCCION WHERE CODIGO =" + estacion;
+        String enviar = "Estado EstacionProduccion;" + estacion;
+		inicializar();
+
+		establecerConexion();
+
+		conexion.setAutoCommit(false);
+		conexion.setTransactionIsolation(conexion.TRANSACTION_READ_COMMITTED);
+		Savepoint save1 = conexion.setSavepoint();
+
+		ResultSet resultado = null;
+		try 
+		{
+			PreparedStatement prepStmt = conexion.prepareStatement(sql);
+			resultado = prepStmt.executeQuery( sql );
+			if (resultado.first()== false)
+			{
+				//Esta en la otra aplicacion la estacion de produccion, ellos continuan con la ejecucion y se reportan
+				mensaje(enviar);
+				
+			}
+			else
+			{
+				
+				
+			}
+			
+			prepStmt.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+
+		if(!enviar.startsWith("Estado EstacionProduccion;"))
+		{
+			
+		String estado = "";
+
+		while( resultado.next( )) 
+		{
+			estado = resultado.getString( 1 );
+		}
+
+		String sql4 = "SELECT max(ID_ESTACION) FROM ETAPAS_DE_ESTACION";
+
+		ResultSet resultado2 = null;
+		try 
+		{
+			PreparedStatement prepStmt4 = conexion.prepareStatement(sql4);
+			resultado2 = prepStmt4.executeQuery( sql4 );
+			prepStmt4.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+
+		int mayor = 0;
+
+		while( resultado2.next( ))  
+		{
+			mayor = Integer.parseInt(resultado2.getString( 1 ));
+		}
+
+		String sql2 = "";
+
+		if(estado.equalsIgnoreCase("ACTIVA"))
+		{
+			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'INACTIVA' WHERE CODIGO =" + estacion;
+			if(estacion == mayor)
+			{
+				int x = estacion - 1;
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + x +" WHERE ID_ESTACION = "+ estacion;
+			}
+			else
+			{
+				int x = estacion + 1;
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + x +" WHERE ID_ESTACION = "+ estacion;
+			}
+		}
+		else
+		{
+			sql = "UPDATE ESTACION_PRODUCCION SET ESTADO = 'ACTIVA' WHERE CODIGO =" + estacion;
+
+			String sql5 = "SELECT COUNT (ID_ESTACION), ID_ESTACION FROM ETAPAS_DE_ESTACION GROUP BY ID_ESTACION";
+
+			ResultSet resultado3 = null;
+			try 
+			{
+				PreparedStatement prepStmt5 = conexion.prepareStatement(sql5);
+				resultado3 = prepStmt5.executeQuery( sql5 );
+				prepStmt5.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+
+			int mayor2 = 0;
+			int cont = 0;
+			int num = 0;
+
+			while( resultado3.next( ))  
+			{
+				cont = Integer.parseInt(resultado3.getString( 1 ));
+				if(cont > mayor2)
+				{
+					mayor2 = cont;
+					num = Integer.parseInt(resultado3.getString( 2 ));
+				}
+			}
+
+			String sql6 = "SELECT ID_ETAPA FROM ETAPAS_DE_ESTACION WHERE ID_ESTACION =" + num;
+
+			ResultSet resultado4 = null;
+			try 
+			{
+				PreparedStatement prepStmt6 = conexion.prepareStatement(sql6);
+				resultado4 = prepStmt6.executeQuery( sql6 );
+				prepStmt6.setQueryTimeout(100);
+			} 
+			catch (Exception e) 
+			{
+				// TODO: handle exception
+				conexion.rollback(save1);
+			}
+
+			ArrayList etapas = new ArrayList();
+			int contador = 0;
+			int res = 0;
+			while( resultado4.next( ) && contador<cont/2)  
+			{
+				res = Integer.parseInt(resultado4.getString( 1 ));
+				etapas.add(res); 
+				contador++;
+			}
+
+			int i = 0;
+			while(i<etapas.size())
+			{
+				sql2 = "UPDATE ETAPAS_DE_ESTACION SET ID_ESTACION = " + estacion +" WHERE ID_ESTACION = "+ num + " AND ID_ETAPA = " + etapas.get(i);
+				i++;
+			}
+		}
+
+		try 
+		{
+			PreparedStatement prepStmt2 = conexion.prepareStatement(sql);
+			ResultSet rs = prepStmt2.executeQuery();
+			prepStmt2.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+
+		try 
+		{
+			PreparedStatement prepStmt3 = conexion.prepareStatement(sql2);
+			ResultSet rs2 = prepStmt3.executeQuery();
+			prepStmt3.setQueryTimeout(100);
+		} 
+		catch (Exception e) 
+		{
+			// TODO: handle exception
+			conexion.rollback(save1);
+		}
+		conexion.commit();
+		return estado;
+
+	}
+		else
+		{
+			if ( sirvio == false)
+			{
+				return "No se encontro la etapa deseada";
+			}
+			else
+			{
+				return etapa;
+			}
+			
+			
+		}
+	}
+	
+	
 
 	public ArrayList buscarOperarios(String etapa) throws SQLException
 	{
@@ -1841,6 +2101,42 @@ System.out.print("FUCK");	}
 
 		return pedidos;
 	}
+	
+	
+	
+	public ArrayList buscarEtapasFecha2(String fecha1, String fecha2) throws SQLException
+	{
+		ArrayList etapas = new ArrayList();
+
+
+		EtapasDeProducion registro = null;
+
+		String sql ="SELECT *  FROM ETAPAS_PRODUCCION WHERE FECHA_INICIO > TO_DATE('"+fecha1+"') AND FECHA_FINAL < TO_DATE('"+fecha2+"')" ;
+
+		inicializar();
+
+		establecerConexion();
+
+		PreparedStatement prepStmt = conexion.prepareStatement(sql);
+		ResultSet resultado = prepStmt.executeQuery( sql );
+
+		System.out.println("A");
+
+		while( resultado.next( )) 
+		{
+			int id = resultado.getInt( 4 );
+			String nombre = resultado.getString( 3 );
+			int personal = resultado.getInt( 1 );
+			int secuencia = resultado.getInt( 2 );
+			Date inicio = resultado.getDate( 5 );
+			Date fin = resultado.getDate( 6 );
+			System.out.println(nombre);
+			registro = new EtapasDeProducion(id, nombre, inicio, fin);
+			etapas.add(registro);
+		}
+		return etapas;
+	}
+	
 
 	public ArrayList buscarEtapasNOFecha(String fecha1, String fecha2,
 			String parametro, String tema) throws Exception
@@ -1913,6 +2209,52 @@ System.out.print("FUCK");	}
 		
 		
 	}
+
+
+
+	@Override
+	public void onMessage(Message arg0)
+	{
+		// TODO Auto-generated method stub
+		System.out.println("LLLEGO:");
+		String jesus;
+		try 
+		{
+
+			jesus = ( ( TextMessage )arg0 ).getText( );
+		if (jesus.startsWith("Estado EstacionProduccion;"))
+		{
+		 String joda []  = jesus.split(";");
+			if (joda[1] == null)
+			{
+			sirvio = false;	
+			}
+			else
+			{
+				sirvio = true;
+				etapa = joda[1];
+			}
+		}
+		else if (jesus.startsWith("Estado EstacionProduccionDEME;"))
+				{
+			 String joda []  = jesus.split(";");
+		 int estacion = Integer.parseInt(joda[1]);
+			     
+			 cambiarEstadoMensaje(estacion);
+				}
+			
+			
+			
+			System.out.println(jesus);
+}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+
+		}
+	}	// TODO Auto-generated method stub
+		
+	
 		
 		
 		
